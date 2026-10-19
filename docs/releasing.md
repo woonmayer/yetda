@@ -19,7 +19,8 @@ updates the Homebrew cask.
    - create a public repo `woonmayer/homebrew-tap` (the name must start with
      `homebrew-`; users then run `brew install --cask woonmayer/tap/yetda`),
    - set repo variable `RELEASE_REPO=woonmayer/homebrew-tap` so the dmg is
-     attached there too. Remove the variable once yetda itself is public.
+     attached there too. Remove the variable once yetda itself is public, and
+     point the dmg links in README.md and docs/*/index.html back at yetda.
 5. **Secrets and variables** (yetda → Settings → Secrets and variables → Actions):
 
    | Kind | Name | Value |

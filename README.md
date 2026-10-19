@@ -39,7 +39,7 @@ macOS 13 or later.
 brew install --cask woonmayer/tap/yetda
 ```
 
-Or download **[Yetda.dmg](https://github.com/woonmayer/yetda/releases/latest/download/Yetda.dmg)**,
+Or download **[Yetda.dmg](https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg)**,
 open it and drag Yetda to Applications. Releases are signed with Developer ID
 and notarized by Apple. (Maintainers: see [docs/releasing.md](docs/releasing.md).)
 
