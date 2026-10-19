@@ -3,11 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Yetda</title>
+<title>Yetda(옜다) — 스크린샷을 Claude Code·Codex 등 터미널 코딩 에이전트에 바로 (macOS)</title>
 <meta name="description" content="⌘를 두 번 누르고 영역을 드래그하면, 스크린샷이 이미 코딩 에이전트 프롬프트에 들어가 있어요. Claude Code, Codex, Gemini CLI 등에서 동작하는 작은 무료 오픈소스 macOS 메뉴바 앱.">
 <meta property="og:title" content="Yetda: 스크린샷을 코딩 에이전트에게, 한 번에">
 <meta property="og:description" content="⌘ 두 번, 드래그 한 번이면 스크린샷이 에이전트 프롬프트에 들어가 있어요.">
-<meta property="og:image" content="https://woonmayer.github.io/yetda/icon.png">
+<meta property="og:image" content="https://woonmayer.github.io/yetda/ko/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Yetda">
+<meta property="og:locale" content="ko_KR">
 <meta property="og:url" content="https://woonmayer.github.io/yetda/ko/">
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://woonmayer.github.io/yetda/ko/">
@@ -15,6 +19,100 @@
 <link rel="alternate" hreflang="ko" href="https://woonmayer.github.io/yetda/ko/">
 <link rel="alternate" hreflang="ja" href="https://woonmayer.github.io/yetda/ja/">
 <link rel="alternate" hreflang="x-default" href="https://woonmayer.github.io/yetda/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Yetda: 스크린샷을 코딩 에이전트에게, 한 번에">
+<meta name="twitter:description" content="⌘ 두 번, 드래그 한 번이면 스크린샷이 에이전트 프롬프트에 들어가 있어요.">
+<meta name="twitter:image" content="https://woonmayer.github.io/yetda/ko/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "SoftwareApplication",
+ "name": "Yetda",
+ "alternateName": "옜다",
+ "applicationCategory": "DeveloperApplication",
+ "operatingSystem": "macOS 13 or later",
+ "softwareVersion": "0.3.0",
+ "description": "⌘를 두 번 누르고 영역을 드래그하면, 스크린샷이 이미 코딩 에이전트 프롬프트에 들어가 있어요. Claude Code, Codex, Gemini CLI 등에서 동작하는 작은 무료 오픈소스 macOS 메뉴바 앱.",
+ "url": "https://woonmayer.github.io/yetda/ko/",
+ "inLanguage": "ko",
+ "downloadUrl": "https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg",
+ "installUrl": "https://woonmayer.github.io/yetda/ko/#install",
+ "license": "https://opensource.org/licenses/MIT",
+ "isAccessibleForFree": true,
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "USD"
+ },
+ "image": "https://woonmayer.github.io/yetda/ko/og.png",
+ "author": {
+  "@type": "Person",
+  "name": "SeungWoon Lee",
+  "url": "https://github.com/woonmayer"
+ },
+ "sameAs": [
+  "https://github.com/woonmayer/yetda"
+ ],
+ "keywords": "Claude Code, Codex, Gemini CLI, opencode, screenshot, macOS menu bar app, coding agent, terminal"
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "inLanguage": "ko",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "비밀 정보는 어떻게 가리나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "macOS 기기 안 OCR로 캡처의 글자를 읽고, 알려진 키 형식(OpenAI, Anthropic, GitHub, AWS, Stripe, JWT 등), password=… 같은 값, 카드번호를 찾아 이미지와 붙는 글자 양쪽에서 가려요. Apple Intelligence가 켜진 Mac에서는 Apple의 기기 내 모델이 무작위처럼 보이는 문자열도 한 번 더 판단해요. 가리는 도중 문제가 생기면 아예 붙여넣지 않아요. 너무 많이 가렸다면 Paste Last Capture Without Hiding으로 원본을 붙일 수 있어요(원본은 메모리에만 보관). 어떤 데이터도 밖으로 나가지 않아요. 다만 안전망이니, 보내기 전에 한 번 훑어봐 주세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "손쉬운 사용 권한은 왜 필요한가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "⌘ 두 번 누르기를 알아채고, 터미널에서 붙여넣기 키를 누르기 위해서예요. 권한이 없어도 캡처는 클립보드에 들어가니 직접 붙여넣으면 돼요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "제 터미널이 목록에 없어요.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "그 터미널을 쓰다가 메뉴바 아이콘을 누르면 Also Paste into “앱 이름” 항목이 보여요. 체크하면 자동 붙여넣기 대상이 돼요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Codex(또는 다른 앱)가 이미 ⌘⌘를 써요.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "메뉴에서 “Capture with ⌘⌘”를 끄고 ⌘⇧2를 쓰세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "캡처가 빈 화면으로 나오거나 권한 창이 계속 떠요.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Mac에 Yetda.app이 하나만 있는지 확인한 뒤 tccutil reset ScreenCapture io.github.woonmayer.yetda를 실행하고, 앱을 다시 켜서 권한을 다시 주세요."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "어떤 에이전트에서 동작하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "붙여넣은 이미지를 받는 터미널 에이전트라면 다 돼요: Claude Code, Codex, Gemini CLI, opencode 등. Yetda는 ⌃V(iTerm2는 ⌘V)를 눌러요. Cursor CLI처럼 어디서든 ⌘V를 쓰는 에이전트라면 메뉴에서 Paste Key → ⌘V로 바꾸세요. /shots 스킬은 Claude Code와 Codex에서 동작해요."
+   }
+  }
+ ]
+}
+</script>
 <link rel="icon" href="../icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

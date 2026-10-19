@@ -3,11 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Yetda</title>
+<title>Yetda — screenshots into Claude Code, Codex &amp; any terminal coding agent (macOS)</title>
 <meta name="description" content="Tap ⌘ twice, drag a region, and the screenshot is already in your coding agent's prompt. Works with Claude Code, Codex, Gemini CLI and more. A tiny, free, open-source macOS menu bar app.">
 <meta property="og:title" content="Yetda: screenshots into your coding agent, in one gesture">
 <meta property="og:description" content="Tap ⌘ twice, drag a region, and the screenshot is already in your coding agent's prompt.">
-<meta property="og:image" content="https://woonmayer.github.io/yetda/icon.png">
+<meta property="og:image" content="https://woonmayer.github.io/yetda/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Yetda">
+<meta property="og:locale" content="en_US">
 <meta property="og:url" content="https://woonmayer.github.io/yetda/">
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://woonmayer.github.io/yetda/">
@@ -15,6 +19,100 @@
 <link rel="alternate" hreflang="ko" href="https://woonmayer.github.io/yetda/ko/">
 <link rel="alternate" hreflang="ja" href="https://woonmayer.github.io/yetda/ja/">
 <link rel="alternate" hreflang="x-default" href="https://woonmayer.github.io/yetda/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Yetda: screenshots into your coding agent, in one gesture">
+<meta name="twitter:description" content="Tap ⌘ twice, drag a region, and the screenshot is already in your coding agent's prompt.">
+<meta name="twitter:image" content="https://woonmayer.github.io/yetda/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "SoftwareApplication",
+ "name": "Yetda",
+ "alternateName": "옜다",
+ "applicationCategory": "DeveloperApplication",
+ "operatingSystem": "macOS 13 or later",
+ "softwareVersion": "0.3.0",
+ "description": "Tap ⌘ twice, drag a region, and the screenshot is already in your coding agent's prompt. Works with Claude Code, Codex, Gemini CLI and more. A tiny, free, open-source macOS menu bar app.",
+ "url": "https://woonmayer.github.io/yetda/",
+ "inLanguage": "en",
+ "downloadUrl": "https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg",
+ "installUrl": "https://woonmayer.github.io/yetda/#install",
+ "license": "https://opensource.org/licenses/MIT",
+ "isAccessibleForFree": true,
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "USD"
+ },
+ "image": "https://woonmayer.github.io/yetda/og.png",
+ "author": {
+  "@type": "Person",
+  "name": "SeungWoon Lee",
+  "url": "https://github.com/woonmayer"
+ },
+ "sameAs": [
+  "https://github.com/woonmayer/yetda"
+ ],
+ "keywords": "Claude Code, Codex, Gemini CLI, opencode, screenshot, macOS menu bar app, coding agent, terminal"
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "inLanguage": "en",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "How does secret hiding work?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yetda reads the capture's text with macOS's on-device OCR, matches known key formats (OpenAI, Anthropic, GitHub, AWS, Stripe, JWT and more), password=… assignments and card numbers, and covers them with a solid mask in the image and in the pasted text. On Macs with Apple Intelligence, Apple's on-device model also judges random-looking strings. If anything goes wrong while masking, Yetda doesn't paste the capture at all. Masked too much? Paste Last Capture Without Hiding pastes the original, which is kept in memory only. Nothing is sent anywhere. It's a safety net, so still glance at what you share."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Why does it need Accessibility permission?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "To notice the ⌘⌘ double tap and to press the paste key in your terminal. Without it, Yetda still captures to the clipboard and you paste yourself."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "My terminal isn't in the list.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Use that terminal, then click the menu bar icon: an Also Paste into “<app>” item appears. Tick it and that app becomes an auto-paste target."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Codex (or another app) already uses ⌘⌘.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Turn off “Capture with ⌘⌘” in the menu and use ⌘⇧2 instead."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Captures come out blank or the permission prompt keeps appearing.",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Make sure only one Yetda.app exists on your Mac, then run tccutil reset ScreenCapture io.github.woonmayer.yetda, relaunch, and grant again."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Which agents does it work with?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Any terminal agent that accepts a pasted image: Claude Code, Codex, Gemini CLI, opencode and others. Yetda presses ⌃V (⌘V in iTerm2). If your agent wants ⌘V everywhere, like Cursor CLI, set Paste Key → ⌘V in the menu. The /shots skill works in Claude Code and Codex."
+   }
+  }
+ ]
+}
+</script>
 <link rel="icon" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

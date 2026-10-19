@@ -1,0 +1,27 @@
+# Yetda
+
+> Yetda (옜다, Korean for "here, take it") is a free, open-source macOS menu bar app that puts a screenshot straight into the prompt of a coding agent running in your terminal — Claude Code, Codex CLI, Gemini CLI, opencode, Cursor CLI and others. Tap ⌘ twice (or press ⌘⇧2), drag a region, and the image is pasted into the agent. API keys, tokens and passwords in the capture are masked on-device first.
+
+Key facts:
+
+- Platform: macOS 13 or later, Apple silicon and Intel. Signed with Developer ID and notarized by Apple.
+- Install: `brew install --cask woonmayer/tap/yetda`, or download https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg
+- Price: free. License: MIT. Source: https://github.com/woonmayer/yetda
+- Privacy: no network access and no analytics; OCR and secret detection run on the Mac. Captures are kept in `~/Yetda/` and deleted after 7 days.
+- Permissions: Screen Recording (to capture) and Accessibility (to paste into the terminal and detect the ⌘⌘ tap). Yetda does not record what you type.
+- Terminals: Terminal, iTerm2, Ghostty, Warp, WezTerm, kitty, Alacritty, Hyper and more; any other app can be added from the menu.
+- Several screenshots at once: the bundled `/shots` skill for Claude Code and Codex feeds all pending captures into the session.
+- Paste an earlier capture: ⌘⇧1 opens a thumbnail menu of the 10 newest captures.
+
+## Docs
+
+- [Landing page (English)](https://woonmayer.github.io/yetda/): what it does, install, FAQ
+- [한국어](https://woonmayer.github.io/yetda/ko/) and [日本語](https://woonmayer.github.io/yetda/ja/)
+- [README](https://github.com/woonmayer/yetda/blob/main/README.md): usage, menu items, configuration, privacy, how it works
+- [Changelog](https://github.com/woonmayer/yetda/blob/main/CHANGELOG.md)
+
+## Optional
+
+- [/shots skill](https://github.com/woonmayer/yetda/blob/main/skills/shots/SKILL.md)
+- [Releases](https://github.com/woonmayer/yetda/releases)
+- [Sponsor](https://github.com/sponsors/woonmayer)

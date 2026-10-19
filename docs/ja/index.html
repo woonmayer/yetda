@@ -3,11 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Yetda</title>
+<title>Yetda — スクショをClaude Code・Codexなどのターミナルエージェントへ一瞬で（macOS）</title>
 <meta name="description" content="⌘を2回押して範囲をドラッグするだけで、スクリーンショットがコーディングエージェントのプロンプトに入ります。Claude Code、Codex、Gemini CLIなどに対応した、小さな無料のオープンソースmacOSメニューバーアプリ。">
 <meta property="og:title" content="Yetda：スクショをコーディングエージェントへ、ワンアクションで">
 <meta property="og:description" content="⌘を2回押してドラッグするだけで、スクショがエージェントのプロンプトに入ります。">
-<meta property="og:image" content="https://woonmayer.github.io/yetda/icon.png">
+<meta property="og:image" content="https://woonmayer.github.io/yetda/ja/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Yetda">
+<meta property="og:locale" content="ja_JP">
 <meta property="og:url" content="https://woonmayer.github.io/yetda/ja/">
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://woonmayer.github.io/yetda/ja/">
@@ -15,6 +19,100 @@
 <link rel="alternate" hreflang="ko" href="https://woonmayer.github.io/yetda/ko/">
 <link rel="alternate" hreflang="ja" href="https://woonmayer.github.io/yetda/ja/">
 <link rel="alternate" hreflang="x-default" href="https://woonmayer.github.io/yetda/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Yetda：スクショをコーディングエージェントへ、ワンアクションで">
+<meta name="twitter:description" content="⌘を2回押してドラッグするだけで、スクショがエージェントのプロンプトに入ります。">
+<meta name="twitter:image" content="https://woonmayer.github.io/yetda/ja/og.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "SoftwareApplication",
+ "name": "Yetda",
+ "alternateName": "옜다",
+ "applicationCategory": "DeveloperApplication",
+ "operatingSystem": "macOS 13 or later",
+ "softwareVersion": "0.3.0",
+ "description": "⌘を2回押して範囲をドラッグするだけで、スクリーンショットがコーディングエージェントのプロンプトに入ります。Claude Code、Codex、Gemini CLIなどに対応した、小さな無料のオープンソースmacOSメニューバーアプリ。",
+ "url": "https://woonmayer.github.io/yetda/ja/",
+ "inLanguage": "ja",
+ "downloadUrl": "https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg",
+ "installUrl": "https://woonmayer.github.io/yetda/ja/#install",
+ "license": "https://opensource.org/licenses/MIT",
+ "isAccessibleForFree": true,
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "USD"
+ },
+ "image": "https://woonmayer.github.io/yetda/ja/og.png",
+ "author": {
+  "@type": "Person",
+  "name": "SeungWoon Lee",
+  "url": "https://github.com/woonmayer"
+ },
+ "sameAs": [
+  "https://github.com/woonmayer/yetda"
+ ],
+ "keywords": "Claude Code, Codex, Gemini CLI, opencode, screenshot, macOS menu bar app, coding agent, terminal"
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "inLanguage": "ja",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "秘密情報はどうやって隠すの？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "macOSの端末内OCRでスクショの文字を読み取り、既知のキー形式（OpenAI、Anthropic、GitHub、AWS、Stripe、JWTなど）、password=…のような値、カード番号を見つけて、画像と貼り付けるテキストの両方で隠します。Apple Intelligenceが有効なMacでは、Appleの端末内モデルがランダムに見える文字列ももう一度判定します。隠す途中で問題が起きたら、そもそも貼り付けません。隠しすぎたときはPaste Last Capture Without Hidingで元の画像を貼れます（元画像はメモリにだけ保持）。データは一切外に出ません。ただし安全網なので、送る前に一度確認してください。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "なぜアクセシビリティの許可が必要？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "⌘の2回押しを検知して、ターミナルで貼り付けキーを押すためです。許可がなくてもキャプチャはクリップボードに入るので、手動で貼り付けられます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "使っているターミナルがリストにない。",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "そのターミナルを使っている状態でメニューバーのアイコンを押すと、Also Paste into “アプリ名”が表示されます。チェックすると自動貼り付けの対象になります。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Codex（または他のアプリ）がもう⌘⌘を使っている。",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "メニューで「Capture with ⌘⌘」をオフにして、⌘⇧2を使ってください。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "キャプチャが真っ白になる、または許可ダイアログが何度も出る。",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "MacにYetda.appが1つだけあることを確認してからtccutil reset ScreenCapture io.github.woonmayer.yetdaを実行し、アプリを再起動して許可し直してください。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "どのエージェントで使える？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "画像の貼り付けを受け付けるターミナルエージェントならどれでも：Claude Code、Codex、Gemini CLI、opencodeなど。Yetdaは⌃V（iTerm2では⌘V）を押します。Cursor CLIのようにどこでも⌘Vを使うエージェントなら、メニューでPaste Key → ⌘Vに変えてください。/shotsスキルはClaude CodeとCodexで使えます。"
+   }
+  }
+ ]
+}
+</script>
 <link rel="icon" href="../icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
