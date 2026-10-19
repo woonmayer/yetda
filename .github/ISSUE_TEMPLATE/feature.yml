@@ -1,0 +1,16 @@
+name: Feature request
+description: An idea for Yetda, or a terminal/agent it should support.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like
+      description: The problem first, then the idea.
+    validations:
+      required: true
+  - type: input
+    id: setup
+    attributes:
+      label: Your terminal and agent
+      placeholder: "WezTerm + opencode"

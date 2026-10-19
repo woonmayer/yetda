@@ -1,0 +1,46 @@
+name: Bug report
+description: Something doesn't work as described.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Yetda version
+      placeholder: "0.3.0 (menu bar icon → About, or the dmg name)"
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: "15.5, Apple silicon"
+    validations:
+      required: true
+  - type: input
+    id: terminal
+    attributes:
+      label: Terminal app
+      placeholder: "Ghostty, iTerm2, Terminal, …"
+  - type: input
+    id: agent
+    attributes:
+      label: Coding agent
+      placeholder: "Claude Code, Codex, Gemini CLI, …"
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Tap ⌘ twice
+        2. …
+  - type: markdown
+    attributes:
+      value: |
+        Please don't attach captures that show secrets, even masked ones you haven't checked.

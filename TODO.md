@@ -13,7 +13,7 @@ the pitch, next to secret masking); collect everything outside it.
 - [ ] **Report a Bug… menu item.** While the repo is private, the same form
       with type = bug; once public, a prefilled GitHub issue
       (`/issues/new?template=bug.yml&version=…`).
-- [ ] **GitHub issue templates.** `.github/ISSUE_TEMPLATE/bug.yml` and
+- [x] **GitHub issue templates.** `.github/ISSUE_TEMPLATE/bug.yml` and
       `feature.yml` (version, macOS, terminal, agent, steps).
 - [ ] **PostHog on the landing page only.** Visits, language, install-button
       clicks; cookieless mode. Needs the project API key (`phc_…`).
@@ -22,7 +22,7 @@ the pitch, next to secret masking); collect everything outside it.
 
 ## Release
 
-- [ ] Decide on going public: as is, or clean the old history first.
+- [x] Going public: fresh single-commit repo (old history kept private in yetda-dev).
 - [x] Developer ID + notarization; GitHub Release with a signed dmg
       (`scripts/release.sh`, `.github/workflows/release.yml`).
 - [x] Homebrew cask template (`packaging/homebrew/`), updated by the release workflow.
