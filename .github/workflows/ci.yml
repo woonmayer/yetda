@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    # Swift 6 toolchain (Xcode 16+); the package builds in Swift 6 language mode.
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build (warnings are errors)
+        run: swift build -Xswiftc -warnings-as-errors
+      - name: Test
+        run: swift test
+      - name: Bundle app (ad-hoc signed)
+        run: ./scripts/build-app.sh

@@ -1,0 +1,48 @@
+# Changelog
+
+## Unreleased
+
+## 0.3.0
+
+- **Signed releases:** Developer ID + hardened runtime, notarized dmg, and a
+  Homebrew cask (`brew install --cask woonmayer/tap/yetda`); `scripts/release.sh`
+  and a tag-triggered release workflow. Universal binary (Apple silicon + Intel).
+
+- **/shots skill ships with the app:** on first launch Yetda asks once whether to
+  install it for Claude Code (`~/.claude/skills`) and Codex (`~/.agents/skills`);
+  toggle it per agent from the menu. Its own copies update with the app; edited
+  copies are left alone.
+- **Renamed ClipShot → Yetda** (옜다, Korean for “here, take it”). New bundle ID
+  `io.github.woonmayer.yetda` and capture folder `~/Yetda/`; settings and
+  `~/ClipShot/` are carried over on first launch. macOS asks for Screen
+  Recording and Accessibility again, since permissions follow the bundle ID.
+- Kaku added to the known terminals; **Also Paste into “<app>”** menu item
+  adds any other app as an auto-paste target.
+- **Hide secrets:** on-device OCR finds API keys, tokens, passwords and card
+  numbers in each capture and blacks them out (on by default). Apple's
+  on-device model double-checks unknown formats on macOS 26 with Apple
+  Intelligence. Masks are solid password-field pills; *Paste Last Capture
+  Without Hiding* undoes a mask (original kept in memory for 5 minutes).
+- **Also paste text:** optionally paste the capture's OCR text after the image.
+- Works with any terminal coding agent (Claude Code, Codex, Gemini CLI,
+  opencode, …); README and landing page say so.
+- **Paste Key** menu: Automatic, or force `Ctrl+V` / `⌘V` (e.g. Cursor CLI).
+- App icon (`scripts/make-icon.sh` regenerates it).
+- Landing page in `docs/` for GitHub Pages.
+- Promo videos (`assets/promo*.mp4`), built with Remotion in `promo/` (`npm run render`).
+
+## 0.2.0
+
+- **Auto-paste:** after a capture, Yetda brings the last active terminal to
+  the front and presses `Ctrl+V`, so the image lands in Claude Code's prompt.
+- **⌘⌘ capture:** tap ⌘ twice to capture (toggle in the menu).
+- **Paste Recent (⌘⇧1):** thumbnail menu of the 10 newest captures.
+- Menu warnings when Screen Recording or Accessibility permission is missing.
+- Capture filenames include milliseconds; only Yetda-named files in
+  `~/Yetda/` are listed, cleared, or pruned.
+- Extra terminals via `defaults write … extraTerminalBundleIDs`.
+
+## 0.1.0
+
+- Menu bar app: ⌘⇧2 region capture to clipboard and `~/Yetda/`, pending
+  count badge, 7-day auto-prune, and the `/shots` Claude Code skill.

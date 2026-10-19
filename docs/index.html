@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yetda</title>
+<meta name="description" content="Tap ⌘ twice, drag a region, and the screenshot is already in your coding agent's prompt. Works with Claude Code, Codex, Gemini CLI and more. A tiny, free, open-source macOS menu bar app.">
+<meta property="og:title" content="Yetda: screenshots into your coding agent, in one gesture">
+<meta property="og:description" content="Tap ⌘ twice, drag a region, and the screenshot is already in your coding agent's prompt.">
+<meta property="og:image" content="https://woonmayer.github.io/yetda/icon.png">
+<meta property="og:url" content="https://woonmayer.github.io/yetda/">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://woonmayer.github.io/yetda/">
+<link rel="alternate" hreflang="en" href="https://woonmayer.github.io/yetda/">
+<link rel="alternate" hreflang="ko" href="https://woonmayer.github.io/yetda/ko/">
+<link rel="alternate" hreflang="ja" href="https://woonmayer.github.io/yetda/ja/">
+<link rel="alternate" hreflang="x-default" href="https://woonmayer.github.io/yetda/">
+<link rel="icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fbfaf8;
+    --bg-soft: #f2f0ec;
+    --card: #ffffff;
+    --text: #17171c;
+    --muted: #5f6070;
+    --line: #e4e1db;
+    --accent: #ff9e45;
+    --accent-ink: #b85d0c;
+    --term: #14151b;
+    --term-text: #d8dae3;
+    --shadow: 0 30px 60px -20px rgba(20, 20, 30, .25);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d0e12;
+      --bg-soft: #15161c;
+      --card: #181a21;
+      --text: #f1f1f4;
+      --muted: #9a9cab;
+      --line: #262833;
+      --accent-ink: #ffb46e;
+      --shadow: 0 30px 60px -20px rgba(0, 0, 0, .7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d0e12;
+    --bg-soft: #15161c;
+    --card: #181a21;
+    --text: #f1f1f4;
+    --muted: #9a9cab;
+    --line: #262833;
+    --accent-ink: #ffb46e;
+    --shadow: 0 30px 60px -20px rgba(0, 0, 0, .7);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 17px/1.6 Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  code, kbd, .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+
+  /* Nav */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; }
+  .brand img { width: 32px; height: 32px; }
+  .nav-right { display: flex; align-items: center; gap: 24px; }
+  .nav-links { display: flex; gap: 24px; font-size: 15px; }
+  .lang { display: flex; gap: 10px; font-size: 14px; }
+  .lang a { text-decoration: none; color: var(--muted); }
+  .lang a[aria-current] { color: var(--text); font-weight: 600; }
+  /* Korean and Japanese: keep words whole, and less tracking on headings. */
+  :lang(ko) h1, :lang(ko) h2, :lang(ja) h1, :lang(ja) h2 { letter-spacing: -0.02em; }
+  :lang(ko) body, :lang(ko) h1, :lang(ko) h2, :lang(ko) .sub, :lang(ko) .lead { word-break: keep-all; }
+  :lang(ja) h1, :lang(ja) h2 { line-break: strict; }
+  .nav-links a { text-decoration: none; color: var(--muted); }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero { text-align: center; padding: 56px 0 32px; }
+  .hero img.logo { width: 112px; height: 112px; margin-bottom: 14px; }
+  .origin { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
+  .origin span { font-weight: 600; color: var(--text); }
+  h1 {
+    font-size: clamp(36px, 6vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    margin: 0 0 18px;
+    font-weight: 800;
+    text-wrap: balance;
+  }
+  h1 .hl { color: var(--accent-ink); }
+  .sub { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 620px; margin: 0 auto 32px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 22px; border-radius: 12px;
+    font-weight: 600; font-size: 16px; text-decoration: none;
+    border: 1px solid var(--line); background: var(--card);
+  }
+  .btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .btn:hover { transform: translateY(-1px); }
+  .meta { margin-top: 16px; font-size: 14px; color: var(--muted); }
+  .agents { margin-top: 22px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
+  .agents b { font-weight: 600; color: var(--text); padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); }
+
+  kbd {
+    display: inline-block; min-width: 1.6em; padding: 1px 7px;
+    border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 6px;
+    background: var(--card); font-size: .85em; text-align: center;
+  }
+
+  /* Demo */
+  .demo { margin: 48px auto 0; max-width: 900px; text-align: left; }
+  .screen {
+    position: relative; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden;
+    background: linear-gradient(135deg, #3b3f8f, #8a4f9e 55%, #e0806b);
+    box-shadow: var(--shadow);
+  }
+  .win {
+    position: absolute; border-radius: 10px; overflow: hidden;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, .35);
+  }
+  .win .bar { height: 26px; display: flex; align-items: center; gap: 6px; padding: 0 10px; }
+  .win .bar i { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
+  .win .bar i:nth-child(2) { background: #febc2e; }
+  .win .bar i:nth-child(3) { background: #28c840; }
+
+  .browser { z-index: 1; left: 4%; top: 7%; width: 54%; height: 70%; background: #fff; }
+  .browser .bar { background: #ececec; }
+  .page { padding: 16px; }
+  .page .h { height: 14px; width: 55%; background: #1f2330; border-radius: 4px; margin-bottom: 14px; }
+  .page .l { height: 8px; background: #e3e5ea; border-radius: 4px; margin-bottom: 8px; }
+  .page .err {
+    margin-top: 14px; padding: 10px; border-radius: 6px; border: 1px solid #f3b4b4; background: #fff1f1;
+    color: #c0392b; font: 600 clamp(8px, 1.3vw, 12px)/1.4 "JetBrains Mono", monospace;
+  }
+  .page .btn-mock { margin-top: 14px; width: 34%; height: 26px; border-radius: 6px; background: #4f63ff; }
+
+  .term { right: 4%; bottom: 7%; width: 50%; height: 56%; background: var(--term); }
+  .term .bar { background: #22242c; }
+  .term .body {
+    padding: 12px 14px; color: var(--term-text);
+    font: clamp(8px, 1.35vw, 13px)/1.6 "JetBrains Mono", monospace;
+  }
+  .term .dim { color: #6e7386; }
+  .term .acc { color: var(--accent); }
+  .prompt-box { margin-top: 8px; border: 1px solid #3a3d4a; border-radius: 6px; padding: 6px 10px; }
+  .pasted { color: #8fb4ff; opacity: 0; }
+  .typed { display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom; max-width: 0; }
+  .cursor { display: inline-block; width: .55em; height: 1.1em; background: var(--term-text); vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
+
+  .keys {
+    position: absolute; left: 50%; top: 24%; transform: translate(-50%, -50%);
+    display: flex; gap: 10px; opacity: 0; z-index: 5;
+  }
+  .keys span {
+    font: 700 clamp(18px, 3.5vw, 34px)/1 Inter, sans-serif; color: #fff;
+    background: rgba(20, 20, 28, .82); padding: 14px 20px; border-radius: 14px;
+    backdrop-filter: blur(8px);
+  }
+  .dim-overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, .25); opacity: 0; z-index: 3; }
+  .sel {
+    position: absolute; left: 7%; top: 31%; width: 0; height: 0; z-index: 4;
+    border: 2px solid #fff; background: rgba(255, 255, 255, .12);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .3); opacity: 0;
+  }
+  .flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 6; pointer-events: none; }
+  .caption { text-align: center; margin-top: 16px; font-size: 14px; color: var(--muted); }
+
+  /* 7s loop: ⌘⌘ → drag → flash → terminal jumps forward → image pasted → typed */
+  .keys        { animation: keys 7s infinite; }
+  .dim-overlay { animation: dim 7s infinite; }
+  .sel         { animation: sel 7s infinite; }
+  .flash       { animation: flash 7s infinite; }
+  .term        { animation: front 7s infinite; }
+  .pasted      { animation: pasted 7s infinite; }
+  .typed       { animation: typed 7s infinite; }
+  @keyframes keys   { 0%, 4% { opacity: 0; transform: translate(-50%, -40%); } 8%, 20% { opacity: 1; transform: translate(-50%, -50%); } 25%, 100% { opacity: 0; } }
+  @keyframes dim    { 0%, 22% { opacity: 0; } 25%, 47% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  @keyframes sel    { 0%, 25% { opacity: 0; width: 0; height: 0; } 27% { opacity: 1; width: 0; height: 0; } 45% { opacity: 1; width: 47%; height: 34%; } 48%, 100% { opacity: 0; width: 47%; height: 34%; } }
+  @keyframes flash  { 0%, 47% { opacity: 0; } 49% { opacity: .55; } 54%, 100% { opacity: 0; } }
+  @keyframes front  { 0%, 54% { z-index: 0; transform: scale(1); } 57% { z-index: 2; transform: scale(1.025); } 60%, 100% { z-index: 2; transform: scale(1); } }
+  @keyframes pasted { 0%, 60% { opacity: 0; } 63%, 96% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes typed  { 0%, 66% { max-width: 0; } 86%, 96% { max-width: 40ch; } 100% { max-width: 0; } }
+  @keyframes blink  { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .keys, .dim-overlay, .sel, .flash, .term, .pasted, .typed { animation: none; }
+    .term { z-index: 2; } .pasted { opacity: 1; } .typed { max-width: none; }
+  }
+
+  /* Sections */
+  section { padding: 88px 0 0; }
+  h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.03em; line-height: 1.15; margin: 0 0 12px; text-align: center; }
+  .lead { text-align: center; color: var(--muted); max-width: 580px; margin: 0 auto 40px; }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .step, .feat { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
+  .step .n { font: 600 13px/1 "JetBrains Mono", monospace; color: var(--accent-ink); margin-bottom: 14px; }
+  .step h3, .feat h3 { margin: 0 0 6px; font-size: 18px; letter-spacing: -0.01em; }
+  .step p, .feat p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .compare .col { border-radius: 16px; padding: 24px; border: 1px solid var(--line); }
+  .compare .before { background: var(--bg-soft); }
+  .compare .after { background: var(--card); border-color: var(--accent); }
+  .compare h3 { margin: 0 0 14px; font-size: 15px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .compare .after h3 { color: var(--accent-ink); }
+  .compare ol { margin: 0; padding-left: 20px; }
+  .compare li { margin: 6px 0; }
+  .compare .before li { color: var(--muted); }
+
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .feat .ic { font-size: 22px; margin-bottom: 10px; }
+
+  .terms { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 24px; }
+  .terms span { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 14px; color: var(--muted); background: var(--card); }
+
+  pre {
+    background: var(--term); color: var(--term-text); border-radius: 14px; padding: 20px 22px;
+    overflow-x: auto; font-size: 14px; line-height: 1.7; margin: 0;
+  }
+  pre .c { color: #6e7386; }
+  .install { max-width: 720px; margin: 0 auto; }
+  .note { margin-top: 16px; font-size: 15px; color: var(--muted); }
+  .install .note .btn { margin-right: 10px; }
+  @media (max-width: 600px) { .install .note .btn { display: flex; width: fit-content; margin: 0 0 10px; } }
+  details.from-source { margin-top: 16px; }
+  details.from-source pre { margin-top: 12px; }
+
+  details { border-bottom: 1px solid var(--line); padding: 18px 0; max-width: 720px; margin: 0 auto; }
+  details summary { cursor: pointer; font-weight: 600; list-style: none; }
+  details summary::after { content: "+"; float: right; color: var(--muted); }
+  details[open] summary::after { content: "–"; }
+  details p { color: var(--muted); margin: 10px 0 0; font-size: 15px; }
+
+  footer { margin-top: 96px; padding: 32px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 760px) {
+    .nav-links { display: none; }
+    .steps, .features, .compare { grid-template-columns: 1fr; }
+    section { padding-top: 64px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <a class="brand" href="#"><img src="icon.png" alt="">Yetda</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/woonmayer/yetda">GitHub</a>
+      </div>
+      <div class="lang"><a href="./" aria-current="page" lang="en">EN</a><a href="ko/" lang="ko">한국어</a><a href="ja/" lang="ja">日本語</a></div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <img class="logo" src="icon.png" alt="Yetda icon">
+    <div class="origin"><span lang="ko">옜다</span> · <i>yetda</i> · Korean for “here, take it.”</div>
+    <h1>Screenshots into your<br>coding agent, <span class="hl">in one gesture.</span></h1>
+    <p class="sub">Tap <kbd>⌘</kbd> twice, drag a region, done. Yetda drops the image straight into the agent running in your terminal. No saving, no dragging, no switching windows.</p>
+    <div class="cta">
+      <a class="btn primary" href="#install">Install for macOS</a>
+      <a class="btn" href="https://github.com/woonmayer/yetda">★ View on GitHub</a>
+    </div>
+    <div class="meta">Free &amp; open source · MIT · macOS 13+ · No network access · Captures expire after 7 days</div>
+    <div class="agents">
+      <span>Works with</span>
+      <b>Claude Code</b><b>Codex</b><b>Gemini CLI</b><b>opencode</b><b>Cursor CLI</b>
+    </div>
+
+    <!-- Replace with a screen recording when available:
+         <video src="demo.mp4" autoplay muted loop playsinline></video> -->
+    <div class="demo" aria-label="Animated demo: tapping Command twice, selecting a region of a web page, and the screenshot appearing in a terminal coding agent's prompt">
+      <div class="screen">
+        <div class="win browser">
+          <div class="bar"><i></i><i></i><i></i></div>
+          <div class="page">
+            <div class="h"></div>
+            <div class="l" style="width:90%"></div>
+            <div class="l" style="width:75%"></div>
+            <div class="err">TypeError: Cannot read properties of undefined (reading 'map')</div>
+            <div class="btn-mock"></div>
+          </div>
+        </div>
+        <div class="win term">
+          <div class="bar"><i></i><i></i><i></i></div>
+          <div class="body">
+            <div><span class="acc">●</span> agent</div>
+            <div class="dim">  cwd: ~/projects/webapp</div>
+            <div class="prompt-box">
+              &gt; <span class="pasted">[Image #1]</span> <span class="typed">why is this broken?</span><span class="cursor"></span>
+            </div>
+          </div>
+        </div>
+        <div class="dim-overlay"></div>
+        <div class="sel"></div>
+        <div class="keys"><span>⌘</span><span>⌘</span></div>
+        <div class="flash"></div>
+      </div>
+      <p class="caption">⌘⌘ → drag → it's already in the prompt.</p>
+    </div>
+  </header>
+
+  <section id="how">
+    <h2>Three seconds, start to finish</h2>
+    <p class="lead">Built for the moment you see something on screen and want your agent to look at it.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <h3>Tap <kbd>⌘</kbd> <kbd>⌘</kbd></h3>
+        <p>From any app. Or press <kbd>⌘⇧2</kbd> if you prefer a classic hotkey.</p>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <h3>Drag a region</h3>
+        <p>The native macOS selector. Press Space to grab a whole window instead.</p>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <h3>It's pasted</h3>
+        <p>Yetda brings back your last terminal and pastes. Keep typing your question.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Fewer steps than you think</h2>
+    <p class="lead">The built-in way works, but you do it dozens of times a day.</p>
+    <div class="compare">
+      <div class="col before">
+        <h3>Without Yetda</h3>
+        <ol>
+          <li>Press <kbd>⌘⇧4</kbd> and drag</li>
+          <li>Find the file on your Desktop</li>
+          <li>Switch to the terminal</li>
+          <li>Drag the file in, or copy its path</li>
+          <li>Clean up the Desktop later</li>
+        </ol>
+      </div>
+      <div class="col after">
+        <h3>With Yetda</h3>
+        <ol>
+          <li>Tap <kbd>⌘</kbd> twice and drag</li>
+        </ol>
+        <p class="note">The image is already in the prompt, and the file expires on its own.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <h2>Small app, the right details</h2>
+    <p class="lead">A menu bar icon and a few shortcuts. Nothing else to learn.</p>
+    <div class="features">
+      <div class="feat">
+        <div class="ic">⌘⌘</div>
+        <h3>Double-tap capture</h3>
+        <p>Faster than any three-key hotkey. Toggle it off if another app already uses it.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">↩︎</div>
+        <h3>Auto-paste</h3>
+        <p>Remembers the last terminal you used and pastes with the right key for it (<kbd>⌃V</kbd>, or <kbd>⌘V</kbd> in iTerm2).</p>
+      </div>
+      <div class="feat">
+        <div class="ic">🖼</div>
+        <h3>Paste an earlier shot</h3>
+        <p><kbd>⌘⇧1</kbd> opens a thumbnail menu of your last 10 captures. Press 1–9 to paste one.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">/</div>
+        <h3><code>/shots</code> skill</h3>
+        <p>Took several shots? Run <code>/shots</code> in Claude Code or Codex and it reads every pending one at once. Yetda offers to install it for you.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">🔒</div>
+        <h3>Hides your secrets</h3>
+        <p>API keys, tokens and passwords in the shot are blacked out on-device, before the image reaches your agent.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">Aa</div>
+        <h3>Pastes the text, too</h3>
+        <p>Optionally adds the text read from the shot, so your agent gets the exact error message. OCR runs locally.</p>
+      </div>
+    </div>
+    <div class="terms">
+      <span>Terminal</span><span>iTerm2</span><span>Ghostty</span><span>Warp</span><span>WezTerm</span>
+      <span>kitty</span><span>Alacritty</span><span>Hyper</span><span>cmux</span><span>Orca</span><span>Kaku</span>
+    </div>
+  </section>
+
+  <section id="install">
+    <h2>Install</h2>
+    <p class="lead">Install with Homebrew, or download the app. macOS 13 or later; signed and notarized by Apple.</p>
+    <div class="install">
+<pre><span class="c"># Homebrew</span>
+brew install --cask woonmayer/tap/yetda</pre>
+      <p class="note"><a class="btn primary" href="https://github.com/woonmayer/yetda/releases/latest/download/Yetda.dmg">Download Yetda.dmg</a> Open the dmg and drag Yetda to Applications.</p>
+      <details class="from-source">
+        <summary>Build from source instead</summary>
+<pre><span class="c"># build</span>
+git clone https://github.com/woonmayer/yetda.git
+cd yetda
+./scripts/build-app.sh
+
+<span class="c"># install (move, don't copy, so macOS permissions stick)</span>
+rm -rf /Applications/Yetda.app &amp;&amp; mv Yetda.app /Applications/
+open /Applications/Yetda.app</pre>
+      </details>
+      <p class="note">On first use macOS asks for <strong>Screen Recording</strong> (to capture) and <strong>Accessibility</strong> (for ⌘⌘ and auto-paste). If one is missing, the menu shows a ⚠︎ item that opens the right settings pane. On first launch Yetda also asks whether to add the <code>/shots</code> skill to Claude Code and Codex; it never installs it without asking.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>FAQ</h2>
+    <p class="lead"></p>
+    <details>
+      <summary>How does secret hiding work?</summary>
+      <p>Yetda reads the capture's text with macOS's on-device OCR, matches known key formats (OpenAI, Anthropic, GitHub, AWS, Stripe, JWT and more), <code>password=…</code> assignments and card numbers, and covers them with a solid mask in the image and in the pasted text. On Macs with Apple Intelligence, Apple's on-device model also judges random-looking strings. If anything goes wrong while masking, Yetda doesn't paste the capture at all. Masked too much? <em>Paste Last Capture Without Hiding</em> pastes the original, which is kept in memory only. Nothing is sent anywhere. It's a safety net, so still glance at what you share.</p>
+    </details>
+    <details>
+      <summary>Why does it need Accessibility permission?</summary>
+      <p>To notice the ⌘⌘ double tap and to press the paste key in your terminal. Without it, Yetda still captures to the clipboard and you paste yourself.</p>
+    </details>
+    <details>
+      <summary>My terminal isn't in the list.</summary>
+      <p>Use that terminal, then click the menu bar icon: an <em>Also Paste into “&lt;app&gt;”</em> item appears. Tick it and that app becomes an auto-paste target.</p>
+    </details>
+    <details>
+      <summary>Codex (or another app) already uses ⌘⌘.</summary>
+      <p>Turn off “Capture with ⌘⌘” in the menu and use <kbd>⌘⇧2</kbd> instead.</p>
+    </details>
+    <details>
+      <summary>Captures come out blank or the permission prompt keeps appearing.</summary>
+      <p>Make sure only one Yetda.app exists on your Mac, then run <code>tccutil reset ScreenCapture io.github.woonmayer.yetda</code>, relaunch, and grant again.</p>
+    </details>
+    <details>
+      <summary>Which agents does it work with?</summary>
+      <p>Any terminal agent that accepts a pasted image: Claude Code, Codex, Gemini CLI, opencode and others. Yetda presses <kbd>⌃V</kbd> (<kbd>⌘V</kbd> in iTerm2). If your agent wants <kbd>⌘V</kbd> everywhere, like Cursor CLI, set <em>Paste Key → ⌘V</em> in the menu. The <code>/shots</code> skill works in Claude Code and Codex.</p>
+    </details>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Yetda · MIT License</span>
+    <a href="https://github.com/woonmayer/yetda">github.com/woonmayer/yetda</a>
+  </div>
+</footer>
+
+</body>
+</html>
