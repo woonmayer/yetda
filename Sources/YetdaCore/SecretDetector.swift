@@ -101,12 +101,25 @@ public enum SecretDetector {
         }
     }
 
-    /// Words that fill a password/token field without being one:
-    /// `token=undefined`, `password: required`, `secret = ********`.
+    /// Words that fill a password/token field without being one. A known list
+    /// rather than "any lowercase word": real passwords are often plain
+    /// words (`PGPASSWORD=postgres`).
+    private static let placeholderWords: Set<String> = [
+        "required", "optional", "undefined", "null", "nil", "none", "empty", "unset", "default",
+        "string", "number", "boolean", "text", "value", "example", "sample", "placeholder",
+        "redacted", "hidden", "masked", "invalid", "missing", "expired", "incorrect", "provided",
+        "true", "false",
+    ]
+
+    /// `token=undefined`, `password: required`, `secret = ********`,
+    /// `password: (none)`, `api_key=<your-key>`, `TOKEN=$GITHUB_TOKEN`,
+    /// `password: {{db_password}}`: a type, a stand-in or a reference, not a value.
     private static func isPlaceholder(_ value: Substring) -> Bool {
-        let masked = value.allSatisfy { "*•●x.".contains($0) }
-        let plainWord = value.count < 12 && value.allSatisfy { $0.isLowercase && $0.isLetter }
-        return masked || plainWord
+        if value.allSatisfy({ "*•●x.".contains($0) }) { return true }
+        if value.hasPrefix("$") || value.hasPrefix("{{") || value.hasPrefix("%")
+            || (value.hasPrefix("<") && value.hasSuffix(">")) { return true }
+        let word = value.trimmingCharacters(in: CharacterSet(charactersIn: "()[]{}<>")).lowercased()
+        return placeholderWords.contains(word)
     }
 
     /// Issuer prefixes (Visa, Mastercard, Amex, Discover, JCB, UnionPay), so
@@ -164,7 +177,8 @@ public enum SecretDetector {
         return sum % 10 == 0
     }
 
-    private static func merge(_ ranges: [Range<String.Index>]) -> [Range<String.Index>] {
+    /// Sorted, with overlapping or touching ranges joined.
+    static func merge(_ ranges: [Range<String.Index>]) -> [Range<String.Index>] {
         ranges.sorted { $0.lowerBound < $1.lowerBound }.reduce(into: []) { merged, range in
             if let last = merged.last, last.upperBound >= range.lowerBound {
                 merged[merged.count - 1] = last.lowerBound..<max(last.upperBound, range.upperBound)

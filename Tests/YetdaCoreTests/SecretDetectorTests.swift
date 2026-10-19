@@ -72,6 +72,18 @@ final class SecretDetectorTests: XCTestCase {
         XCTAssertEqual(secrets("password: required"), [])
         XCTAssertEqual(secrets("secret = ********"), [])
         XCTAssertEqual(secrets("password: correcthorsebattery"), ["correcthorsebattery"])
+        XCTAssertEqual(secrets("password: (none)"), [])
+        XCTAssertEqual(secrets("token: string;"), [])
+        XCTAssertEqual(secrets("api_key=<your-key>"), [])
+        XCTAssertEqual(secrets("API_TOKEN=$GITHUB_TOKEN"), [])
+        XCTAssertEqual(secrets("password: {{db_password}}"), [])
+    }
+
+    /// Real passwords are often plain lowercase words.
+    func test_lowercase_word_passwords_are_hidden() {
+        XCTAssertEqual(secrets("PGPASSWORD=postgres"), ["postgres"])
+        XCTAssertEqual(secrets("password: letmein"), ["letmein"])
+        XCTAssertEqual(secrets("DB_PASSWORD=supersecret"), ["supersecret"])
     }
 
     /// Everyday developer text that must never be hidden.

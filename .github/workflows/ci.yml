@@ -7,8 +7,14 @@ on:
 
 jobs:
   test:
-    # Swift 6 toolchain (Xcode 16+); the package builds in Swift 6 language mode.
-    runs-on: macos-15
+    # Swift 6 toolchain; the package builds in Swift 6 language mode.
+    # macos-15 (Xcode 16) builds without FoundationModels, as for macOS 13–15;
+    # macos-26 (Xcode 26) compiles the on-device model check, like releases do.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-26]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - name: Build (warnings are errors)

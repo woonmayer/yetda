@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- **Hide secrets, closer gaps:** the body of a private key under its
+  `BEGIN … PRIVATE KEY` header is hidden, not just the header; a key the
+  terminal wrapped onto the next line is hidden on both lines (including when
+  neither part is recognizable alone); plain-word passwords
+  (`PGPASSWORD=postgres`) are hidden, with only known stand-ins (`required`,
+  `<your-key>`, `$TOKEN`, …) left alone.
+- The on-device model judges a capture's unknown-format strings in one request,
+  so a busy screen no longer times out line by line.
+- A new capture cancels a paste still in progress, so an older paste can't put
+  its image back on the clipboard.
+- The cross-line decisions live in `YetdaCore` (`ScreenshotRedaction`) with tests;
+  CI also builds and tests on macOS 26.
+
 ## 0.3.0
 
 - **Signed releases:** Developer ID + hardened runtime, notarized dmg, and a

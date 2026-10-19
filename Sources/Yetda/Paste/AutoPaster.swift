@@ -26,6 +26,10 @@ final class AutoPaster {
     private var lastTerminal: NSRunningApplication?
     private var hasPrompted = false
     private var activationObserver: NSObjectProtocol?
+    /// The paste in progress. A new paste cancels it, so an older one never
+    /// types into the terminal or puts its image back on the clipboard after
+    /// a newer capture has taken over.
+    private var pasteTask: Task<Void, Never>?
     private let extraTerminals: () -> Set<String>
     private let pasteKeyOverride: () -> PasteTarget.PasteKey?
 
@@ -76,27 +80,33 @@ final class AutoPaster {
         }
         let key = PasteTarget.pasteKey(bundleID: terminal.bundleIdentifier, override: pasteKeyOverride())
         terminal.activate()
-        Task {
+        pasteTask?.cancel()
+        pasteTask = Task {
             // Only press keys once the terminal really is in front, so they
             // never land in whatever app happened to be there.
             guard await waitUntilFrontmost(terminal) else {
-                NSLog("Yetda: the terminal didn't come to the front; capture left on the clipboard.")
-                onStatus?("📋 copied")
+                if !Task.isCancelled {
+                    NSLog("Yetda: the terminal didn't come to the front; capture left on the clipboard.")
+                    onStatus?("📋 copied")
+                }
                 return
             }
             try? await Task.sleep(for: Timing.settle)
+            guard !Task.isCancelled else { return }
             PasteKeystroke.send(key)
             guard let text else { return }
             try? await Task.sleep(for: Timing.imageRead)
+            guard !Task.isCancelled else { return }
             Clipboard.setText(text)
             PasteKeystroke.send(.commandV)
             try? await Task.sleep(for: Timing.textRead)
+            guard !Task.isCancelled else { return }
             restoreImage()
         }
     }
 
     private func waitUntilFrontmost(_ app: NSRunningApplication) async -> Bool {
-        for _ in 0..<Timing.focusAttempts {
+        for _ in 0..<Timing.focusAttempts where !Task.isCancelled {
             if NSWorkspace.shared.frontmostApplication?.processIdentifier == app.processIdentifier { return true }
             try? await Task.sleep(for: Timing.focusPoll)
         }

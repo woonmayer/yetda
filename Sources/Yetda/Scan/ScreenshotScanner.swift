@@ -33,21 +33,25 @@ enum ScreenshotScanner {
         guard let lines = TextRecognizer.lines(in: image) else { return Result(maskingFailed: redact) }
         guard redact else { return Result(text: lines.map(\.best.text).joined(separator: "\n")) }
 
-        // Lines are checked in parallel: each may wait on the on-device model.
-        let found = await withTaskGroup(of: (Int, LineSecrets?).self) { group in
-            for (index, line) in lines.enumerated() {
-                group.addTask { (index, await secrets(in: line)) }
+        // Every line's candidates go to the on-device model in one request,
+        // then the plan adds what only shows across lines (key bodies, wraps).
+        let texts = lines.map {
+            ScreenshotRedaction.Line(best: $0.best.text, alternatives: $0.alternatives.map(\.text))
+        }
+        let bests = texts.map(\.best)
+        let flagged = await LocalModel.secrets(candidates: bests.map(SecretDetector.candidates(in:)), in: bests)
+        let plans = ScreenshotRedaction.plan(texts, flagged: flagged)
+
+        var rects: [CGRect] = []
+        for (line, plan) in zip(lines, plans) where !plan.ranges.isEmpty {
+            let reading = plan.reading == 0 ? line.best : line.alternatives[plan.reading - 1]
+            guard let located = locate(plan.ranges, in: reading) else {
+                NSLog("Yetda: found a secret but couldn't locate it in the image; not sharing the capture.")
+                return Result(maskingFailed: true)
             }
-            var results = [LineSecrets?](repeating: nil, count: lines.count)
-            for await (index, secrets) in group { results[index] = secrets }
-            return results
+            rects += located
         }
-        guard found.allSatisfy({ $0 != nil }) else {
-            NSLog("Yetda: found a secret but couldn't locate it in the image; not sharing the capture.")
-            return Result(maskingFailed: true)
-        }
-        let rects = found.flatMap { $0?.rects ?? [] }
-        let text = found.map { $0?.redactedText ?? "" }.joined(separator: "\n")
+        let text = plans.map(\.redactedText).joined(separator: "\n")
         guard !rects.isEmpty else { return Result(text: text) }
 
         let original: Data?
@@ -62,34 +66,6 @@ enum ScreenshotScanner {
             return Result(maskingFailed: true)
         }
         return Result(hiddenCount: rects.count, text: text, original: original)
-    }
-
-    private struct LineSecrets: Sendable {
-        var rects: [CGRect] = []
-        var redactedText: String
-    }
-
-    /// Secrets in the best reading (patterns, then the on-device model for
-    /// random-looking leftovers); failing that, in a runner-up reading. The
-    /// same ranges mask the image and redact the text. Nil if a secret was
-    /// found but couldn't be located in the image.
-    private static func secrets(in line: RecognizedLine) async -> LineSecrets? {
-        let best = line.best
-        var ranges = SecretDetector.secretRanges(in: best.text)
-        ranges += await LocalModel.secrets(among: SecretDetector.candidates(in: best.text), in: best.text)
-        if !ranges.isEmpty {
-            return locate(ranges, in: best).map {
-                LineSecrets(rects: $0, redactedText: SecretDetector.redact(best.text, ranges: ranges))
-            }
-        }
-        for reading in line.alternatives {
-            let alternativeRanges = SecretDetector.secretRanges(in: reading.text)
-            guard !alternativeRanges.isEmpty else { continue }
-            // The best reading garbled the secret, so it can't be redacted
-            // piece by piece: drop the whole line from the text.
-            return locate(alternativeRanges, in: reading).map { LineSecrets(rects: $0, redactedText: "[REDACTED]") }
-        }
-        return LineSecrets(redactedText: best.text)
     }
 
     /// The image rects for every range, or nil if any can't be located.

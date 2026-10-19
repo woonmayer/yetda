@@ -74,9 +74,15 @@ enum TextRecognizer {
             }
     }
 
-    // Vision's origin is bottom-left, so higher midY comes first.
+    // Vision's origin is bottom-left, so higher rows come first. Rows are
+    // 1%-of-height bands: a fixed bucket keeps the order transitive, which a
+    // "within 1% of each other" test is not.
     private static func readingOrder(_ a: VNRecognizedTextObservation, _ b: VNRecognizedTextObservation) -> Bool {
-        let sameRow = abs(a.boundingBox.midY - b.boundingBox.midY) <= 0.01
-        return sameRow ? a.boundingBox.minX < b.boundingBox.minX : a.boundingBox.midY > b.boundingBox.midY
+        let rowA = row(a), rowB = row(b)
+        return rowA != rowB ? rowA > rowB : a.boundingBox.minX < b.boundingBox.minX
+    }
+
+    private static func row(_ observation: VNRecognizedTextObservation) -> Int {
+        Int((observation.boundingBox.midY * 100).rounded())
     }
 }
