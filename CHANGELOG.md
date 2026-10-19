@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- **Support Yetda…** menu item and a Sponsor link (GitHub Sponsors); the app
+  only opens the page in your browser.
+
 ## 0.3.0
 
 - **Hide secrets, closer gaps:** the body of a private key under its

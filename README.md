@@ -123,6 +123,7 @@ app. If captures come out blank, the permission isn't granted yet.
   - **Hide Secrets in Captures** — on by default
   - **Also Paste Text from Capture** — off by default (needs auto-paste)
   - **/shots Skill** — install or remove the skill per agent
+  - **Support Yetda…** — opens the GitHub Sponsors page in your browser
   - **Quit**
 
 The number next to the icon is how many captures are pending in `~/Yetda/`.
@@ -235,6 +236,10 @@ Issues and pull requests are welcome. Before opening a PR, run
 `swift build -Xswiftc -warnings-as-errors && swift test` (CI runs both), and
 keep new logic in `YetdaCore` with a unit test where possible; the AppKit
 layer should stay thin wiring.
+
+## Support
+
+Yetda is free. If it saves you time, you can [sponsor its development](https://github.com/sponsors/woonmayer) ♥
 
 ## License
 

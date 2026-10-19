@@ -108,6 +108,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         configure(skillItem, "/shots Skill", nil, in: menu).submenu = NSMenu()
 
         menu.addItem(.separator())
+        configure(NSMenuItem(), "Support Yetda…", #selector(openSponsors), in: menu)
         menu.addItem(withTitle: "Quit Yetda", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         return menu
     }
@@ -196,6 +197,10 @@ final class StatusMenu: NSObject, NSMenuDelegate {
     @objc private func capture() { handlers.capture() }
     @objc private func pasteUnmasked() { handlers.pasteUnmasked() }
     @objc private func openFolder() { NSWorkspace.shared.open(store.folderURL) }
+    /// Opens the sponsor page in the browser; Yetda itself makes no network request.
+    @objc private func openSponsors() {
+        if let url = URL(string: "https://github.com/sponsors/woonmayer") { NSWorkspace.shared.open(url) }
+    }
     @objc private func openScreenRecordingSettings() { Permissions.openScreenRecordingSettings() }
     @objc private func openAccessibilitySettings() { Permissions.openAccessibilitySettings() }
     @objc private func toggleRedact() { Settings.redactSecrets.toggle() }
