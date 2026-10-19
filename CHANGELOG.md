@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0
+
 - **Hide secrets, closer gaps:** the body of a private key under its
   `BEGIN … PRIVATE KEY` header is hidden, not just the header; a key the
   terminal wrapped onto the next line is hidden on both lines (including when
@@ -14,13 +16,9 @@
   its image back on the clipboard.
 - The cross-line decisions live in `YetdaCore` (`ScreenshotRedaction`) with tests;
   CI also builds and tests on macOS 26.
-
-## 0.3.0
-
 - **Signed releases:** Developer ID + hardened runtime, notarized dmg, and a
   Homebrew cask (`brew install --cask woonmayer/tap/yetda`); `scripts/release.sh`
   and a tag-triggered release workflow. Universal binary (Apple silicon + Intel).
-
 - **/shots skill ships with the app:** on first launch Yetda asks once whether to
   install it for Claude Code (`~/.claude/skills`) and Codex (`~/.agents/skills`);
   toggle it per agent from the menu. Its own copies update with the app; edited
