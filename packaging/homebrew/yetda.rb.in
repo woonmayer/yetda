@@ -7,7 +7,7 @@ cask "yetda" do
   url "https://github.com/@RELEASE_REPO@/releases/download/v#{version}/Yetda-#{version}.dmg"
   name "Yetda"
   desc "Puts screenshots into coding agents, with secrets masked first"
-  homepage "https://woonmayer.github.io/yetda/"
+  homepage "https://yetda.app/"
 
   livecheck do
     url :url

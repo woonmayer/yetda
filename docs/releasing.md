@@ -60,7 +60,9 @@ YETDA_NOTARY_PROFILE=yetda-notary ./scripts/release.sh
 
 ## Landing page (GitHub Pages)
 
-Settings → Pages → *Deploy from a branch* → `main` / `/docs`. The site is
-`https://woonmayer.github.io/yetda/` (pages use absolute URLs for `og:image`
-and `hreflang`). Pages from a private repo needs GitHub Pro; otherwise turn it
+Settings → Pages → *Deploy from a branch* → `main` / `/docs`, custom domain
+`yetda.app` (`docs/CNAME`; DNS at Vercel: four A and four AAAA records for
+GitHub Pages, `www` CNAME to `woonmayer.github.io`). The old
+`woonmayer.github.io/yetda/` redirects there. Pages use absolute URLs for
+`og:image` and `hreflang`. Pages from a private repo needs GitHub Pro; otherwise turn it
 on when the repo goes public.

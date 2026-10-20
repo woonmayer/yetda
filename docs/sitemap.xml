@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://woonmayer.github.io/yetda/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://woonmayer.github.io/yetda/"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://woonmayer.github.io/yetda/ko/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://woonmayer.github.io/yetda/ja/"/>
+    <loc>https://yetda.app/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yetda.app/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yetda.app/ko/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://yetda.app/ja/"/>
   </url>
   <url>
-    <loc>https://woonmayer.github.io/yetda/ko/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://woonmayer.github.io/yetda/"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://woonmayer.github.io/yetda/ko/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://woonmayer.github.io/yetda/ja/"/>
+    <loc>https://yetda.app/ko/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yetda.app/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yetda.app/ko/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://yetda.app/ja/"/>
   </url>
   <url>
-    <loc>https://woonmayer.github.io/yetda/ja/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://woonmayer.github.io/yetda/"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://woonmayer.github.io/yetda/ko/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://woonmayer.github.io/yetda/ja/"/>
+    <loc>https://yetda.app/ja/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yetda.app/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yetda.app/ko/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://yetda.app/ja/"/>
   </url>
 </urlset>

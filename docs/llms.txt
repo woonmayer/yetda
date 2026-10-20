@@ -16,8 +16,8 @@ Key facts:
 
 ## Docs
 
-- [Landing page (English)](https://woonmayer.github.io/yetda/): what it does, install, FAQ
-- [한국어](https://woonmayer.github.io/yetda/ko/) and [日本語](https://woonmayer.github.io/yetda/ja/)
+- [Landing page (English)](https://yetda.app/): what it does, install, FAQ
+- [한국어](https://yetda.app/ko/) and [日本語](https://yetda.app/ja/)
 - [README](https://github.com/woonmayer/yetda/blob/main/README.md): usage, menu items, configuration, privacy, how it works
 - [Changelog](https://github.com/woonmayer/yetda/blob/main/CHANGELOG.md)
 
