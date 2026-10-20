@@ -30,7 +30,7 @@ accepts a pasted image:
 | Gemini CLI | `Ctrl+V` | should work |
 | opencode | `Ctrl+V` | should work |
 | Cursor CLI | `⌘V` | set your terminal to `⌘V` under **Paste Into** |
-| Claude desktop app | `⌘V` | should work |
+| Claude desktop app | `⌘V` | tested |
 | Codex / ChatGPT desktop app | `⌘V` | should work |
 
 Tried one of these? A PR to update this table is welcome.
