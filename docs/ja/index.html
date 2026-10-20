@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Yetda — スクショをClaude Code・Codexなどのターミナルエージェントへ一瞬で（macOS）</title>
-<meta name="description" content="⌘を2回押して範囲をドラッグするだけで、スクリーンショットがコーディングエージェントのプロンプトに入ります。Claude Code、Codex、Gemini CLIなどに対応した、小さな無料のオープンソースmacOSメニューバーアプリ。">
-<meta property="og:title" content="Yetda：スクショをコーディングエージェントへ、ワンアクションで">
-<meta property="og:description" content="⌘を2回押してドラッグするだけで、スクショがエージェントのプロンプトに入ります。">
+<title>Yetda — スクショをClaude Code・Codexなどのコーディングエージェントへ、秘密は隠して（macOS）</title>
+<meta name="description" content="⌘を2回押してドラッグするだけで、スクショがClaude Code、Codexやそのデスクトップアプリに入ります。APIキーやパスワードはMacの中で先に黒塗り。無料・オープンソースのmacOSメニューバーアプリ。">
+<meta property="og:title" content="Yetda：画面は見せて、鍵は隠す">
+<meta property="og:description" content="⌘を2回、ドラッグ1回。スクショがターミナルでもデスクトップアプリでもエージェントに入り、キーやパスワードは先に黒塗りされます。">
 <meta property="og:image" content="https://woonmayer.github.io/yetda/ja/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -20,8 +20,8 @@
 <link rel="alternate" hreflang="ja" href="https://woonmayer.github.io/yetda/ja/">
 <link rel="alternate" hreflang="x-default" href="https://woonmayer.github.io/yetda/">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Yetda：スクショをコーディングエージェントへ、ワンアクションで">
-<meta name="twitter:description" content="⌘を2回押してドラッグするだけで、スクショがエージェントのプロンプトに入ります。">
+<meta name="twitter:title" content="Yetda：画面は見せて、鍵は隠す">
+<meta name="twitter:description" content="⌘を2回、ドラッグ1回。スクショがターミナルでもデスクトップアプリでもエージェントに入り、キーやパスワードは先に黒塗りされます。">
 <meta name="twitter:image" content="https://woonmayer.github.io/yetda/ja/og.png">
 <script type="application/ld+json">
 {
@@ -32,7 +32,7 @@
  "applicationCategory": "DeveloperApplication",
  "operatingSystem": "macOS 13 or later",
  "softwareVersion": "0.3.2",
- "description": "⌘を2回押して範囲をドラッグするだけで、スクリーンショットがコーディングエージェントのプロンプトに入ります。Claude Code、Codex、Gemini CLIなどに対応した、小さな無料のオープンソースmacOSメニューバーアプリ。",
+ "description": "⌘を2回押してドラッグするだけで、スクショがClaude Code、Codexやそのデスクトップアプリに入ります。APIキーやパスワードはMacの中で先に黒塗り。無料・オープンソースのmacOSメニューバーアプリ。",
  "url": "https://woonmayer.github.io/yetda/ja/",
  "inLanguage": "ja",
  "downloadUrl": "https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg",
@@ -219,6 +219,7 @@
 
   /* Demo */
   .demo { margin: 48px auto 0; max-width: 900px; text-align: left; }
+  .demo video { display: block; width: 100%; height: auto; aspect-ratio: 1600 / 1016; border-radius: 16px; background: #0d0e12; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
   .screen {
     position: relative; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden;
     background: linear-gradient(135deg, #3b3f8f, #8a4f9e 55%, #e0806b);
@@ -370,8 +371,8 @@
   <header class="hero">
     <img class="logo" src="../icon.png" alt="Yetdaのアイコン">
     <div class="origin"><span lang="ko">옜다</span>（イェッタ）· 韓国語で「ほら、どうぞ」</div>
-    <h1>スクショを<br>エージェントへ、<span class="hl">一瞬で。</span></h1>
-    <p class="sub"><kbd>⌘</kbd>を2回押して、範囲をドラッグするだけ。ターミナルで動いているエージェントのプロンプトに、画像がそのまま入ります。保存もドラッグも、ウィンドウの切り替えも要りません。</p>
+    <h1>画面は見せて、<br><span class="hl">鍵は隠す。</span></h1>
+    <p class="sub"><kbd>⌘</kbd>を2回押して、ドラッグするだけ。スクショがターミナルでもデスクトップアプリでも、コーディングエージェントにそのまま入ります。APIキーやパスワードはMacの中で先に黒塗り。保存もドラッグも、ウィンドウの切り替えも要りません。</p>
     <div class="cta">
       <a class="btn primary" href="#install">macOSにインストール</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ GitHubで見る</a>
@@ -379,39 +380,12 @@
     <div class="meta">無料・オープンソース · MIT · macOS 13以降 · ネットワーク通信なし · キャプチャは7日後に自動削除</div>
     <div class="agents">
       <span>対応</span>
-      <b>Claude Code</b><b>Codex</b><b>Gemini CLI</b><b>opencode</b><b>Cursor CLI</b>
+      <b>Claude Code</b><b>Codex</b><b>Gemini CLI</b><b>opencode</b><b>Cursor CLI</b><b>Claudeアプリ</b><b>Codexアプリ</b>
     </div>
 
-    <!-- Replace with a screen recording when available:
-         <video src="demo.mp4" autoplay muted loop playsinline></video> -->
-    <div class="demo" aria-label="デモ：⌘を2回押してWebページの範囲を選ぶと、スクショがターミナルのエージェントのプロンプトに現れます">
-      <div class="screen">
-        <div class="win browser">
-          <div class="bar"><i></i><i></i><i></i></div>
-          <div class="page">
-            <div class="h"></div>
-            <div class="l" style="width:90%"></div>
-            <div class="l" style="width:75%"></div>
-            <div class="err">TypeError: Cannot read properties of undefined (reading 'map')</div>
-            <div class="btn-mock"></div>
-          </div>
-        </div>
-        <div class="win term">
-          <div class="bar"><i></i><i></i><i></i></div>
-          <div class="body">
-            <div><span class="acc">●</span> agent</div>
-            <div class="dim">  cwd: ~/projects/webapp</div>
-            <div class="prompt-box">
-              &gt; <span class="pasted">[Image #1]</span> <span class="typed">なんで動かないの？</span><span class="cursor"></span>
-            </div>
-          </div>
-        </div>
-        <div class="dim-overlay"></div>
-        <div class="sel"></div>
-        <div class="keys"><span>⌘</span><span>⌘</span></div>
-        <div class="flash"></div>
-      </div>
-      <p class="caption">⌘⌘ → ドラッグ → もうプロンプトに入っています。</p>
+    <div class="demo">
+      <video src="../demo.mp4" poster="../demo-poster.jpg" autoplay muted loop playsinline aria-label="デモ：⌘を2回押し、APIキーが写ったエラーをドラッグすると、キーが黒塗りされたスクショがターミナルのエージェントとエージェントのデスクトップアプリに入る様子"></video>
+      <p class="caption">⌘⌘ → ドラッグ → キーは黒塗り → もうプロンプトの中。</p>
     </div>
   </header>
 
@@ -431,8 +405,8 @@
       </div>
       <div class="step">
         <div class="n">03</div>
-        <h3>貼り付け完了</h3>
-        <p>最後に使っていたターミナルを前面に出して貼り付けます。あとは質問を打つだけ。</p>
+        <h3>隠して、貼り付け</h3>
+        <p>スクショ内のキーやパスワードを黒塗りしてから、最後に使っていたターミナルかエージェントアプリを前面に出して貼り付けます。あとは質問を打つだけ。</p>
       </div>
     </div>
   </section>
@@ -466,14 +440,19 @@
     <p class="lead">メニューバーのアイコンと、いくつかのショートカットだけ。新しく覚えることはありません。</p>
     <div class="features">
       <div class="feat">
+        <div class="ic">🔒</div>
+        <h3>秘密情報を隠す</h3>
+        <p>スクショ内のAPIキー、トークン、パスワードを端末内で隠してから、エージェントに渡します。</p>
+      </div>
+      <div class="feat">
         <div class="ic">⌘⌘</div>
         <h3>2回押しでキャプチャ</h3>
         <p>3キーのショートカットより速い。他のアプリが使っていればオフにできます。</p>
       </div>
       <div class="feat">
         <div class="ic">↩︎</div>
-        <h3>自動貼り付け</h3>
-        <p>最後に使ったターミナルを覚えていて、そのターミナルに合ったキーで貼り付けます（<kbd>⌃V</kbd>、iTerm2では<kbd>⌘V</kbd>）。</p>
+        <h3>ターミナルでもアプリでも</h3>
+        <p>最後に使ったターミナルかエージェントアプリ（Claude Code、Codex、Claude・Codexのデスクトップアプリ）に、それぞれ合ったキーで貼り付けます。ほかのアプリもメニューから追加できます。</p>
       </div>
       <div class="feat">
         <div class="ic">🖼</div>
@@ -486,11 +465,6 @@
         <p>何枚も撮ったら、Claude CodeやCodexで<code>/shots</code>を実行。待機中のキャプチャをまとめて読み込みます。インストールはYetdaが提案します。</p>
       </div>
       <div class="feat">
-        <div class="ic">🔒</div>
-        <h3>秘密情報を隠す</h3>
-        <p>スクショ内のAPIキー、トークン、パスワードを端末内で隠してから、エージェントに渡します。</p>
-      </div>
-      <div class="feat">
         <div class="ic">Aa</div>
         <h3>テキストも一緒に</h3>
         <p>必要なら、スクショから読み取ったテキストも一緒に貼り付け。エラーメッセージを正確な文字列で渡せます。OCRも端末内で動きます。</p>
@@ -498,7 +472,7 @@
     </div>
     <div class="terms">
       <span>Terminal</span><span>iTerm2</span><span>Ghostty</span><span>Warp</span><span>WezTerm</span>
-      <span>kitty</span><span>Alacritty</span><span>Hyper</span><span>cmux</span><span>Orca</span><span>Kaku</span>
+      <span>kitty</span><span>Alacritty</span><span>Hyper</span><span>cmux</span><span>Orca</span><span>Kaku</span><span>Claude</span><span>Codex</span><span>ChatGPT</span>
     </div>
   </section>
 

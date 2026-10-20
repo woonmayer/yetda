@@ -11,12 +11,13 @@ import {
   useVideoConfig,
 } from 'remotion';
 
-// Timeline (30 fps): title → demo → features → end card.
-const TITLE = 60;
-const DEMO = 270;
-const FEATURES = 90;
+// Timeline (30 fps): title → demo (terminal, with a key masked) → desktop app → features → end card.
+const TITLE = 66;
+const DEMO = 300;
+const APP = 140;
+const FEATURES = 110;
 const END = 90;
-export const PROMO_FRAMES = TITLE + DEMO + FEATURES + END;
+export const PROMO_FRAMES = TITLE + DEMO + APP + FEATURES + END;
 
 const SANS = '-apple-system, "SF Pro Display", "Helvetica Neue", sans-serif';
 const MONO = '"SF Mono", Menlo, monospace';
@@ -35,10 +36,13 @@ export const Promo = () => (
     <Sequence from={TITLE} durationInFrames={DEMO}>
       <Demo />
     </Sequence>
-    <Sequence from={TITLE + DEMO} durationInFrames={FEATURES}>
+    <Sequence from={TITLE + DEMO} durationInFrames={APP}>
+      <AppScene />
+    </Sequence>
+    <Sequence from={TITLE + DEMO + APP} durationInFrames={FEATURES}>
       <Features />
     </Sequence>
-    <Sequence from={TITLE + DEMO + FEATURES}>
+    <Sequence from={TITLE + DEMO + APP + FEATURES}>
       <EndCard />
     </Sequence>
   </AbsoluteFill>
@@ -50,16 +54,16 @@ const Title = () => {
   const f = useCurrentFrame();
   const { fps, width } = useVideoConfig();
   const pop = spring({ frame: f, fps, config: { damping: 14 } });
-  const out = interpolate(f, [48, 60], [1, 0], clamp);
-  const size = width > 1500 ? 92 : 76;
+  const out = interpolate(f, [TITLE - 12, TITLE], [1, 0], clamp);
+  const size = width > 1500 ? 92 : 66;
   return (
     <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', opacity: out, textAlign: 'center', padding: 60 }}>
       <Img src={staticFile('icon.png')} style={{ width: 220, transform: `scale(${pop})` }} />
       <div style={{ color: '#fff', fontSize: size, fontWeight: 800, letterSpacing: '-0.035em', marginTop: 36, opacity: fade(f, 10, 25) }}>
-        Screenshots into your coding agent
+        Show your agent the screen.
       </div>
-      <div style={{ color: ACCENT, fontSize: size, fontWeight: 800, letterSpacing: '-0.035em', opacity: fade(f, 18, 33) }}>
-        in one gesture.
+      <div style={{ color: ACCENT, fontSize: size, fontWeight: 800, letterSpacing: '-0.035em', opacity: fade(f, 20, 35) }}>
+        Not your keys.
       </div>
     </AbsoluteFill>
   );
@@ -70,7 +74,9 @@ const Title = () => {
 // The demo is laid out on a fixed 1600×1000 stage, scaled to fit the frame.
 const STAGE_W = 1600;
 const STAGE_H = 1000;
-const SELECTION = { x: 84, y: 298, w: 872, h: 150 }; // around the error message
+const SELECTION = { x: 84, y: 300, w: 872, h: 224 }; // around the error and the key below it
+const KEY_NAME = 'OPENAI_API_KEY=';
+const KEY_VALUE = 'sk-proj-Q7wErTy8Ui0p9AsDfGh2JkL';
 const QUESTION = 'why is this broken?';
 const ANSWER = [
   '⏺ `items` is undefined on the first render — the',
@@ -80,7 +86,8 @@ const ANSWER = [
 
 // Beats, in demo-local frames.
 const TAP1 = 18, TAP2 = 28, SELECT_START = 55, SELECT_END = 95, SHOT = 100;
-const FRONT = 108, PASTE = 122, TYPE_START = 134, TYPE_END = 170, ENTER = 180, ANSWER_START = 192;
+const CARD_IN = 104, MASK_START = 120, MASK_END = 134;
+const FRONT = 168, PASTE = 182, TYPE_START = 194, TYPE_END = 228, ENTER = 238, ANSWER_START = 250;
 
 const Demo = () => {
   const f = useCurrentFrame();
@@ -88,15 +95,22 @@ const Demo = () => {
   const vertical = height > width;
 
   const stageScale = vertical ? (width * 0.96) / STAGE_W : Math.min((width * 0.8) / STAGE_W, (height * 0.78) / STAGE_H);
-  const zoom = interpolate(f, [FRONT, FRONT + 25], [1, 1.28], { ...clamp, easing: ease });
-  const panX = interpolate(f, [FRONT, FRONT + 25], [0, -300], { ...clamp, easing: ease });
-  const panY = interpolate(f, [FRONT, FRONT + 25], [0, -150], { ...clamp, easing: ease });
+  // Camera: close in on the capture while its key is masked, then on the terminal.
+  const beats = [CARD_IN + 4, CARD_IN + 22, FRONT - 4, FRONT + 22];
+  const cam = (values: number[]) => interpolate(f, beats, values, { ...clamp, easing: ease });
+  const zoom = cam([1, 1.75, 1.75, 1.28]);
+  const panX = cam([0, -870, -870, -300]);
+  const panY = cam([0, 430, 430, -150]);
   const enter = fade(f, 0, 14);
   const exit = interpolate(f, [DEMO - 12, DEMO], [1, 0], clamp);
 
   const caption =
-    f < SELECT_START ? 'Tap ⌘ twice' : f < FRONT ? 'Drag a region' : f < ENTER ? 'It\'s already in the prompt' : 'Ask away';
-  const captionKey = f < SELECT_START ? 0 : f < FRONT ? SELECT_START : f < ENTER ? FRONT : ENTER;
+    f < SELECT_START ? 'Tap ⌘ twice'
+      : f < SHOT ? 'Drag a region'
+      : f < FRONT ? 'Keys blacked out, on your Mac'
+      : f < ENTER ? 'It\'s already in the prompt'
+      : 'Ask away';
+  const captionKey = f < SELECT_START ? 0 : f < SHOT ? SELECT_START : f < FRONT ? SHOT : f < ENTER ? FRONT : ENTER;
 
   return (
     <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', opacity: enter * exit, flexDirection: 'column' }}>
@@ -142,8 +156,8 @@ const Desktop = ({ f }: { f: number }) => {
           <div style={{ height: 26, width: '55%', background: '#1f2330', borderRadius: 6, marginBottom: 26 }} />
           <div style={{ height: 14, width: '90%', background: '#e3e5ea', borderRadius: 7, marginBottom: 14 }} />
           <div style={{ height: 14, width: '72%', background: '#e3e5ea', borderRadius: 7 }} />
-          <div style={{ marginTop: 34, padding: '20px 22px', borderRadius: 10, border: '2px solid #f3b4b4', background: '#fff1f1', color: '#c0392b', font: `600 24px/1.45 ${MONO}` }}>
-            TypeError: Cannot read properties of undefined (reading 'map')
+          <div style={{ marginTop: 34 }}>
+            <CapturedRegion />
           </div>
           <div style={{ marginTop: 30, width: 260, height: 52, borderRadius: 10, background: '#4f63ff' }} />
         </div>
@@ -164,17 +178,20 @@ const Desktop = ({ f }: { f: number }) => {
         />
       )}
       <div style={{ position: 'absolute', inset: 0, background: '#fff', opacity: flash, zIndex: 9 }} />
+      <CaptureCard f={f} />
       <KeyCast f={f} />
     </div>
   );
 };
 
 const MenuBar = ({ f }: { f: number }) => {
-  const count = f >= SHOT ? ' 1' : '';
+  const locked = f >= MASK_END && f < FRONT + 40;
+  const count = f >= SHOT ? '1' : '';
   return (
     <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 40, background: 'rgba(20,20,30,.35)', backdropFilter: 'blur(20px)', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 26, padding: '0 26px', color: '#fff', font: `500 20px ${SANS}`, zIndex: 8 }}>
       <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
         <Img src={staticFile('icon.png')} style={{ width: 26 }} />
+        {locked && <Lock size={18} color="#fff" />}
         {count}
       </span>
       <span>Mon 9:41 AM</span>
@@ -226,6 +243,65 @@ const Terminal = ({ f }: { f: number }) => {
   );
 };
 
+// What the selection covers: the error, and an env line with a key in it.
+// With `mask` (0…1), a password-field pill covers the key's value.
+const CapturedRegion = ({ mask = 0 }: { mask?: number }) => (
+  <div>
+    <div style={{ padding: '20px 22px', borderRadius: 10, border: '2px solid #f3b4b4', background: '#fff1f1', color: '#c0392b', font: `600 24px/1.45 ${MONO}` }}>
+      TypeError: Cannot read properties of undefined (reading 'map')
+    </div>
+    <div style={{ marginTop: 14, padding: '14px 22px', borderRadius: 10, background: '#f3f4f7', color: '#3b4050', font: `500 22px/1.4 ${MONO}`, whiteSpace: 'pre', position: 'relative' }}>
+      {KEY_NAME}
+      <span style={{ position: 'relative' }}>
+        {KEY_VALUE}
+        {mask > 0 && <Pill width={mask} />}
+      </span>
+    </div>
+  </div>
+);
+
+/** The mask Yetda draws: a solid pill with password dots, growing left to right. */
+const Pill = ({ width }: { width: number }) => (
+  <span style={{ position: 'absolute', left: -4, top: -3, bottom: -3, width: `calc(${width * 100}% + 8px)`, borderRadius: 999, background: '#1d1f27', overflow: 'hidden', display: 'flex', alignItems: 'center', paddingLeft: 14, color: '#9a9db0', letterSpacing: 4, fontSize: 18 }}>
+    {'●'.repeat(Math.round(14 * width))}
+  </span>
+);
+
+const Lock = ({ size, color }: { size: number; color: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+    <rect x="4" y="10" width="16" height="11" rx="2.5" fill={color} />
+    <path d="M8 10V7.5a4 4 0 0 1 8 0V10" stroke={color} strokeWidth="2.4" />
+  </svg>
+);
+
+// The capture, shown like macOS's floating screenshot preview: it appears
+// after the shot, the key gets masked, then it drops into the terminal.
+const CaptureCard = ({ f }: { f: number }) => {
+  if (f < CARD_IN || f > FRONT + 16) return null;
+  const inT = interpolate(f, [CARD_IN, CARD_IN + 12], [0, 1], { ...clamp, easing: ease });
+  const outT = interpolate(f, [FRONT - 4, FRONT + 14], [0, 1], { ...clamp, easing: Easing.in(Easing.cubic) });
+  const mask = interpolate(f, [MASK_START, MASK_END], [0, 1], { ...clamp, easing: ease });
+  const badge = fade(f, MASK_END, MASK_END + 8);
+  const scale = 0.62;
+  return (
+    <div style={{
+      position: 'absolute', zIndex: 7, left: 1010 + outT * -120, top: 120 + (1 - inT) * 30 + outT * 520,
+      width: SELECTION.w * scale + 36, padding: 18, borderRadius: 18, background: '#fff',
+      boxShadow: '0 30px 80px rgba(0,0,0,.45)', opacity: inT * (1 - outT), transform: `scale(${1 - outT * 0.6})`, transformOrigin: 'left top',
+    }}>
+      <div style={{ width: SELECTION.w, transform: `scale(${scale})`, transformOrigin: 'top left', height: (SELECTION.h - 40) * scale }}>
+        <CapturedRegion mask={mask} />
+      </div>
+      <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 10, color: '#1d1f27', font: `600 20px ${SANS}`, opacity: badge }}>
+        <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 16, background: '#1d1f27' }}>
+          <Lock size={16} color={ACCENT} />
+        </span>
+        1 key hidden · never leaves your Mac
+      </div>
+    </div>
+  );
+};
+
 // On-screen keystroke badges for the two ⌘ taps.
 const KeyCast = ({ f }: { f: number }) => {
   if (f < TAP1 - 2 || f > SELECT_START + 4) return null;
@@ -247,22 +323,106 @@ const KeyCast = ({ f }: { f: number }) => {
   );
 };
 
+// ─── Desktop app ─────────────────────────────────────────────────────────
+
+const APP_PASTE = 34, APP_TYPE_START = 52, APP_TYPE_END = 84;
+const APP_QUESTION = 'same error on mobile too';
+
+const AppScene = () => {
+  const f = useCurrentFrame();
+  const { width, height } = useVideoConfig();
+  const vertical = height > width;
+  const stageScale = vertical ? (width * 0.96) / STAGE_W : Math.min((width * 0.8) / STAGE_W, (height * 0.78) / STAGE_H);
+  const enter = fade(f, 0, 14);
+  const exit = interpolate(f, [APP - 12, APP], [1, 0], clamp);
+  const caption = 'Or the agent\'s desktop app';
+  // Close in on the composer once the capture lands in it.
+  const appCam = (to: number) => interpolate(f, [APP_PASTE + 4, APP_PASTE + 28], [0, to], { ...clamp, easing: ease });
+  const appZoom = 1 + appCam(0.45);
+  const appPanX = appCam(-210);
+  const appPanY = appCam(-400);
+  return (
+    <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', opacity: enter * exit, flexDirection: 'column' }}>
+      {vertical && <Caption text={caption} startFrame={0} size={64} />}
+      <div style={{ width: STAGE_W * stageScale, height: STAGE_H * stageScale, borderRadius: 28 * stageScale, overflow: 'hidden', boxShadow: '0 40px 100px rgba(0,0,0,.6)', margin: vertical ? '60px 0' : 0 }}>
+        <div style={{ width: STAGE_W, height: STAGE_H, transform: `scale(${stageScale})`, transformOrigin: 'top left', position: 'relative' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #2f5d8a, #4f8a9e 55%, #e0b46b)' }}>
+            <MenuBar f={0} />
+            <div style={{ position: 'absolute', inset: 0, transform: `translate(${appPanX}px, ${appPanY}px) scale(${appZoom})`, transformOrigin: 'center' }}>
+              <Window x={120} y={90} w={1360} h={860} z={2} light>
+                <AgentApp f={f} />
+              </Window>
+            </div>
+          </div>
+        </div>
+      </div>
+      {!vertical && (
+        <div style={{ position: 'absolute', bottom: 34 }}>
+          <Caption text={caption} startFrame={0} size={46} />
+        </div>
+      )}
+    </AbsoluteFill>
+  );
+};
+
+/** A generic chat-style agent app: sidebar, a thread, and the composer. */
+const AgentApp = ({ f }: { f: number }) => {
+  const pasted = f >= APP_PASTE;
+  const pop = spring({ frame: f - APP_PASTE, fps: 30, config: { damping: 12 } });
+  const typed = APP_QUESTION.slice(0, Math.round(interpolate(f, [APP_TYPE_START, APP_TYPE_END], [0, APP_QUESTION.length], clamp)));
+  const cursorOn = Math.floor(f / 15) % 2 === 0;
+  const chipFlash = interpolate(f, [APP_PASTE - 8, APP_PASTE - 4, APP_PASTE + 4], [0, 1, 0], clamp);
+  return (
+    <div style={{ display: 'flex', height: 814 }}>
+      <div style={{ width: 280, background: '#f4f4f6', padding: 28, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ height: 34, width: 150, borderRadius: 8, background: '#dfe0e6' }} />
+        {[80, 65, 72, 55].map((w, i) => (
+          <div key={i} style={{ height: 14, width: `${w}%`, borderRadius: 7, background: '#e4e5ea' }} />
+        ))}
+      </div>
+      <div style={{ flex: 1, position: 'relative', padding: '40px 70px' }}>
+        <div style={{ marginLeft: 'auto', width: 520, padding: '18px 22px', borderRadius: 18, background: '#f0f0f3', color: '#2a2c35', font: `400 24px/1.5 ${SANS}` }}>
+          the checkout page crashes on load
+        </div>
+        <div style={{ marginTop: 28, width: 700, color: '#2a2c35', font: `400 24px/1.6 ${SANS}` }}>
+          Can you show me what you see on screen?
+        </div>
+        <div style={{ position: 'absolute', left: 70, right: 70, bottom: 40, borderRadius: 24, border: '2px solid #dadbe2', background: '#fff', padding: 22, boxShadow: '0 10px 30px rgba(0,0,0,.06)' }}>
+          {pasted && (
+            <div style={{ transform: `scale(${pop})`, transformOrigin: 'left bottom', marginBottom: 16, width: 420, padding: 12, borderRadius: 14, border: '1px solid #e3e4ea', background: '#fafafb', position: 'relative' }}>
+              <div style={{ width: SELECTION.w, transform: 'scale(0.455)', transformOrigin: 'top left', height: (SELECTION.h - 40) * 0.455 }}>
+                <CapturedRegion mask={1} />
+              </div>
+            </div>
+          )}
+          <div style={{ color: typed ? '#2a2c35' : '#a0a3b1', font: `400 26px ${SANS}`, display: 'flex', alignItems: 'center' }}>
+            {typed || (pasted ? '' : 'Reply…')}
+            {pasted && <span style={{ display: 'inline-block', width: 3, height: 30, marginLeft: 2, background: cursorOn ? '#2a2c35' : 'transparent' }} />}
+          </div>
+          <div style={{ position: 'absolute', inset: 0, borderRadius: 24, boxShadow: `0 0 0 4px rgba(255,158,69,${chipFlash})` }} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ─── Features ────────────────────────────────────────────────────────────
 
 const FEATURE_LINES: [string, string][] = [
   ['⌘⌘', 'Capture from anywhere'],
-  ['↩︎', 'Auto-pastes into your terminal'],
+  ['●●●', 'Keys and passwords blacked out'],
+  ['↩︎', 'Lands in your terminal or agent app'],
   ['⌘⇧1', 'Paste any of your last 10 shots'],
 ];
 
 const Features = () => {
   const f = useCurrentFrame();
   const { width } = useVideoConfig();
-  const size = width > 1500 ? 64 : 54;
+  const size = width > 1500 ? 60 : 48;
   const exit = interpolate(f, [FEATURES - 10, FEATURES], [1, 0], clamp);
   return (
     <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', opacity: exit }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 44 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 38 }}>
         {FEATURE_LINES.map(([key, label], i) => {
           const t = fade(f, 4 + i * 12, 18 + i * 12);
           return (
@@ -292,6 +452,7 @@ const EndCard = () => {
       <div style={{ color: '#9a9cab', fontSize: 34, marginTop: 10, opacity: fade(f, 10, 24) }}>옜다 · Korean for “here, take it.”</div>
       <div style={{ color: '#9a9cab', fontSize: 30, marginTop: 8, opacity: fade(f, 14, 28) }}>Free &amp; open source for macOS</div>
       <div style={{ color: '#d8dae3', fontSize: 30, marginTop: 26, opacity: fade(f, 18, 32) }}>Claude Code · Codex · Gemini CLI · opencode</div>
+      <div style={{ color: '#d8dae3', fontSize: 30, marginTop: 6, opacity: fade(f, 20, 34) }}>and the Claude, Codex &amp; ChatGPT apps</div>
       <div style={{ color: ACCENT, font: `500 34px ${MONO}`, marginTop: 34, opacity: fade(f, 22, 36) }}>github.com/woonmayer/yetda</div>
     </AbsoluteFill>
   );

@@ -1,6 +1,6 @@
 # Yetda
 
-> Yetda (옜다, Korean for "here, take it") is a free, open-source macOS menu bar app that puts a screenshot straight into the prompt of a coding agent running in your terminal — Claude Code, Codex CLI, Gemini CLI, opencode, Cursor CLI and others. Tap ⌘ twice (or press ⌘⇧2), drag a region, and the image is pasted into the agent. API keys, tokens and passwords in the capture are masked on-device first.
+> Yetda (옜다, Korean for "here, take it") is a free, open-source macOS menu bar app that puts a screenshot straight into a coding agent — Claude Code, Codex CLI, Gemini CLI, opencode, Cursor CLI and others in the terminal, or the Claude, Codex and ChatGPT desktop apps. Tap ⌘ twice (or press ⌘⇧2), drag a region, and the image is pasted into the terminal or app you used last. API keys, tokens and passwords in the capture are blacked out on-device first. Tagline: "Show your agent the screen. Not your keys."
 
 Key facts:
 

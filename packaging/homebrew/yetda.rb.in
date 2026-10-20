@@ -6,7 +6,7 @@ cask "yetda" do
 
   url "https://github.com/@RELEASE_REPO@/releases/download/v#{version}/Yetda-#{version}.dmg"
   name "Yetda"
-  desc "Menu bar app that drops screenshots straight into terminal coding agents"
+  desc "Puts screenshots into coding agents, with secrets masked first"
   homepage "https://woonmayer.github.io/yetda/"
 
   livecheck do

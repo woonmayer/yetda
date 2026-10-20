@@ -4,12 +4,16 @@
 
 <p align="center"><i>옜다 (yetda): Korean for “here, take it,” what you say as you hand something over.</i></p>
 
-<p align="center">A tiny macOS menu bar app for getting screenshots into your terminal coding agent fast:<br>Claude Code, Codex, Gemini CLI, opencode, and more.</p>
+<p align="center"><b>Show your agent the screen. Not your keys.</b></p>
 
-<p align="center"><img src="assets/demo.gif" width="720" alt="Tap ⌘ twice, select a region, and the screenshot lands in the coding agent's prompt"></p>
+<p align="center">A tiny macOS menu bar app that puts a screenshot straight into your coding agent —<br>Claude Code, Codex, Gemini CLI, opencode, or the Claude, Codex and ChatGPT desktop apps —<br>with API keys and passwords blacked out on your Mac first.</p>
+
+<p align="center"><img src="assets/demo.gif" width="720" alt="Tap ⌘ twice, drag over an error with an API key in it; the key is blacked out and the screenshot lands in a terminal agent, then in an agent's desktop app"></p>
 
 - **One shot, right now** — tap ⌘ twice, select a region, and Yetda pastes
-  it straight into the agent running in your terminal. No files to manage.
+  it straight into the terminal or agent app you used last. No files to manage.
+- **Secrets stay yours** — API keys, tokens and passwords in the shot are
+  blacked out on-device before the image goes anywhere.
 - **Several shots** — every capture is also saved to `~/Yetda/`; pick an
   earlier one with ⌘⇧1, or (Claude Code) feed them all at once with `/shots`.
 
