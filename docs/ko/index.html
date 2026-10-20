@@ -220,8 +220,7 @@
 
   /* Demo */
   .demo { margin: 48px auto 0; max-width: 900px; text-align: left; }
-  @media (max-width: 600px) { .demo video { aspect-ratio: 1080 / 900 !important; } .hero .origin { display: none; } .demo { margin-top: 28px; } }
-  .demo video { display: block; width: 100%; height: auto; aspect-ratio: 1600 / 1016; border-radius: 16px; background: #0d0e12; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+  @media (max-width: 600px) { .hero .origin { display: none; } .demo { margin-top: 28px; } }
   .screen {
     position: relative; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden;
     background: linear-gradient(135deg, #3b3f8f, #8a4f9e 55%, #e0806b);
@@ -301,6 +300,13 @@
 
   /* Sections */
   section { padding: 88px 0 0; }
+  .show { text-align: center; padding-top: 96px; }
+  .show h2 { font-size: clamp(34px, 6vw, 60px); margin-bottom: 10px; }
+  .show .lead { margin-bottom: 28px; font-size: 18px; }
+  .clip, .demo video { display: block; width: 100%; height: auto; aspect-ratio: 960 / 612; border-radius: 18px; background: #0d0e12; box-shadow: 0 30px 80px rgba(0,0,0,.28); }
+  .clip { max-width: 900px; margin: 0 auto; }
+  .more { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 0; margin: 72px auto 0; max-width: 860px; }
+  .more li { padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font-size: 15px; }
   h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.03em; line-height: 1.15; margin: 0 0 12px; text-align: center; }
   .lead { text-align: center; color: var(--muted); max-width: 580px; margin: 0 auto 40px; }
 
@@ -379,6 +385,9 @@
       <a class="btn primary" href="#install">macOS에 설치</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ GitHub에서 보기</a>
     </div>
+    <div class="demo">
+      <video id="demo" class="v" src="../demo.mp4" poster="../demo-poster.jpg" autoplay muted loop playsinline aria-label="데모: 스크린샷 속 API 키가 가려진 뒤 터미널 에이전트와 데스크톱 앱에 붙는 모습"></video>
+    </div>
     <div class="meta">무료 오픈소스 · macOS 13+ · 온디바이스 AI · 네트워크 안 씀</div>
     <div class="origin"><span>옜다</span> · 뭔가를 툭 건네며 하는 말, “자, 받아.”</div>
     <div class="agents">
@@ -386,66 +395,33 @@
       <b>Claude Code</b><b>Codex</b><b>Gemini CLI</b><b>opencode</b><b>Cursor CLI</b><b>Claude 앱</b><b>Codex 앱</b>
     </div>
 
-    <div class="demo">
-      <video id="demo" src="../demo.mp4" poster="../demo-poster.jpg" data-base="../" autoplay muted loop playsinline aria-label="데모: ⌘를 두 번 누르고 API 키가 보이는 에러를 드래그하면, 키가 가려진 채 터미널 에이전트와 에이전트 데스크톱 앱에 스크린샷이 들어가는 모습"></video>
-    </div>
   </header>
 
-  <section id="how">
-    <h2>3초면 끝</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="n">01</div>
-        <h3><kbd>⌘</kbd> <kbd>⌘</kbd></h3>
-        <p>어느 앱에서든. <kbd>⌘⇧2</kbd>도 돼요.</p>
-      </div>
-      <div class="step">
-        <div class="n">02</div>
-        <h3>영역 드래그</h3>
-        <p>스페이스로 창 하나 통째로.</p>
-      </div>
-      <div class="step">
-        <div class="n">03</div>
-        <h3>가리고, 붙여넣기</h3>
-        <p>마지막에 쓰던 터미널이나 앱으로.</p>
-      </div>
-    </div>
+  <section id="how" class="show">
+    <h2><kbd>⌘</kbd> 두 번.</h2>
+    <p class="lead">어느 앱에서든. <kbd>⌘⇧2</kbd>도 돼요.</p>
+    <video class="clip v" data-src="../clip-capture.mp4" poster="../clip-capture-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
+  </section>
+
+  <section id="secrets" class="show">
+    <h2>비번은 알아서 가려요.</h2>
+    <p class="lead">맥 안에서, 보내기 전에.</p>
+    <video class="clip v" data-src="../clip-mask.mp4" poster="../clip-mask-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
+  </section>
+
+  <section id="paste" class="show">
+    <h2>쓰던 데로 붙어요.</h2>
+    <p class="lead">터미널이든 앱이든. Claude Code, Codex, 그 밖에도.</p>
+    <video class="clip v" data-src="../clip-paste.mp4" poster="../clip-paste-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
   </section>
 
   <section id="features">
-    <h2>디테일</h2>
-    <div class="features">
-      <div class="feat">
-        <div class="ic">🔒</div>
-        <h3>맥 안에서 가리기</h3>
-        <p>OCR에, 되는 맥에선 Apple 온디바이스 LLM까지. 클라우드 안 씀.</p>
-      </div>
-      <div class="feat">
-        <div class="ic">⌘⌘</div>
-        <h3>⌘ 두 번 캡처</h3>
-        <p>세 키 단축키보다 빨라요.</p>
-      </div>
-      <div class="feat">
-        <div class="ic">↩︎</div>
-        <h3>터미널이든 앱이든</h3>
-        <p>Claude Code, Codex, 그 데스크톱 앱, 직접 추가한 앱까지.</p>
-      </div>
-      <div class="feat">
-        <div class="ic">🖼</div>
-        <h3>지난 캡처 붙이기</h3>
-        <p><kbd>⌘⇧1</kbd>로 최근 10장.</p>
-      </div>
-      <div class="feat">
-        <div class="ic">/</div>
-        <h3><code>/shots</code> 스킬</h3>
-        <p>여러 장을 Claude Code·Codex에 한 번에.</p>
-      </div>
-      <div class="feat">
-        <div class="ic">Aa</div>
-        <h3>글자도 같이</h3>
-        <p>원하면 OCR 텍스트도 같이 붙여요.</p>
-      </div>
-    </div>
+    <ul class="more">
+      <li><kbd>⌘⇧1</kbd>로 최근 10장 다시 붙이기</li>
+      <li><code>/shots</code>로 여러 장 한 번에</li>
+      <li>원하면 글자도 같이</li>
+      <li>기기 안 OCR·AI, 네트워크 안 씀</li>
+    </ul>
     <div class="terms">
       <span>Terminal</span><span>iTerm2</span><span>Ghostty</span><span>Warp</span><span>WezTerm</span>
       <span>kitty</span><span>Alacritty</span><span>Hyper</span><span>cmux</span><span>Orca</span><span>Kaku</span><span>Claude</span><span>Codex</span><span>ChatGPT</span>
@@ -514,17 +490,18 @@ open /Applications/Yetda.app</pre>
 </footer>
 
 <script>
-// Phones get a taller crop of the demo; if autoplay is blocked (e.g. Low Power Mode), show controls so a tap plays it.
+// Hero plays at once; section clips load and play when scrolled into view.
+// If autoplay is blocked (e.g. Low Power Mode), show controls so a tap plays.
 (() => {
-  const v = document.getElementById('demo');
-  if (!v) return;
-  const b = v.dataset.base || '';
-  if (matchMedia('(max-width: 600px)').matches) {
-    v.poster = b + 'demo-mobile-poster.jpg';
-    v.src = b + 'demo-mobile.mp4';
-  }
-  const p = v.play();
-  if (p) p.catch(() => { v.controls = true; });
+  const play = v => { const p = v.play(); if (p) p.catch(() => { v.controls = true; }); };
+  const hero = document.getElementById('demo');
+  if (hero) play(hero);
+  const clips = document.querySelectorAll('video.clip');
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
+    const v = e.target;
+    if (e.isIntersecting) { if (!v.src) v.src = v.dataset.src; play(v); } else v.pause();
+  }), { rootMargin: '200px 0px' }) : null;
+  clips.forEach(v => io ? io.observe(v) : (v.src = v.dataset.src, play(v)));
 })();
 </script>
 </body>

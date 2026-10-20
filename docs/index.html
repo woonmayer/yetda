@@ -220,8 +220,7 @@
 
   /* Demo */
   .demo { margin: 48px auto 0; max-width: 900px; text-align: left; }
-  @media (max-width: 600px) { .demo video { aspect-ratio: 1080 / 900 !important; } .hero .origin { display: none; } .demo { margin-top: 28px; } }
-  .demo video { display: block; width: 100%; height: auto; aspect-ratio: 1600 / 1016; border-radius: 16px; background: #0d0e12; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+  @media (max-width: 600px) { .hero .origin { display: none; } .demo { margin-top: 28px; } }
   .screen {
     position: relative; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden;
     background: linear-gradient(135deg, #3b3f8f, #8a4f9e 55%, #e0806b);
@@ -301,6 +300,13 @@
 
   /* Sections */
   section { padding: 88px 0 0; }
+  .show { text-align: center; padding-top: 96px; }
+  .show h2 { font-size: clamp(34px, 6vw, 60px); margin-bottom: 10px; }
+  .show .lead { margin-bottom: 28px; font-size: 18px; }
+  .clip, .demo video { display: block; width: 100%; height: auto; aspect-ratio: 960 / 612; border-radius: 18px; background: #0d0e12; box-shadow: 0 30px 80px rgba(0,0,0,.28); }
+  .clip { max-width: 900px; margin: 0 auto; }
+  .more { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 0; margin: 72px auto 0; max-width: 860px; }
+  .more li { padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font-size: 15px; }
   h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.03em; line-height: 1.15; margin: 0 0 12px; text-align: center; }
   .lead { text-align: center; color: var(--muted); max-width: 580px; margin: 0 auto 40px; }
 
@@ -379,6 +385,9 @@
       <a class="btn primary" href="#install">Install for macOS</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ View on GitHub</a>
     </div>
+    <div class="demo">
+      <video id="demo" class="v" src="demo.mp4" poster="demo-poster.jpg" autoplay muted loop playsinline aria-label="Demo: an API key in a screenshot is blacked out, then the screenshot lands in a terminal agent and in a desktop app"></video>
+    </div>
     <div class="meta">Free &amp; open source · macOS 13+ · On-device AI · No network</div>
     <div class="origin"><span lang="ko">옜다</span> · <i>yetda</i> · Korean for “here, take it.”</div>
     <div class="agents">
@@ -386,66 +395,33 @@
       <b>Claude Code</b><b>Codex</b><b>Gemini CLI</b><b>opencode</b><b>Cursor CLI</b><b>Claude app</b><b>Codex app</b>
     </div>
 
-    <div class="demo">
-      <video id="demo" src="demo.mp4" poster="demo-poster.jpg" data-base="" autoplay muted loop playsinline aria-label="Demo: tapping Command twice, dragging over an error with an API key in it, the key being blacked out, and the screenshot landing in a terminal agent and then in an agent's desktop app"></video>
-    </div>
   </header>
 
-  <section id="how">
-    <h2>Three seconds</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="n">01</div>
-        <h3>Tap <kbd>⌘</kbd> <kbd>⌘</kbd></h3>
-        <p>From any app. Or <kbd>⌘⇧2</kbd>.</p>
-      </div>
-      <div class="step">
-        <div class="n">02</div>
-        <h3>Drag a region</h3>
-        <p>Space grabs a whole window.</p>
-      </div>
-      <div class="step">
-        <div class="n">03</div>
-        <h3>Masked, then pasted</h3>
-        <p>Into the terminal or app you used last.</p>
-      </div>
-    </div>
+  <section id="how" class="show">
+    <h2>Tap <kbd>⌘</kbd> twice.</h2>
+    <p class="lead">From any app. Or <kbd>⌘⇧2</kbd>.</p>
+    <video class="clip v" data-src="clip-capture.mp4" poster="clip-capture-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
+  </section>
+
+  <section id="secrets" class="show">
+    <h2>Passwords? Hidden.</h2>
+    <p class="lead">On your Mac, before anything leaves it.</p>
+    <video class="clip v" data-src="clip-mask.mp4" poster="clip-mask-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
+  </section>
+
+  <section id="paste" class="show">
+    <h2>Lands where you were.</h2>
+    <p class="lead">Terminal or desktop app. Claude Code, Codex, and the rest.</p>
+    <video class="clip v" data-src="clip-paste.mp4" poster="clip-paste-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
   </section>
 
   <section id="features">
-    <h2>The details</h2>
-    <div class="features">
-      <div class="feat">
-        <div class="ic">🔒</div>
-        <h3>Masked on your Mac</h3>
-        <p>OCR, plus Apple's on-device LLM where available. No cloud.</p>
-      </div>
-      <div class="feat">
-        <div class="ic">⌘⌘</div>
-        <h3>Double-tap capture</h3>
-        <p>Faster than a three-key shortcut.</p>
-      </div>
-      <div class="feat">
-        <div class="ic">↩︎</div>
-        <h3>Terminal or desktop app</h3>
-        <p>Claude Code, Codex, their desktop apps, or any app you add.</p>
-      </div>
-      <div class="feat">
-        <div class="ic">🖼</div>
-        <h3>Paste an earlier shot</h3>
-        <p><kbd>⌘⇧1</kbd> opens your last 10.</p>
-      </div>
-      <div class="feat">
-        <div class="ic">/</div>
-        <h3><code>/shots</code> skill</h3>
-        <p>Several shots, one command in Claude Code or Codex.</p>
-      </div>
-      <div class="feat">
-        <div class="ic">Aa</div>
-        <h3>Text, too</h3>
-        <p>Optionally pastes the OCR text with the image.</p>
-      </div>
-    </div>
+    <ul class="more">
+      <li><kbd>⌘⇧1</kbd> pastes any of your last 10</li>
+      <li><code>/shots</code> sends several at once</li>
+      <li>Optionally pastes the text, too</li>
+      <li>On-device OCR + AI, no network</li>
+    </ul>
     <div class="terms">
       <span>Terminal</span><span>iTerm2</span><span>Ghostty</span><span>Warp</span><span>WezTerm</span>
       <span>kitty</span><span>Alacritty</span><span>Hyper</span><span>cmux</span><span>Orca</span><span>Kaku</span><span>Claude</span><span>Codex</span><span>ChatGPT</span>
@@ -514,17 +490,18 @@ open /Applications/Yetda.app</pre>
 </footer>
 
 <script>
-// Phones get a taller crop of the demo; if autoplay is blocked (e.g. Low Power Mode), show controls so a tap plays it.
+// Hero plays at once; section clips load and play when scrolled into view.
+// If autoplay is blocked (e.g. Low Power Mode), show controls so a tap plays.
 (() => {
-  const v = document.getElementById('demo');
-  if (!v) return;
-  const b = v.dataset.base || '';
-  if (matchMedia('(max-width: 600px)').matches) {
-    v.poster = b + 'demo-mobile-poster.jpg';
-    v.src = b + 'demo-mobile.mp4';
-  }
-  const p = v.play();
-  if (p) p.catch(() => { v.controls = true; });
+  const play = v => { const p = v.play(); if (p) p.catch(() => { v.controls = true; }); };
+  const hero = document.getElementById('demo');
+  if (hero) play(hero);
+  const clips = document.querySelectorAll('video.clip');
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
+    const v = e.target;
+    if (e.isIntersecting) { if (!v.src) v.src = v.dataset.src; play(v); } else v.pause();
+  }), { rootMargin: '200px 0px' }) : null;
+  clips.forEach(v => io ? io.observe(v) : (v.src = v.dataset.src, play(v)));
 })();
 </script>
 </body>
