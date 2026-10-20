@@ -252,7 +252,7 @@ const CapturedRegion = ({ mask = 0 }: { mask?: number }) => (
     </div>
     <div style={{ marginTop: 14, padding: '14px 22px', borderRadius: 10, background: '#f3f4f7', color: '#3b4050', font: `500 22px/1.4 ${MONO}`, whiteSpace: 'pre', position: 'relative' }}>
       {KEY_NAME}
-      <span style={{ position: 'relative' }}>
+      <span style={{ position: 'relative', display: 'inline-block' }}>
         {KEY_VALUE}
         {mask > 0 && <Pill width={mask} />}
       </span>
