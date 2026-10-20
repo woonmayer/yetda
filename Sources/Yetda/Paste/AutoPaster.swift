@@ -1,7 +1,7 @@
 import AppKit
 import YetdaCore
 
-/// Remembers the most recently active terminal and, after a capture, brings
+/// Remembers the most recently active terminal (or agent desktop app) and, after a capture, brings
 /// it to the front and presses its paste key so the image lands in the
 /// coding agent's prompt. Sending keystrokes needs Accessibility permission;
 /// without it the capture just stays on the clipboard. Lives for the app's
@@ -114,6 +114,6 @@ final class AutoPaster {
     }
 
     private func isTerminal(_ app: NSRunningApplication?) -> Bool {
-        PasteTarget.isTerminal(bundleID: app?.bundleIdentifier, extra: extraTerminals())
+        PasteTarget.isPasteTarget(bundleID: app?.bundleIdentifier, extra: extraTerminals())
     }
 }

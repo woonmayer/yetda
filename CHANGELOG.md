@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- **Agent desktop apps:** auto-paste also goes to the Claude, Codex and ChatGPT
+  desktop apps (with `⌘V`), whichever of them or your terminal you used last.
+
 - **Support Yetda…** menu item and a Sponsor link (GitHub Sponsors); the app
   only opens the page in your browser.
 

@@ -16,7 +16,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
 
     private static let flashDuration: Duration = .seconds(3)
     private static let pasteKeyChoices: [(title: String, key: PasteTarget.PasteKey?)] = [
-        ("Automatic (⌃V; ⌘V in iTerm2)", nil),
+        ("Automatic (⌃V; ⌘V in iTerm2 and agent apps)", nil),
         ("⌃V", .controlV),
         ("⌘V (e.g. Cursor CLI)", .commandV),
     ]
@@ -99,7 +99,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         configure(clearItem, "Clear", #selector(clearAll), in: menu)
 
         menu.addItem(.separator())
-        configure(autoPasteItem, "Auto-paste into Terminal", #selector(toggleAutoPaste), in: menu)
+        configure(autoPasteItem, "Auto-paste into Terminal or Agent App", #selector(toggleAutoPaste), in: menu)
         configure(frontAppItem, "", #selector(toggleFrontAppAsTerminal), in: menu).indentationLevel = 1
         configure(NSMenuItem(), "Paste Key", nil, in: menu).submenu = buildPasteKeyMenu()
         configure(doubleCommandItem, "Capture with ⌘⌘", #selector(toggleDoubleCommand), in: menu)
@@ -160,13 +160,13 @@ final class StatusMenu: NSObject, NSMenuDelegate {
 
     /// "Also Paste into <app>": offers the app the user was just in (opening
     /// a menu bar menu doesn't change the frontmost app) as an auto-paste
-    /// target, unless it's already a known terminal or Yetda itself.
+    /// target, unless it's already a known target or Yetda itself.
     private func refreshFrontAppItem() {
         let app = NSWorkspace.shared.frontmostApplication
         let bundleID = app?.bundleIdentifier
         frontAppBundleID = bundleID
         frontAppItem.isHidden = bundleID == nil || bundleID == Bundle.main.bundleIdentifier
-            || PasteTarget.isTerminal(bundleID: bundleID)
+            || PasteTarget.isPasteTarget(bundleID: bundleID)
         frontAppItem.title = "Also Paste into “\(app?.localizedName ?? "this app")”"
         frontAppItem.state = .init(bundleID.map(Settings.extraTerminalBundleIDs.contains) ?? false)
     }

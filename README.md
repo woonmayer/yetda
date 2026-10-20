@@ -15,8 +15,9 @@
 
 ## Works with
 
-Yetda puts the image on the clipboard and presses your terminal's paste key,
-so it works with any terminal agent that accepts a pasted image:
+Yetda puts the image on the clipboard and presses the paste key in the last
+terminal or agent desktop app you used, so it works with any agent that
+accepts a pasted image:
 
 | Agent | Paste key on macOS | Status |
 |---|---|---|
@@ -25,6 +26,8 @@ so it works with any terminal agent that accepts a pasted image:
 | Gemini CLI | `Ctrl+V` | should work |
 | opencode | `Ctrl+V` | should work |
 | Cursor CLI | `⌘V` | set **Paste Key → ⌘V** in the menu |
+| Claude desktop app | `⌘V` | should work |
+| Codex / ChatGPT desktop app | `⌘V` | should work |
 
 Tried one of these? A PR to update this table is welcome.
 
@@ -112,10 +115,10 @@ app. If captures come out blank, the permission isn't granted yet.
   - **Open Folder** — reveal `~/Yetda/` in Finder
   - **Paste Recent** — same thumbnail list as ⌘⇧1
   - **Clear (N)** — empty the capture queue
-  - **Auto-paste into Terminal** — toggle auto-paste (on by default)
+  - **Auto-paste into Terminal or Agent App** — toggle auto-paste (on by default)
   - **Also Paste into “<app>”** — shown when the app you were just in isn't a
     known terminal; tick it to make that app an auto-paste target
-  - **Paste Key** — Automatic (`Ctrl+V`; `⌘V` in iTerm2), or force `Ctrl+V` /
+  - **Paste Key** — Automatic (`Ctrl+V`; `⌘V` in iTerm2 and agent desktop apps), or force `Ctrl+V` /
     `⌘V` if your agent wants a different one
   - **Capture with ⌘⌘** — toggle the double-tap trigger (on by default; turn it
     off if another app, e.g. Codex, also uses ⌘⌘)
