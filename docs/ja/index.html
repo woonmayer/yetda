@@ -114,329 +114,154 @@
 }
 </script>
 <link rel="icon" href="../icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #fbfaf8;
-    --bg-soft: #f2f0ec;
-    --card: #ffffff;
-    --text: #17171c;
-    --muted: #5f6070;
-    --line: #e4e1db;
-    --accent: #ff9e45;
-    --accent-ink: #b85d0c;
-    --term: #14151b;
-    --term-text: #d8dae3;
-    --shadow: 0 30px 60px -20px rgba(20, 20, 30, .25);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0d0e12;
-      --bg-soft: #15161c;
-      --card: #181a21;
-      --text: #f1f1f4;
-      --muted: #9a9cab;
-      --line: #262833;
-      --accent-ink: #ffb46e;
-      --shadow: 0 30px 60px -20px rgba(0, 0, 0, .7);
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0d0e12;
-    --bg-soft: #15161c;
-    --card: #181a21;
-    --text: #f1f1f4;
-    --muted: #9a9cab;
-    --line: #262833;
-    --accent-ink: #ffb46e;
-    --shadow: 0 30px 60px -20px rgba(0, 0, 0, .7);
-  }
+:root {
+  --paper: #ffffff; --ink: #1d1d1f; --quiet: #6e6e73; --line: #e3e3e8;
+  --mask: #23262f; --dot: #8d92a3; --link: #0066cc; --well: #f5f5f7;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #1c1c1e; --ink: #f5f5f7; --quiet: #98989d; --line: #38383a; --mask: #000000; --dot: #6e6e73; --link: #4ea1ff; --well: #2c2c2e; }
+}
+:root[data-theme="dark"] { --paper: #1c1c1e; --ink: #f5f5f7; --quiet: #98989d; --line: #38383a; --mask: #000000; --dot: #6e6e73; --link: #4ea1ff; --well: #2c2c2e; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 17px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Apple SD Gothic Neo", "Hiragino Sans", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+:lang(ko) body, :lang(ko) h1, :lang(ko) h2, :lang(ko) p { word-break: keep-all; }
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: 4px; }
+code, pre, kbd { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+kbd { font-size: .9em; }
+.page { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 600; }
+.brand img { width: 28px; height: 28px; }
+.langs { display: flex; gap: 14px; font-size: 15px; }
+.langs a { color: var(--quiet); }
+.langs a[aria-current] { color: var(--ink); }
 
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font: 17px/1.7 Inter, "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; }
-  code, kbd, .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+.hero { padding: 64px 0 0; max-width: 760px; }
+h1 { font: 700 clamp(44px, 8.5vw, 88px)/1.02 -apple-system, BlinkMacSystemFont, "SF Pro Display", "Apple SD Gothic Neo", "Hiragino Sans", system-ui, sans-serif; letter-spacing: -0.035em; margin: 0; }
+h1 .line { display: block; }
+.redact { position: relative; display: inline-block; letter-spacing: 0; }
+.redact .pill {
+  position: absolute; left: -0.08em; right: -0.14em; top: 0; bottom: -0.06em;
+  background: var(--mask); border-radius: 999px; transform-origin: left center;
+  display: flex; align-items: center; padding-left: 0.28em; overflow: hidden;
+  animation: mask .55s cubic-bezier(.2,.8,.2,1) .7s both;
+}
+.redact .pill::after { content: "• • • •"; color: var(--dot); font-size: .3em; letter-spacing: .06em; white-space: nowrap; }
+:lang(ja) .redact .pill { left: -0.04em; right: -0.04em; justify-content: center; padding-left: 0; }
+@keyframes mask { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.lede { font-size: clamp(19px, 2.3vw, 23px); line-height: 1.45; color: var(--quiet); margin: 28px 0 0; max-width: 34em; }
+.lede strong { color: var(--ink); font-weight: 600; }
 
-  /* Nav */
-  nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; }
-  .brand img { width: 32px; height: 32px; }
-  .nav-right { display: flex; align-items: center; gap: 24px; }
-  .nav-links { display: flex; gap: 24px; font-size: 15px; }
-  .lang { display: flex; gap: 10px; font-size: 14px; }
-  .lang a { text-decoration: none; color: var(--muted); }
-  .lang a[aria-current] { color: var(--text); font-weight: 600; }
-  /* Korean and Japanese: keep words whole, and less tracking on headings. */
-  :lang(ko) h1, :lang(ko) h2, :lang(ja) h1, :lang(ja) h2 { letter-spacing: -0.02em; }
-  :lang(ko) body, :lang(ko) h1, :lang(ko) h2, :lang(ko) .sub, :lang(ko) .lead { word-break: keep-all; }
-  :lang(ja) h1, :lang(ja) h2 { line-break: strict; }
-  .nav-links a { text-decoration: none; color: var(--muted); }
-  .nav-links a:hover { color: var(--text); }
+.get { margin-top: 36px; }
+.brew { display: flex; align-items: center; gap: 12px; max-width: 560px; background: var(--well); border-radius: 12px; padding: 14px 14px 14px 18px; }
+.brew code { flex: 1; font-size: 15px; overflow-x: auto; white-space: nowrap; }
+@media (max-width: 480px) { .brew { flex-wrap: wrap; } .brew code { flex-basis: 100%; font-size: 13px; } .brew button { margin-left: auto; } }
+.brew button { font: 600 14px/1 inherit; font-family: inherit; color: var(--paper); background: var(--ink); border: 0; border-radius: 8px; padding: 9px 14px; cursor: pointer; }
+.get p { margin: 14px 0 0; color: var(--quiet); font-size: 15px; }
 
-  /* Hero */
-  .hero { text-align: center; padding: 56px 0 32px; }
-  .hero img.logo { width: 112px; height: 112px; margin-bottom: 14px; }
-  .hook { font-size: 20px; color: var(--muted); margin: 0 0 14px; letter-spacing: -0.01em; }
-  .hero .origin { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
-  .origin span { font-weight: 600; color: var(--text); }
-  h1 {
-    font-size: clamp(36px, 6vw, 64px);
-    line-height: 1.05;
-    letter-spacing: -0.035em;
-    margin: 0 0 18px;
-    font-weight: 800;
-    text-wrap: balance;
-  }
-  h1 .hl { color: var(--accent-ink); }
-  .sub { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 620px; margin: 0 auto 32px; }
-  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 13px 22px; border-radius: 12px;
-    font-weight: 600; font-size: 16px; text-decoration: none;
-    border: 1px solid var(--line); background: var(--card);
-  }
-  .btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-  .btn:hover { transform: translateY(-1px); }
-  .meta { margin-top: 16px; font-size: 14px; color: var(--muted); }
-  .agents { margin-top: 22px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
-  .agents b { font-weight: 600; color: var(--text); padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); }
+.demo { margin: 56px 0 0; }
+video { display: block; width: 100%; height: auto; aspect-ratio: 960 / 612; border-radius: 14px; background: #000; }
 
-  kbd {
-    display: inline-block; min-width: 1.6em; padding: 1px 7px;
-    border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 6px;
-    background: var(--card); font-size: .85em; text-align: center;
-  }
+.feature { display: grid; gap: 20px 56px; padding: 112px 0 0; align-items: center; }
+@media (min-width: 900px) { .feature { grid-template-columns: 5fr 7fr; } }
+h2 { font: 700 clamp(30px, 4.4vw, 44px)/1.1 -apple-system, BlinkMacSystemFont, "SF Pro Display", "Apple SD Gothic Neo", "Hiragino Sans", system-ui, sans-serif; letter-spacing: -0.025em; margin: 0 0 12px; }
+.feature p { margin: 0; color: var(--quiet); }
+.feature p + p { margin-top: 12px; font-size: 15px; }
 
-  /* Demo */
-  .demo { margin: 48px auto 0; max-width: 900px; text-align: left; }
-  @media (max-width: 600px) { .hero .origin { display: none; } .demo { margin-top: 28px; } }
-  .screen {
-    position: relative; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden;
-    background: linear-gradient(135deg, #3b3f8f, #8a4f9e 55%, #e0806b);
-    box-shadow: var(--shadow);
-  }
-  .win {
-    position: absolute; border-radius: 10px; overflow: hidden;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, .35);
-  }
-  .win .bar { height: 26px; display: flex; align-items: center; gap: 6px; padding: 0 10px; }
-  .win .bar i { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
-  .win .bar i:nth-child(2) { background: #febc2e; }
-  .win .bar i:nth-child(3) { background: #28c840; }
+.also { padding: 112px 0 0; max-width: 640px; }
+.also h3 { font-size: 17px; margin: 0 0 8px; }
+.also ul { margin: 0; padding-left: 1.1em; color: var(--quiet); }
+.also li { margin: 4px 0; }
 
-  .browser { z-index: 1; left: 4%; top: 7%; width: 54%; height: 70%; background: #fff; }
-  .browser .bar { background: #ececec; }
-  .page { padding: 16px; }
-  .page .h { height: 14px; width: 55%; background: #1f2330; border-radius: 4px; margin-bottom: 14px; }
-  .page .l { height: 8px; background: #e3e5ea; border-radius: 4px; margin-bottom: 8px; }
-  .page .err {
-    margin-top: 14px; padding: 10px; border-radius: 6px; border: 1px solid #f3b4b4; background: #fff1f1;
-    color: #c0392b; font: 600 clamp(8px, 1.3vw, 12px)/1.4 "JetBrains Mono", monospace;
-  }
-  .page .btn-mock { margin-top: 14px; width: 34%; height: 26px; border-radius: 6px; background: #4f63ff; }
+.install { padding: 112px 0 0; max-width: 640px; }
+.install p { color: var(--quiet); margin: 0 0 12px; }
+.install pre { background: var(--well); border-radius: 12px; padding: 16px 18px; overflow-x: auto; font-size: 14px; }
+details { border-top: 1px solid var(--line); padding: 14px 0; }
+details:last-child { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; font-weight: 600; }
+details p { color: var(--quiet); margin: 10px 0 0; }
+.faq { padding: 112px 0 0; max-width: 720px; }
+.faq h2 { margin-bottom: 20px; }
 
-  .term { right: 4%; bottom: 7%; width: 50%; height: 56%; background: var(--term); }
-  .term .bar { background: #22242c; }
-  .term .body {
-    padding: 12px 14px; color: var(--term-text);
-    font: clamp(8px, 1.35vw, 13px)/1.6 "JetBrains Mono", monospace;
-  }
-  .term .dim { color: #6e7386; }
-  .term .acc { color: var(--accent); }
-  .prompt-box { margin-top: 8px; border: 1px solid #3a3d4a; border-radius: 6px; padding: 6px 10px; }
-  .pasted { color: #8fb4ff; opacity: 0; }
-  .typed { display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom; max-width: 0; }
-  .cursor { display: inline-block; width: .55em; height: 1.1em; background: var(--term-text); vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
+footer { margin-top: 112px; padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--quiet); font-size: 14px; }
+footer .page { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+footer .name { margin-right: auto; }
 
-  .keys {
-    position: absolute; left: 50%; top: 24%; transform: translate(-50%, -50%);
-    display: flex; gap: 10px; opacity: 0; z-index: 5;
-  }
-  .keys span {
-    font: 700 clamp(18px, 3.5vw, 34px)/1 Inter, sans-serif; color: #fff;
-    background: rgba(20, 20, 28, .82); padding: 14px 20px; border-radius: 14px;
-    backdrop-filter: blur(8px);
-  }
-  .dim-overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, .25); opacity: 0; z-index: 3; }
-  .sel {
-    position: absolute; left: 7%; top: 31%; width: 0; height: 0; z-index: 4;
-    border: 2px solid #fff; background: rgba(255, 255, 255, .12);
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, .3); opacity: 0;
-  }
-  .flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 6; pointer-events: none; }
-  .caption { text-align: center; margin-top: 16px; font-size: 14px; color: var(--muted); }
-
-  /* 7s loop: ⌘⌘ → drag → flash → terminal jumps forward → image pasted → typed */
-  .keys        { animation: keys 7s infinite; }
-  .dim-overlay { animation: dim 7s infinite; }
-  .sel         { animation: sel 7s infinite; }
-  .flash       { animation: flash 7s infinite; }
-  .term        { animation: front 7s infinite; }
-  .pasted      { animation: pasted 7s infinite; }
-  .typed       { animation: typed 7s infinite; }
-  @keyframes keys   { 0%, 4% { opacity: 0; transform: translate(-50%, -40%); } 8%, 20% { opacity: 1; transform: translate(-50%, -50%); } 25%, 100% { opacity: 0; } }
-  @keyframes dim    { 0%, 22% { opacity: 0; } 25%, 47% { opacity: 1; } 50%, 100% { opacity: 0; } }
-  @keyframes sel    { 0%, 25% { opacity: 0; width: 0; height: 0; } 27% { opacity: 1; width: 0; height: 0; } 45% { opacity: 1; width: 47%; height: 34%; } 48%, 100% { opacity: 0; width: 47%; height: 34%; } }
-  @keyframes flash  { 0%, 47% { opacity: 0; } 49% { opacity: .55; } 54%, 100% { opacity: 0; } }
-  @keyframes front  { 0%, 54% { z-index: 0; transform: scale(1); } 57% { z-index: 2; transform: scale(1.025); } 60%, 100% { z-index: 2; transform: scale(1); } }
-  @keyframes pasted { 0%, 60% { opacity: 0; } 63%, 96% { opacity: 1; } 100% { opacity: 0; } }
-  @keyframes typed  { 0%, 66% { max-width: 0; } 86%, 96% { max-width: 40ch; } 100% { max-width: 0; } }
-  @keyframes blink  { 50% { opacity: 0; } }
-  @media (prefers-reduced-motion: reduce) {
-    .keys, .dim-overlay, .sel, .flash, .term, .pasted, .typed { animation: none; }
-    .term { z-index: 2; } .pasted { opacity: 1; } .typed { max-width: none; }
-  }
-
-  /* Sections */
-  section { padding: 88px 0 0; }
-  .show { text-align: center; padding-top: 96px; }
-  .show h2 { font-size: clamp(34px, 6vw, 60px); margin-bottom: 10px; }
-  .show .lead { margin-bottom: 28px; font-size: 18px; }
-  .clip, .demo video { display: block; width: 100%; height: auto; aspect-ratio: 960 / 612; border-radius: 18px; background: #0d0e12; box-shadow: 0 30px 80px rgba(0,0,0,.28); }
-  .clip { max-width: 900px; margin: 0 auto; }
-  .more { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 0; margin: 72px auto 0; max-width: 860px; }
-  .more li { padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font-size: 15px; }
-  h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.03em; line-height: 1.15; margin: 0 0 12px; text-align: center; }
-  .lead { text-align: center; color: var(--muted); max-width: 580px; margin: 0 auto 40px; }
-
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .step, .feat { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
-  .step .n { font: 600 13px/1 "JetBrains Mono", monospace; color: var(--accent-ink); margin-bottom: 14px; }
-  .step h3, .feat h3 { margin: 0 0 6px; font-size: 18px; letter-spacing: -0.01em; }
-  .step p, .feat p { margin: 0; color: var(--muted); font-size: 15px; }
-
-  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .compare .col { border-radius: 16px; padding: 24px; border: 1px solid var(--line); }
-  .compare .before { background: var(--bg-soft); }
-  .compare .after { background: var(--card); border-color: var(--accent); }
-  .compare h3 { margin: 0 0 14px; font-size: 15px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
-  .compare .after h3 { color: var(--accent-ink); }
-  .compare ol { margin: 0; padding-left: 20px; }
-  .compare li { margin: 6px 0; }
-  .compare .before li { color: var(--muted); }
-
-  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .feat .ic { font-size: 22px; margin-bottom: 10px; }
-
-  .terms { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 24px; }
-  .terms span { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 14px; color: var(--muted); background: var(--card); }
-
-  pre {
-    background: var(--term); color: var(--term-text); border-radius: 14px; padding: 20px 22px;
-    overflow-x: auto; font-size: 14px; line-height: 1.7; margin: 0;
-  }
-  pre .c { color: #6e7386; }
-  .install { max-width: 720px; margin: 0 auto; }
-  .note { margin-top: 16px; font-size: 15px; color: var(--muted); }
-  .install .note .btn { margin-right: 10px; }
-  @media (max-width: 600px) { .install .note .btn { display: flex; width: fit-content; margin: 0 0 10px; } }
-  details.from-source { margin-top: 16px; }
-  details.from-source pre { margin-top: 12px; }
-
-  details { border-bottom: 1px solid var(--line); padding: 18px 0; max-width: 720px; margin: 0 auto; }
-  details summary { cursor: pointer; font-weight: 600; list-style: none; }
-  details summary::after { content: "+"; float: right; color: var(--muted); }
-  details[open] summary::after { content: "–"; }
-  details p { color: var(--muted); margin: 10px 0 0; font-size: 15px; }
-
-  footer { margin-top: 96px; padding: 32px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
-  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-
-  @media (max-width: 760px) {
-    .nav-links { display: none; }
-    .steps, .features, .compare { grid-template-columns: 1fr; }
-    section { padding-top: 64px; }
-  }
+@media (prefers-reduced-motion: reduce) { .redact .pill { animation: none; } }
+@media (max-width: 600px) {
+  .hero { padding-top: 32px; }
+  .demo { margin-top: 40px; }
+  .feature, .also, .install, .faq { padding-top: 80px; }
+}
 </style>
 </head>
 <body>
-
-<div class="wrap">
+<div class="page">
   <nav>
-    <a class="brand" href="#"><img src="../icon.png" alt="">Yetda</a>
-    <div class="nav-right">
-      <div class="nav-links">
-        <a href="#how">使い方</a>
-        <a href="#features">機能</a>
-        <a href="#install">インストール</a>
-        <a href="https://github.com/woonmayer/yetda">GitHub</a>
-      </div>
-      <div class="lang"><a href="../" lang="en">EN</a><a href="../ko/" lang="ko">한국어</a><a href="./" aria-current="page" lang="ja">日本語</a></div>
-    </div>
+    <a class="brand" href="../"><img src="../icon.png" alt="">Yetda</a>
+    <div class="langs"><a href="../" lang="en">English</a><a href="../ko/" lang="ko">한국어</a><a href="../ja/" lang="ja" aria-current="page">日本語</a></div>
   </nav>
 
   <header class="hero">
-    <img class="logo" src="../icon.png" alt="Yetdaのアイコン">
-    <p class="hook">今日、AIに何枚スクショを渡しましたか？</p>
-    <h1>画面は見せて、<br><span class="hl">鍵は隠す。</span></h1>
-    <p class="sub">Claude CodeでもCodexでも、スクショをそのまま貼れるMacアプリ。APIキーやパスワードは自動で隠します。</p>
-    <div class="cta">
-      <a class="btn primary" href="#install">macOSにインストール</a>
-      <a class="btn" href="https://github.com/woonmayer/yetda">★ GitHubで見る</a>
+    <h1><span class="line">画面は見せて、</span><span class="line"><span class="redact">鍵<span class="pill" aria-hidden="true"></span></span>は隠す。</span></h1>
+    <p class="lede">Claude CodeでもCodexでも、スクショをそのまま貼れるMacアプリ。<strong>APIキーやパスワードは自動で隠します。</strong></p>
+    <div class="get" id="get">
+      <div class="brew"><code>brew install --cask woonmayer/tap/yetda</code><button type="button" data-copied="コピーしました">コピー</button></div>
+      <p>または<a href="https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg">dmgをダウンロード</a>。無料・オープンソース、macOS 13以降、Apple署名・公証済み。Macの外には何も送りません。</p>
     </div>
-    <div class="demo">
-      <video id="demo" class="v" src="../demo.mp4" poster="../demo-poster.jpg" autoplay muted loop playsinline aria-label="デモ：スクショ内のAPIキーが黒塗りされ、ターミナルのエージェントとデスクトップアプリに貼られる様子"></video>
-    </div>
-    <div class="meta">無料・オープンソース · macOS 13以降 · オンデバイスAI · 通信なし</div>
-    <div class="origin"><span lang="ko">옜다</span>（イェッタ）· 韓国語で「ほら、どうぞ」</div>
-    <div class="agents">
-      <span>対応</span>
-      <b>Claude Code</b><b>Codex</b><b>Gemini CLI</b><b>opencode</b><b>Cursor CLI</b><b>Claudeアプリ</b><b>Codexアプリ</b>
-    </div>
-
   </header>
 
-  <section id="how" class="show">
-    <h2><kbd>⌘</kbd>を2回。</h2>
-    <p class="lead">どのアプリからでも。<kbd>⌘⇧2</kbd>でも。</p>
-    <video class="clip v" data-src="../clip-capture.mp4" poster="../clip-capture-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
-  </section>
+  <div class="demo">
+    <video id="demo" src="../demo.mp4" poster="../demo-poster.jpg" autoplay muted loop playsinline aria-label="デモ：スクショ内のAPIキーが黒塗りされ、ターミナルのエージェントとデスクトップアプリに貼られる様子"></video>
+  </div>
 
-  <section id="secrets" class="show">
-    <h2>パスワードは隠します。</h2>
-    <p class="lead">APIキーが写っていても大丈夫。Macの中で先に隠します。</p>
-    <video class="clip v" data-src="../clip-mask.mp4" poster="../clip-mask-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
-  </section>
-
-  <section id="paste" class="show">
-    <h2>使っていた場所へ。</h2>
-    <p class="lead">ターミナルでもアプリでも。Claude Code、Codex、ほかにも。</p>
-    <video class="clip v" data-src="../clip-paste.mp4" poster="../clip-paste-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
-  </section>
-
-  <section id="features">
-    <ul class="more">
-      <li><kbd>⌘⇧1</kbd>で直近10枚を貼り直す</li>
-      <li><code>/shots</code>で複数枚を一度に</li>
-      <li>必要ならテキストも一緒に</li>
-      <li>端末内OCR・AI、通信なし</li>
-    </ul>
-    <div class="terms">
-      <span>Terminal</span><span>iTerm2</span><span>Ghostty</span><span>Warp</span><span>WezTerm</span>
-      <span>kitty</span><span>Alacritty</span><span>Hyper</span><span>cmux</span><span>Orca</span><span>Kaku</span><span>Claude</span><span>Codex</span><span>ChatGPT</span>
+  <section class="feature" id="how">
+    <div>
+      <h2><kbd>⌘</kbd>を2回。</h2>
+      <p>どのアプリからでも。<kbd>⌘⇧2</kbd>でも。範囲をドラッグ、またはスペースでウィンドウ全体。</p>
     </div>
+    <video class="clip" data-src="../clip-capture.mp4" poster="../clip-capture-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
+  </section>
+  <section class="feature" id="secrets">
+    <div>
+      <h2>APIキーが写っていても大丈夫。</h2>
+      <p>画像がどこかへ行く前に、Macの中で先に隠します。端末内OCRで見つけ、Apple Intelligence対応のMacではオンデバイスモデルがもう一度確認します。</p>
+    </div>
+    <video class="clip" data-src="../clip-mask.mp4" poster="../clip-mask-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
+  </section>
+  <section class="feature" id="paste">
+    <div>
+      <h2>使っていた場所へ。</h2>
+      <p>最後に使ったターミナルかアプリに、そのアプリに合ったキーで貼ります。</p>
+      <p>Terminal、iTerm2、Ghostty、Warp、WezTerm、kitty、Alacritty、Hyper、cmux、Orca、Kaku、そしてClaude・Codex・ChatGPTのアプリ。ほかのアプリもメニューから追加できます。</p>
+    </div>
+    <video class="clip" data-src="../clip-paste.mp4" poster="../clip-paste-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
   </section>
 
-  <section id="install">
+  <section class="also" id="features">
+    <h3>ほかにも</h3>
+    <ul>
+      <li><kbd>⌘⇧1</kbd>で直近10枚を貼り直せます。</li>
+      <li>Claude CodeやCodexで<code>/shots</code>を使えば複数枚を一度に。</li>
+      <li>読み取ったテキストも一緒に貼れます。</li>
+      <li>キャプチャは7日後に消えます。</li>
+    </ul>
+  </section>
+
+  <section class="install" id="install">
     <h2>インストール</h2>
-    <p class="lead">Apple署名・公証済み。macOS 13以降。</p>
-    <div class="install">
-<pre><span class="c"># Homebrew</span>
-brew install --cask woonmayer/tap/yetda</pre>
-      <p class="note"><a class="btn primary" href="https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg">Yetda.dmgをダウンロード</a> dmgを開いて、アプリケーションフォルダへドラッグ。</p>
-      <details class="from-source">
-        <summary>ソースからビルドする</summary>
+    <p>上のbrewを実行するか、dmgを開いてアプリケーションフォルダへ。初回に画面収録とアクセシビリティの許可を求めます。</p>
+    <details>
+      <summary>ソースからビルドする</summary>
 <pre><span class="c"># ビルド</span>
 git clone https://github.com/woonmayer/yetda.git
 cd yetda
@@ -445,14 +270,11 @@ cd yetda
 <span class="c"># インストール（macOSの権限を保つため、コピーではなく移動）</span>
 rm -rf /Applications/Yetda.app &amp;&amp; mv Yetda.app /Applications/
 open /Applications/Yetda.app</pre>
-      </details>
-      <p class="note">初回に画面収録とアクセシビリティの許可を求めます。</p>
-    </div>
+    </details>
   </section>
 
-  <section>
+  <section class="faq" id="faq">
     <h2>よくある質問</h2>
-    <p class="lead"></p>
     <details>
       <summary>秘密情報はどうやって隠すの？</summary>
       <p>macOSの端末内OCRでスクショの文字を読み取り、既知のキー形式（OpenAI、Anthropic、GitHub、AWS、Stripe、JWTなど）、<code>password=…</code>のような値、カード番号を見つけて、画像と貼り付けるテキストの両方で隠します。Apple Intelligenceが有効なMacでは、AppleのオンデバイスLLMがランダムに見える文字列もMacの中でもう一度判定します（クラウド呼び出しなし）。隠す途中で問題が起きたら、そもそも貼り付けません。隠しすぎたときは<em>Paste Last Capture Without Hiding</em>で元の画像を貼れます（元画像はメモリにだけ保持）。データは一切外に出ません。ただし安全網なので、送る前に一度確認してください。</p>
@@ -481,21 +303,27 @@ open /Applications/Yetda.app</pre>
 </div>
 
 <footer>
-  <div class="wrap">
-    <span>Yetda · MITライセンス</span>
-    <a href="https://github.com/woonmayer/yetda">github.com/woonmayer/yetda</a>
+  <div class="page">
+    <span class="name">옜다（イェッタ）は韓国語で「ほら、どうぞ」。MITライセンス。</span>
+    <a href="https://github.com/woonmayer/yetda">GitHub</a>
     <a href="https://github.com/woonmayer/yetda/issues/new/choose">フィードバック</a>
-    <a href="https://github.com/sponsors/woonmayer">♥ スポンサーになる</a>
+    <a href="https://github.com/sponsors/woonmayer">スポンサー</a>
   </div>
 </footer>
 
 <script>
-// Hero plays at once; section clips load and play when scrolled into view.
-// If autoplay is blocked (e.g. Low Power Mode), show controls so a tap plays.
 (() => {
+  // Copy the brew line.
+  const btn = document.querySelector('.brew button');
+  btn.addEventListener('click', async () => {
+    const label = btn.textContent;
+    try { await navigator.clipboard.writeText(document.querySelector('.brew code').textContent); btn.textContent = btn.dataset.copied; }
+    catch { getSelection().selectAllChildren(document.querySelector('.brew code')); }
+    setTimeout(() => { btn.textContent = label; }, 1600);
+  });
+  // Hero plays at once; feature clips load and play in view. If autoplay is blocked, show controls.
   const play = v => { const p = v.play(); if (p) p.catch(() => { v.controls = true; }); };
-  const hero = document.getElementById('demo');
-  if (hero) play(hero);
+  play(document.getElementById('demo'));
   const clips = document.querySelectorAll('video.clip');
   const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
     const v = e.target;
