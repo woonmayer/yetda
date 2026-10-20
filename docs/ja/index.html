@@ -67,7 +67,7 @@
    "name": "秘密情報はどうやって隠すの？",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "macOSの端末内OCRでスクショの文字を読み取り、既知のキー形式（OpenAI、Anthropic、GitHub、AWS、Stripe、JWTなど）、password=…のような値、カード番号を見つけて、画像と貼り付けるテキストの両方で隠します。Apple Intelligenceが有効なMacでは、Appleの端末内モデルがランダムに見える文字列ももう一度判定します。隠す途中で問題が起きたら、そもそも貼り付けません。隠しすぎたときはPaste Last Capture Without Hidingで元の画像を貼れます（元画像はメモリにだけ保持）。データは一切外に出ません。ただし安全網なので、送る前に一度確認してください。"
+    "text": "macOSの端末内OCRでスクショの文字を読み取り、既知のキー形式（OpenAI、Anthropic、GitHub、AWS、Stripe、JWTなど）、password=…のような値、カード番号を見つけて、画像と貼り付けるテキストの両方で隠します。Apple Intelligenceが有効なMacでは、AppleのオンデバイスLLMがランダムに見える文字列もMacの中でもう一度判定します（クラウド呼び出しなし）。隠す途中で問題が起きたら、そもそも貼り付けません。隠しすぎたときはPaste Last Capture Without Hidingで元の画像を貼れます（元画像はメモリにだけ保持）。データは一切外に出ません。ただし安全網なので、送る前に一度確認してください。"
    }
   },
   {
@@ -186,7 +186,8 @@
   /* Hero */
   .hero { text-align: center; padding: 56px 0 32px; }
   .hero img.logo { width: 112px; height: 112px; margin-bottom: 14px; }
-  .origin { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
+  .hook { font-size: 20px; color: var(--muted); margin: 0 0 14px; letter-spacing: -0.01em; }
+  .hero .origin { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
   .origin span { font-weight: 600; color: var(--text); }
   h1 {
     font-size: clamp(36px, 6vw, 64px);
@@ -370,14 +371,15 @@
 
   <header class="hero">
     <img class="logo" src="../icon.png" alt="Yetdaのアイコン">
-    <div class="origin"><span lang="ko">옜다</span>（イェッタ）· 韓国語で「ほら、どうぞ」</div>
+    <p class="hook">今日、エージェントに何枚スクショを渡しましたか？</p>
     <h1>画面は見せて、<br><span class="hl">鍵は隠す。</span></h1>
     <p class="sub"><kbd>⌘</kbd>を2回押して、ドラッグするだけ。スクショがターミナルでもデスクトップアプリでも、コーディングエージェントにそのまま入ります。APIキーやパスワードはMacの中で先に黒塗り。保存もドラッグも、ウィンドウの切り替えも要りません。</p>
     <div class="cta">
       <a class="btn primary" href="#install">macOSにインストール</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ GitHubで見る</a>
     </div>
-    <div class="meta">無料・オープンソース · MIT · macOS 13以降 · ネットワーク通信なし · キャプチャは7日後に自動削除</div>
+    <div class="meta">無料・オープンソース · MIT · macOS 13以降 · 端末内OCR・AI · ネットワーク通信なし · キャプチャは7日後に自動削除</div>
+    <div class="origin"><span lang="ko">옜다</span>（イェッタ）· 韓国語で「ほら、どうぞ」</div>
     <div class="agents">
       <span>対応</span>
       <b>Claude Code</b><b>Codex</b><b>Gemini CLI</b><b>opencode</b><b>Cursor CLI</b><b>Claudeアプリ</b><b>Codexアプリ</b>
@@ -441,8 +443,8 @@
     <div class="features">
       <div class="feat">
         <div class="ic">🔒</div>
-        <h3>秘密情報を隠す</h3>
-        <p>スクショ内のAPIキー、トークン、パスワードを端末内で隠してから、エージェントに渡します。</p>
+        <h3>Macの中で隠す</h3>
+        <p>端末内OCRでAPIキー、トークン、パスワードを見つけ、Apple Intelligenceが有効なMacではAppleのオンデバイスLLMが未知の形式の文字列ももう一度確認します。隠してからエージェントに渡します。クラウドには送らず、ネットワークも使いません。</p>
       </div>
       <div class="feat">
         <div class="ic">⌘⌘</div>
@@ -503,7 +505,7 @@ open /Applications/Yetda.app</pre>
     <p class="lead"></p>
     <details>
       <summary>秘密情報はどうやって隠すの？</summary>
-      <p>macOSの端末内OCRでスクショの文字を読み取り、既知のキー形式（OpenAI、Anthropic、GitHub、AWS、Stripe、JWTなど）、<code>password=…</code>のような値、カード番号を見つけて、画像と貼り付けるテキストの両方で隠します。Apple Intelligenceが有効なMacでは、Appleの端末内モデルがランダムに見える文字列ももう一度判定します。隠す途中で問題が起きたら、そもそも貼り付けません。隠しすぎたときは<em>Paste Last Capture Without Hiding</em>で元の画像を貼れます（元画像はメモリにだけ保持）。データは一切外に出ません。ただし安全網なので、送る前に一度確認してください。</p>
+      <p>macOSの端末内OCRでスクショの文字を読み取り、既知のキー形式（OpenAI、Anthropic、GitHub、AWS、Stripe、JWTなど）、<code>password=…</code>のような値、カード番号を見つけて、画像と貼り付けるテキストの両方で隠します。Apple Intelligenceが有効なMacでは、AppleのオンデバイスLLMがランダムに見える文字列もMacの中でもう一度判定します（クラウド呼び出しなし）。隠す途中で問題が起きたら、そもそも貼り付けません。隠しすぎたときは<em>Paste Last Capture Without Hiding</em>で元の画像を貼れます（元画像はメモリにだけ保持）。データは一切外に出ません。ただし安全網なので、送る前に一度確認してください。</p>
     </details>
     <details>
       <summary>なぜアクセシビリティの許可が必要？</summary>

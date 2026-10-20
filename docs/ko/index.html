@@ -67,7 +67,7 @@
    "name": "비밀 정보는 어떻게 가리나요?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "macOS 기기 안 OCR로 캡처의 글자를 읽고, 알려진 키 형식(OpenAI, Anthropic, GitHub, AWS, Stripe, JWT 등), password=… 같은 값, 카드번호를 찾아 이미지와 붙는 글자 양쪽에서 가려요. Apple Intelligence가 켜진 Mac에서는 Apple의 기기 내 모델이 무작위처럼 보이는 문자열도 한 번 더 판단해요. 가리는 도중 문제가 생기면 아예 붙여넣지 않아요. 너무 많이 가렸다면 Paste Last Capture Without Hiding으로 원본을 붙일 수 있어요(원본은 메모리에만 보관). 어떤 데이터도 밖으로 나가지 않아요. 다만 안전망이니, 보내기 전에 한 번 훑어봐 주세요."
+    "text": "macOS 기기 안 OCR로 캡처의 글자를 읽고, 알려진 키 형식(OpenAI, Anthropic, GitHub, AWS, Stripe, JWT 등), password=… 같은 값, 카드번호를 찾아 이미지와 붙는 글자 양쪽에서 가려요. Apple Intelligence가 켜진 Mac에서는 Apple의 온디바이스 LLM이 무작위처럼 보이는 문자열도 맥 안에서 한 번 더 판단해요(클라우드 호출 없음). 가리는 도중 문제가 생기면 아예 붙여넣지 않아요. 너무 많이 가렸다면 Paste Last Capture Without Hiding으로 원본을 붙일 수 있어요(원본은 메모리에만 보관). 어떤 데이터도 밖으로 나가지 않아요. 다만 안전망이니, 보내기 전에 한 번 훑어봐 주세요."
    }
   },
   {
@@ -186,7 +186,8 @@
   /* Hero */
   .hero { text-align: center; padding: 56px 0 32px; }
   .hero img.logo { width: 112px; height: 112px; margin-bottom: 14px; }
-  .origin { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
+  .hook { font-size: 20px; color: var(--muted); margin: 0 0 14px; letter-spacing: -0.01em; }
+  .hero .origin { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
   .origin span { font-weight: 600; color: var(--text); }
   h1 {
     font-size: clamp(36px, 6vw, 64px);
@@ -370,14 +371,15 @@
 
   <header class="hero">
     <img class="logo" src="../icon.png" alt="Yetda 아이콘">
-    <div class="origin"><span>옜다</span> · 뭔가를 툭 건네며 하는 말, “자, 받아.”</div>
+    <p class="hook">오늘 에이전트한테 스크린샷 몇 장 넘기셨어요?</p>
     <h1>옜다, 화면.<br><span class="hl">비번은 빼고.</span></h1>
     <p class="sub"><kbd>⌘</kbd>를 두 번 누르고 드래그하면 끝. 스크린샷이 터미널이든 데스크톱 앱이든 코딩 에이전트에 바로 들어가요. API 키·토큰·비밀번호는 맥 안에서 먼저 가려져요. 저장도, 드래그도, 창 전환도 필요 없어요.</p>
     <div class="cta">
       <a class="btn primary" href="#install">macOS에 설치</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ GitHub에서 보기</a>
     </div>
-    <div class="meta">무료 오픈소스 · MIT · macOS 13+ · 네트워크 사용 안 함 · 캡처는 7일 뒤 자동 삭제</div>
+    <div class="meta">무료 오픈소스 · MIT · macOS 13+ · 기기 안 OCR·AI · 네트워크 사용 안 함 · 캡처는 7일 뒤 자동 삭제</div>
+    <div class="origin"><span>옜다</span> · 뭔가를 툭 건네며 하는 말, “자, 받아.”</div>
     <div class="agents">
       <span>지원</span>
       <b>Claude Code</b><b>Codex</b><b>Gemini CLI</b><b>opencode</b><b>Cursor CLI</b><b>Claude 앱</b><b>Codex 앱</b>
@@ -441,8 +443,8 @@
     <div class="features">
       <div class="feat">
         <div class="ic">🔒</div>
-        <h3>비밀 정보 가리기</h3>
-        <p>캡처 속 API 키, 토큰, 비밀번호를 기기 안에서 가린 다음 에이전트에게 보내요.</p>
+        <h3>맥 안에서 가리기</h3>
+        <p>기기 안 OCR로 API 키·토큰·비밀번호를 찾고, Apple Intelligence가 켜진 맥에서는 Apple의 온디바이스 LLM이 형식을 모르는 문자열까지 한 번 더 봐요. 가린 다음에 에이전트에게 보내요. 클라우드로 보내지 않고, 네트워크도 쓰지 않아요.</p>
       </div>
       <div class="feat">
         <div class="ic">⌘⌘</div>
@@ -503,7 +505,7 @@ open /Applications/Yetda.app</pre>
     <p class="lead"></p>
     <details>
       <summary>비밀 정보는 어떻게 가리나요?</summary>
-      <p>macOS 기기 안 OCR로 캡처의 글자를 읽고, 알려진 키 형식(OpenAI, Anthropic, GitHub, AWS, Stripe, JWT 등), <code>password=…</code> 같은 값, 카드번호를 찾아 이미지와 붙는 글자 양쪽에서 가려요. Apple Intelligence가 켜진 Mac에서는 Apple의 기기 내 모델이 무작위처럼 보이는 문자열도 한 번 더 판단해요. 가리는 도중 문제가 생기면 아예 붙여넣지 않아요. 너무 많이 가렸다면 <em>Paste Last Capture Without Hiding</em>으로 원본을 붙일 수 있어요(원본은 메모리에만 보관). 어떤 데이터도 밖으로 나가지 않아요. 다만 안전망이니, 보내기 전에 한 번 훑어봐 주세요.</p>
+      <p>macOS 기기 안 OCR로 캡처의 글자를 읽고, 알려진 키 형식(OpenAI, Anthropic, GitHub, AWS, Stripe, JWT 등), <code>password=…</code> 같은 값, 카드번호를 찾아 이미지와 붙는 글자 양쪽에서 가려요. Apple Intelligence가 켜진 Mac에서는 Apple의 온디바이스 LLM이 무작위처럼 보이는 문자열도 맥 안에서 한 번 더 판단해요(클라우드 호출 없음). 가리는 도중 문제가 생기면 아예 붙여넣지 않아요. 너무 많이 가렸다면 <em>Paste Last Capture Without Hiding</em>으로 원본을 붙일 수 있어요(원본은 메모리에만 보관). 어떤 데이터도 밖으로 나가지 않아요. 다만 안전망이니, 보내기 전에 한 번 훑어봐 주세요.</p>
     </details>
     <details>
       <summary>손쉬운 사용 권한은 왜 필요한가요?</summary>

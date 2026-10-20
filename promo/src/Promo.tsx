@@ -11,13 +11,14 @@ import {
   useVideoConfig,
 } from 'remotion';
 
-// Timeline (30 fps): title → demo (terminal, with a key masked) → desktop app → features → end card.
+// Timeline (30 fps): hook → title → demo (terminal, with a key masked) → desktop app → features → end card.
+const HOOK = 60;
 const TITLE = 66;
 const DEMO = 300;
 const APP = 140;
 const FEATURES = 110;
 const END = 90;
-export const PROMO_FRAMES = TITLE + DEMO + APP + FEATURES + END;
+export const PROMO_FRAMES = HOOK + TITLE + DEMO + APP + FEATURES + END;
 
 const SANS = '-apple-system, "SF Pro Display", "Helvetica Neue", sans-serif';
 const MONO = '"SF Mono", Menlo, monospace';
@@ -30,6 +31,10 @@ const fade = (f: number, from: number, to: number) => interpolate(f, [from, to],
 
 export const Promo = () => (
   <AbsoluteFill style={{ background: BG, fontFamily: SANS }}>
+    <Sequence durationInFrames={HOOK}>
+      <Hook />
+    </Sequence>
+    <Sequence from={HOOK} durationInFrames={PROMO_FRAMES - HOOK}>
     <Sequence durationInFrames={TITLE}>
       <Title />
     </Sequence>
@@ -45,8 +50,25 @@ export const Promo = () => (
     <Sequence from={TITLE + DEMO + APP + FEATURES}>
       <EndCard />
     </Sequence>
+    </Sequence>
   </AbsoluteFill>
 );
+
+// ─── Hook ────────────────────────────────────────────────────────────────
+
+const Hook = () => {
+  const f = useCurrentFrame();
+  const { width } = useVideoConfig();
+  const size = width > 1500 ? 76 : 64;
+  const out = interpolate(f, [HOOK - 10, HOOK], [1, 0], clamp);
+  return (
+    <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: 80, opacity: out }}>
+      <div style={{ color: '#fff', fontSize: size, fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.15, maxWidth: 1400, opacity: fade(f, 2, 16) }}>
+        How many screenshots did you hand your agent today?
+      </div>
+    </AbsoluteFill>
+  );
+};
 
 // ─── Title ───────────────────────────────────────────────────────────────
 
@@ -410,7 +432,7 @@ const AgentApp = ({ f }: { f: number }) => {
 
 const FEATURE_LINES: [string, string][] = [
   ['⌘⌘', 'Capture from anywhere'],
-  ['●●●', 'Keys and passwords blacked out'],
+  ['•••', 'Secrets masked by on-device OCR + AI'],
   ['↩︎', 'Lands in your terminal or agent app'],
   ['⌘⇧1', 'Paste any of your last 10 shots'],
 ];
@@ -427,7 +449,7 @@ const Features = () => {
           const t = fade(f, 4 + i * 12, 18 + i * 12);
           return (
             <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 36, opacity: t, transform: `translateX(${(1 - t) * -40}px)` }}>
-              <div style={{ minWidth: size * 2.8, padding: '10px 22px', borderRadius: 18, border: '2px solid #2c2e3a', background: '#181a21', color: ACCENT, font: `700 ${size * 0.8}px ${SANS}`, textAlign: 'center' }}>
+              <div style={{ width: size * 2.8, boxSizing: 'border-box', padding: '10px 0', borderRadius: 18, border: '2px solid #2c2e3a', background: '#181a21', color: ACCENT, font: `700 ${size * 0.8}px ${SANS}`, textAlign: 'center' }}>
                 {key}
               </div>
               <div style={{ color: '#fff', fontSize: size, fontWeight: 700, letterSpacing: '-0.025em' }}>{label}</div>

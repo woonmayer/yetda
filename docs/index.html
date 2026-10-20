@@ -67,7 +67,7 @@
    "name": "How does secret hiding work?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "Yetda reads the capture's text with macOS's on-device OCR, matches known key formats (OpenAI, Anthropic, GitHub, AWS, Stripe, JWT and more), password=… assignments and card numbers, and covers them with a solid mask in the image and in the pasted text. On Macs with Apple Intelligence, Apple's on-device model also judges random-looking strings. If anything goes wrong while masking, Yetda doesn't paste the capture at all. Masked too much? Paste Last Capture Without Hiding pastes the original, which is kept in memory only. Nothing is sent anywhere. It's a safety net, so still glance at what you share."
+    "text": "Yetda reads the capture's text with macOS's on-device OCR, matches known key formats (OpenAI, Anthropic, GitHub, AWS, Stripe, JWT and more), password=… assignments and card numbers, and covers them with a solid mask in the image and in the pasted text. On Macs with Apple Intelligence, Apple's on-device LLM also judges random-looking strings, locally, with no cloud call. If anything goes wrong while masking, Yetda doesn't paste the capture at all. Masked too much? Paste Last Capture Without Hiding pastes the original, which is kept in memory only. Nothing is sent anywhere. It's a safety net, so still glance at what you share."
    }
   },
   {
@@ -186,7 +186,8 @@
   /* Hero */
   .hero { text-align: center; padding: 56px 0 32px; }
   .hero img.logo { width: 112px; height: 112px; margin-bottom: 14px; }
-  .origin { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
+  .hook { font-size: 20px; color: var(--muted); margin: 0 0 14px; letter-spacing: -0.01em; }
+  .hero .origin { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
   .origin span { font-weight: 600; color: var(--text); }
   h1 {
     font-size: clamp(36px, 6vw, 64px);
@@ -370,14 +371,15 @@
 
   <header class="hero">
     <img class="logo" src="icon.png" alt="Yetda icon">
-    <div class="origin"><span lang="ko">옜다</span> · <i>yetda</i> · Korean for “here, take it.”</div>
+    <p class="hook">How many screenshots did you hand your agent today?</p>
     <h1>Show your agent the screen.<br><span class="hl">Not your keys.</span></h1>
     <p class="sub">Tap <kbd>⌘</kbd> twice and drag. The screenshot lands in your coding agent, in the terminal or its desktop app, with API keys and passwords already blacked out on your Mac. No saving, no dragging, no switching windows.</p>
     <div class="cta">
       <a class="btn primary" href="#install">Install for macOS</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ View on GitHub</a>
     </div>
-    <div class="meta">Free &amp; open source · MIT · macOS 13+ · No network access · Captures expire after 7 days</div>
+    <div class="meta">Free &amp; open source · MIT · macOS 13+ · On-device OCR &amp; AI · No network access · Captures expire after 7 days</div>
+    <div class="origin"><span lang="ko">옜다</span> · <i>yetda</i> · Korean for “here, take it.”</div>
     <div class="agents">
       <span>Works with</span>
       <b>Claude Code</b><b>Codex</b><b>Gemini CLI</b><b>opencode</b><b>Cursor CLI</b><b>Claude app</b><b>Codex app</b>
@@ -441,8 +443,8 @@
     <div class="features">
       <div class="feat">
         <div class="ic">🔒</div>
-        <h3>Hides your secrets</h3>
-        <p>API keys, tokens and passwords in the shot are blacked out on-device, before the image reaches your agent.</p>
+        <h3>Hides your secrets, on your Mac</h3>
+        <p>On-device OCR finds API keys, tokens and passwords; on Macs with Apple Intelligence, Apple's on-device LLM double-checks strings no pattern knows. They're blacked out before the image reaches your agent. No cloud, no network.</p>
       </div>
       <div class="feat">
         <div class="ic">⌘⌘</div>
@@ -503,7 +505,7 @@ open /Applications/Yetda.app</pre>
     <p class="lead"></p>
     <details>
       <summary>How does secret hiding work?</summary>
-      <p>Yetda reads the capture's text with macOS's on-device OCR, matches known key formats (OpenAI, Anthropic, GitHub, AWS, Stripe, JWT and more), <code>password=…</code> assignments and card numbers, and covers them with a solid mask in the image and in the pasted text. On Macs with Apple Intelligence, Apple's on-device model also judges random-looking strings. If anything goes wrong while masking, Yetda doesn't paste the capture at all. Masked too much? <em>Paste Last Capture Without Hiding</em> pastes the original, which is kept in memory only. Nothing is sent anywhere. It's a safety net, so still glance at what you share.</p>
+      <p>Yetda reads the capture's text with macOS's on-device OCR, matches known key formats (OpenAI, Anthropic, GitHub, AWS, Stripe, JWT and more), <code>password=…</code> assignments and card numbers, and covers them with a solid mask in the image and in the pasted text. On Macs with Apple Intelligence, Apple's on-device LLM also judges random-looking strings, locally, with no cloud call. If anything goes wrong while masking, Yetda doesn't paste the capture at all. Masked too much? <em>Paste Last Capture Without Hiding</em> pastes the original, which is kept in memory only. Nothing is sent anywhere. It's a safety net, so still glance at what you share.</p>
     </details>
     <details>
       <summary>Why does it need Accessibility permission?</summary>

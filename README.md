@@ -13,7 +13,8 @@
 - **One shot, right now** — tap ⌘ twice, select a region, and Yetda pastes
   it straight into the terminal or agent app you used last. No files to manage.
 - **Secrets stay yours** — API keys, tokens and passwords in the shot are
-  blacked out on-device before the image goes anywhere.
+  blacked out on your Mac before the image goes anywhere: on-device OCR, plus
+  Apple's on-device LLM on Macs with Apple Intelligence. No cloud, no network.
 - **Several shots** — every capture is also saved to `~/Yetda/`; pick an
   earlier one with ⌘⇧1, or (Claude Code) feed them all at once with `/shots`.
 
