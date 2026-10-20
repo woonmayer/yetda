@@ -242,6 +242,13 @@ The package builds in Swift 6 language mode, so data races are compile
 errors; UI types are `@MainActor`, and blocking work (screencapture, OCR)
 runs off the main actor.
 
+## Feedback
+
+Something broke, or there's a terminal or agent app it should know?
+[Open an issue](https://github.com/woonmayer/yetda/issues/new/choose), or
+use **Feedback → Report a Bug…** in the menu, which fills in your Yetda and
+macOS versions. Ideas are welcome the same way.
+
 ## Contributing
 
 Issues and pull requests are welcome. Before opening a PR, run

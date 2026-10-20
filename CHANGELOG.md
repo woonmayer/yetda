@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- **Feedback** menu: *Report a Bug…* opens the GitHub issue form with your
+  Yetda and macOS versions and paste target filled in; *Suggest an Idea…*
+  opens the idea form. Nothing is sent until you submit it in the browser.
+
 ## 0.3.2
 
 - **Paste Into** menu replaces *Also Paste into*, *Added Apps* and *Paste Key*:

@@ -13,7 +13,7 @@ body:
     id: version
     attributes:
       label: Yetda version
-      placeholder: "0.3.0 (menu bar icon → About, or the dmg name)"
+      placeholder: "0.3.3 (filled in when you use menu → Feedback → Report a Bug…)"
     validations:
       required: true
   - type: input
@@ -26,8 +26,8 @@ body:
   - type: input
     id: terminal
     attributes:
-      label: Terminal app
-      placeholder: "Ghostty, iTerm2, Terminal, …"
+      label: Terminal or app pasted into
+      placeholder: "Ghostty, iTerm2, Terminal, Claude, …"
   - type: input
     id: agent
     attributes:

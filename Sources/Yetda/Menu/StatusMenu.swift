@@ -104,6 +104,11 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         configure(skillItem, "/shots Skill", nil, in: menu).submenu = NSMenu()
 
         menu.addItem(.separator())
+        let feedback = NSMenu()
+        feedback.autoenablesItems = false
+        configure(NSMenuItem(), "Report a Bug…", #selector(reportBug), in: feedback)
+        configure(NSMenuItem(), "Suggest an Idea…", #selector(suggestIdea), in: feedback)
+        configure(NSMenuItem(), "Feedback", nil, in: menu).submenu = feedback
         configure(NSMenuItem(), "Support Yetda…", #selector(openSponsors), in: menu)
         menu.addItem(withTitle: "Quit Yetda", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         return menu
@@ -243,6 +248,33 @@ final class StatusMenu: NSObject, NSMenuDelegate {
     @objc private func openSponsors() {
         if let url = URL(string: "https://github.com/sponsors/woonmayer") { NSWorkspace.shared.open(url) }
     }
+    /// Opens a GitHub issue form in the browser with the version, macOS and
+    /// paste target filled in; nothing is sent until the user submits it.
+    @objc private func reportBug() {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
+        #if arch(arm64)
+        let chip = "Apple silicon"
+        #else
+        let chip = "Intel"
+        #endif
+        let os = ProcessInfo.processInfo.operatingSystemVersion
+        var fields = [
+            "template": "bug.yml",
+            "version": version,
+            "macos": "\(os.majorVersion).\(os.minorVersion).\(os.patchVersion), \(chip)",
+        ]
+        if let target = handlers.nextPasteTarget() { fields["terminal"] = Self.appName(target) }
+        openIssueForm(fields)
+    }
+
+    @objc private func suggestIdea() { openIssueForm(["template": "feature.yml"]) }
+
+    private func openIssueForm(_ fields: [String: String]) {
+        var components = URLComponents(string: "https://github.com/woonmayer/yetda/issues/new")
+        components?.queryItems = fields.sorted { $0.key < $1.key }.map { URLQueryItem(name: $0.key, value: $0.value) }
+        if let url = components?.url { NSWorkspace.shared.open(url) }
+    }
+
     @objc private func openScreenRecordingSettings() { Permissions.openScreenRecordingSettings() }
     @objc private func openAccessibilitySettings() { Permissions.openAccessibilitySettings() }
     @objc private func toggleRedact() { Settings.redactSecrets.toggle() }
