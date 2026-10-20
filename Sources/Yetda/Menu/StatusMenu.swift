@@ -16,7 +16,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
 
     private static let flashDuration: Duration = .seconds(3)
     private static let pasteKeyChoices: [(title: String, key: PasteTarget.PasteKey?)] = [
-        ("Automatic (⌃V; ⌘V in iTerm2 and agent apps)", nil),
+        ("Automatic (⌃V in terminals, ⌘V in iTerm2 and apps)", nil),
         ("⌃V", .controlV),
         ("⌘V (e.g. Cursor CLI)", .commandV),
     ]
@@ -34,6 +34,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
     private let clearItem = NSMenuItem()
     private let autoPasteItem = NSMenuItem()
     private let frontAppItem = NSMenuItem()
+    private let pasteAppsItem = NSMenuItem()
     private var frontAppBundleID: String?
     private var pasteKeyItems: [NSMenuItem] = []
     private let doubleCommandItem = NSMenuItem()
@@ -101,6 +102,8 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         menu.addItem(.separator())
         configure(autoPasteItem, "Auto-paste into Terminal or Agent App", #selector(toggleAutoPaste), in: menu)
         configure(frontAppItem, "", #selector(toggleFrontAppAsTerminal), in: menu).indentationLevel = 1
+        configure(pasteAppsItem, "Added Apps", nil, in: menu).submenu = NSMenu()
+        pasteAppsItem.indentationLevel = 1
         configure(NSMenuItem(), "Paste Key", nil, in: menu).submenu = buildPasteKeyMenu()
         configure(doubleCommandItem, "Capture with ⌘⌘", #selector(toggleDoubleCommand), in: menu)
         configure(redactItem, "Hide Secrets in Captures", #selector(toggleRedact), in: menu)
@@ -143,6 +146,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
 
         autoPasteItem.state = .init(Settings.autoPaste)
         refreshFrontAppItem()
+        refreshPasteAppsMenu()
         for item in pasteKeyItems {
             item.state = .init(Self.pasteKeyChoices[item.tag].key == Settings.pasteKeyOverride)
         }
@@ -169,6 +173,38 @@ final class StatusMenu: NSObject, NSMenuDelegate {
             || PasteTarget.isPasteTarget(bundleID: bundleID)
         frontAppItem.title = "Also Paste into “\(app?.localizedName ?? "this app")”"
         frontAppItem.state = .init(bundleID.map(Settings.extraTerminalBundleIDs.contains) ?? false)
+    }
+
+    /// The apps the user added, each with its paste key (⌘V by default, as in
+    /// any Mac text field; ⌃V for a terminal) and a way to remove it.
+    private func refreshPasteAppsMenu() {
+        let extra = Settings.extraTerminalBundleIDs.sorted()
+        pasteAppsItem.isHidden = extra.isEmpty
+        guard let submenu = pasteAppsItem.submenu else { return }
+        submenu.removeAllItems()
+        submenu.autoenablesItems = false
+        let keys = Settings.pasteKeyByApp
+        for bundleID in extra {
+            let key = PasteTarget.pasteKey(bundleID: bundleID, perApp: keys)
+            let appItem = configure(NSMenuItem(), "\(Self.appName(bundleID)) — \(key == .commandV ? "⌘V" : "⌃V")", nil, in: submenu)
+            let choices = NSMenu()
+            choices.autoenablesItems = false
+            for (title, choice) in [("Paste with ⌘V", PasteTarget.PasteKey.commandV), ("Paste with ⌃V", .controlV)] {
+                let item = configure(NSMenuItem(), title, #selector(choosePasteKeyForApp(_:)), in: choices)
+                item.representedObject = [bundleID, choice.rawValue]
+                item.state = .init(key == choice)
+            }
+            choices.addItem(.separator())
+            configure(NSMenuItem(), "Remove", #selector(removePasteApp(_:)), in: choices).representedObject = bundleID
+            appItem.submenu = choices
+        }
+    }
+
+    /// The app's name as Finder shows it, or its bundle ID if it isn't installed.
+    private static func appName(_ bundleID: String) -> String {
+        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) else { return bundleID }
+        let name = FileManager.default.displayName(atPath: url.path)
+        return name.hasSuffix(".app") ? String(name.dropLast(4)) : name
     }
 
     /// One item per agent found on this Mac: ticked when the skill is
@@ -225,8 +261,25 @@ final class StatusMenu: NSObject, NSMenuDelegate {
     @objc private func toggleFrontAppAsTerminal() {
         guard let bundleID = frontAppBundleID else { return }
         var extra = Settings.extraTerminalBundleIDs
-        if extra.remove(bundleID) == nil { extra.insert(bundleID) }
+        if extra.remove(bundleID) == nil {
+            extra.insert(bundleID)
+        } else {
+            Settings.pasteKeyByApp[bundleID] = nil
+        }
         Settings.extraTerminalBundleIDs = extra
+        handlers.terminalsChanged()
+    }
+
+    @objc private func choosePasteKeyForApp(_ sender: NSMenuItem) {
+        guard let pair = sender.representedObject as? [String], pair.count == 2,
+              let key = PasteTarget.PasteKey(rawValue: pair[1]) else { return }
+        Settings.pasteKeyByApp[pair[0]] = key
+    }
+
+    @objc private func removePasteApp(_ sender: NSMenuItem) {
+        guard let bundleID = sender.representedObject as? String else { return }
+        Settings.extraTerminalBundleIDs.remove(bundleID)
+        Settings.pasteKeyByApp[bundleID] = nil
         handlers.terminalsChanged()
     }
 

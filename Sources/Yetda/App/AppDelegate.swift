@@ -9,7 +9,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let store = CaptureStore()
     private let autoPaster = AutoPaster(
         extraTerminals: { Settings.extraTerminalBundleIDs },
-        pasteKeyOverride: { Settings.pasteKeyOverride }
+        pasteKeyOverride: { Settings.pasteKeyOverride },
+        pasteKeyByApp: { Settings.pasteKeyByApp }
     )
     private lazy var captures = CaptureController(store: store, autoPaster: autoPaster)
     private lazy var statusMenu = StatusMenu(store: store, handlers: menuHandlers)

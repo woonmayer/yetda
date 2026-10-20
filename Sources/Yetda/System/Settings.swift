@@ -2,8 +2,8 @@ import Foundation
 import YetdaCore
 
 /// User preferences, stored in UserDefaults under the app's bundle ID.
-/// `extraTerminalBundleIDs` is edited from the menu ("Also Paste into …")
-/// or with `defaults write`.
+/// `extraTerminalBundleIDs` and `pasteKeyByApp` are edited from the menu
+/// ("Also Paste into …", "Paste Apps") or with `defaults write`.
 enum Settings {
     private static var defaults: UserDefaults { .standard }
 
@@ -33,6 +33,16 @@ enum Settings {
     static var pasteKeyOverride: PasteTarget.PasteKey? {
         get { defaults.string(forKey: "pasteKey").flatMap(PasteTarget.PasteKey.init(rawValue:)) }
         set { defaults.set(newValue?.rawValue, forKey: "pasteKey") }
+    }
+
+    /// The paste key the user picked per app (bundle ID → key), for added
+    /// apps and built-in ones alike. Apps not in it use their default.
+    static var pasteKeyByApp: [String: PasteTarget.PasteKey] {
+        get {
+            let raw = defaults.dictionary(forKey: "pasteKeyByApp") as? [String: String] ?? [:]
+            return raw.compactMapValues(PasteTarget.PasteKey.init(rawValue:))
+        }
+        set { defaults.set(newValue.mapValues(\.rawValue), forKey: "pasteKeyByApp") }
     }
 
     static var extraTerminalBundleIDs: Set<String> {

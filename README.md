@@ -86,8 +86,9 @@ app. If captures come out blank, the permission isn't granted yet.
   so ⌘⇧2 is free), or **tap ⌘ twice** (needs Accessibility, like auto-paste).
   Select a region — or press Space to capture a window. The image lands on
   your clipboard **and** in `~/Yetda/`.
-- **Auto-paste:** right after the capture, Yetda brings your most recently
-  used terminal to the front and presses the paste key for you (`Ctrl+V`; `⌘V` in iTerm2) — the image lands
+- **Auto-paste:** right after the capture, Yetda brings the paste target you
+  used most recently — a terminal, an agent desktop app, or an app you added —
+  to the front and presses the paste key for you (`Ctrl+V`; `⌘V` in iTerm2) — the image lands
   straight in your agent's prompt. Works with Terminal, iTerm2, Ghostty, Warp,
   WezTerm, kitty, Alacritty, Hyper, cmux, Orca and Kaku (add others from the
   menu, or see [Configuration](#configuration)). Needs **Accessibility** permission (macOS
@@ -116,10 +117,14 @@ app. If captures come out blank, the permission isn't granted yet.
   - **Paste Recent** — same thumbnail list as ⌘⇧1
   - **Clear (N)** — empty the capture queue
   - **Auto-paste into Terminal or Agent App** — toggle auto-paste (on by default)
-  - **Also Paste into “<app>”** — shown when the app you were just in isn't a
-    known terminal; tick it to make that app an auto-paste target
-  - **Paste Key** — Automatic (`Ctrl+V`; `⌘V` in iTerm2 and agent desktop apps), or force `Ctrl+V` /
-    `⌘V` if your agent wants a different one
+  - **Also Paste into “<app>”** — shown when the app you were just in isn't
+    built in (terminals and agent desktop apps); tick it to make that app an
+    auto-paste target
+  - **Added Apps** — the apps you added: pick `⌘V` (default) or `Ctrl+V`
+    for each, or remove it
+  - **Paste Key** — Automatic (`Ctrl+V` in terminals; `⌘V` in iTerm2 and
+    other apps), or force `Ctrl+V` / `⌘V` for all apps; a key picked under
+    **Added Apps** still wins for that app
   - **Capture with ⌘⌘** — toggle the double-tap trigger (on by default; turn it
     off if another app, e.g. Codex, also uses ⌘⌘)
   - **Paste Last Capture Without Hiding** — shown after a capture had secrets masked
@@ -177,11 +182,12 @@ the same shot stays available to `/shots` until one of the above removes it.
 
 ## Configuration
 
-Toggles live in the menu. One setting has no UI — extra terminals to
-auto-paste into, by bundle ID:
+Toggles live in the menu. Paste targets can also be set from the shell, by
+bundle ID — extra apps, and a paste key per app (`controlV` or `commandV`):
 
 ```bash
 defaults write io.github.woonmayer.yetda extraTerminalBundleIDs -array com.example.MyTerminal
+defaults write io.github.woonmayer.yetda pasteKeyByApp -dict com.example.MyTerminal controlV
 ```
 
 Find an app's bundle ID with `osascript -e 'id of app "MyTerminal"'`.

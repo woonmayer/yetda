@@ -1,8 +1,9 @@
 import AppKit
 import YetdaCore
 
-/// Remembers the most recently active terminal (or agent desktop app) and, after a capture, brings
-/// it to the front and presses its paste key so the image lands in the
+/// Remembers the most recently active paste target — a terminal, an agent
+/// desktop app, or an app the user added — and, after a capture, brings it
+/// to the front and presses its paste key so the image lands in the
 /// coding agent's prompt. Sending keystrokes needs Accessibility permission;
 /// without it the capture just stays on the clipboard. Lives for the app's
 /// lifetime, so its workspace observer is never removed.
@@ -32,10 +33,16 @@ final class AutoPaster {
     private var pasteTask: Task<Void, Never>?
     private let extraTerminals: () -> Set<String>
     private let pasteKeyOverride: () -> PasteTarget.PasteKey?
+    private let pasteKeyByApp: () -> [String: PasteTarget.PasteKey]
 
-    init(extraTerminals: @escaping () -> Set<String>, pasteKeyOverride: @escaping () -> PasteTarget.PasteKey?) {
+    init(
+        extraTerminals: @escaping () -> Set<String>,
+        pasteKeyOverride: @escaping () -> PasteTarget.PasteKey?,
+        pasteKeyByApp: @escaping () -> [String: PasteTarget.PasteKey]
+    ) {
         self.extraTerminals = extraTerminals
         self.pasteKeyOverride = pasteKeyOverride
+        self.pasteKeyByApp = pasteKeyByApp
         let workspace = NSWorkspace.shared
         lastTerminal = isTerminal(workspace.frontmostApplication)
             ? workspace.frontmostApplication
@@ -53,11 +60,16 @@ final class AutoPaster {
         }
     }
 
-    /// Re-checks the frontmost app, e.g. right after the user adds it as a
-    /// target (it won't send another activation notification until refocused).
+    /// Re-checks the targets after the user adds or removes one: the
+    /// frontmost app if it just became one (it won't send another activation
+    /// notification until refocused), and the remembered one if it no longer is.
     func noticeFrontmostApp() {
-        let app = NSWorkspace.shared.frontmostApplication
-        if isTerminal(app) { lastTerminal = app }
+        let workspace = NSWorkspace.shared
+        if isTerminal(workspace.frontmostApplication) {
+            lastTerminal = workspace.frontmostApplication
+        } else if let last = lastTerminal, !isTerminal(last) {
+            lastTerminal = workspace.runningApplications.first { isTerminal($0) }
+        }
     }
 
     /// Pastes the clipboard's image into the last terminal. With `text`, also
@@ -78,7 +90,9 @@ final class AutoPaster {
             onStatus?("📋 copied")
             return
         }
-        let key = PasteTarget.pasteKey(bundleID: terminal.bundleIdentifier, override: pasteKeyOverride())
+        let key = PasteTarget.pasteKey(
+            bundleID: terminal.bundleIdentifier, override: pasteKeyOverride(), perApp: pasteKeyByApp()
+        )
         terminal.activate()
         pasteTask?.cancel()
         pasteTask = Task {

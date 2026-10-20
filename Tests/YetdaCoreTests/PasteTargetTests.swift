@@ -39,6 +39,30 @@ final class PasteTargetTests: XCTestCase {
         XCTAssertFalse(PasteTarget.isAgentApp(bundleID: "com.apple.Terminal"))
     }
 
+    /// Any app the user adds (an IDE, Slack, Notion, …) takes an image on ⌘V
+    /// like any Mac text field; only the known terminals keep ⌃V.
+    func test_added_apps_paste_with_command_v() {
+        for id in ["com.todesktop.230313mzl4w4u92", "com.microsoft.VSCode", "com.tinyspeck.slackmacgap", "com.example.unknown"] {
+            XCTAssertEqual(PasteTarget.pasteKey(bundleID: id), .commandV, id)
+        }
+    }
+
+    func test_key_chosen_for_an_app_wins() {
+        let perApp: [String: PasteTarget.PasteKey] = ["com.example.term": .controlV, "com.apple.Terminal": .commandV]
+        XCTAssertEqual(PasteTarget.pasteKey(bundleID: "com.example.term", perApp: perApp), .controlV)
+        XCTAssertEqual(PasteTarget.pasteKey(bundleID: "com.apple.Terminal", perApp: perApp), .commandV)
+        // Over the key forced for all apps, too.
+        XCTAssertEqual(PasteTarget.pasteKey(bundleID: "com.example.term", override: .commandV, perApp: perApp), .controlV)
+        // Other apps are unaffected.
+        XCTAssertEqual(PasteTarget.pasteKey(bundleID: "com.mitchellh.ghostty", perApp: perApp), .controlV)
+    }
+
+    func test_built_in_set_is_terminals_and_agent_apps() {
+        XCTAssertTrue(PasteTarget.builtInBundleIDs.contains("com.apple.Terminal"))
+        XCTAssertTrue(PasteTarget.builtInBundleIDs.contains("com.anthropic.claudefordesktop"))
+        XCTAssertFalse(PasteTarget.builtInBundleIDs.contains("com.tinyspeck.slackmacgap"))
+    }
+
     func test_override_also_applies_to_agent_apps() {
         XCTAssertEqual(PasteTarget.pasteKey(bundleID: "com.anthropic.claudefordesktop", override: .controlV), .controlV)
     }
