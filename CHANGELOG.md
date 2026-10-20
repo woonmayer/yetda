@@ -1,12 +1,11 @@
 # Changelog
 
-## Unreleased
+## 0.3.1
 
 - **Agent desktop apps:** auto-paste also goes to the Claude, Codex and ChatGPT
   desktop apps (with `⌘V`), whichever of them or your terminal you used last.
 - **Added Apps** menu: any app you add as a paste target gets `⌘V` by default;
   pick `⌘V` or `Ctrl+V` per app, or remove it.
-
 - **Support Yetda…** menu item and a Sponsor link (GitHub Sponsors); the app
   only opens the page in your browser.
 
