@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.2
 
 - **Paste Into** menu replaces *Also Paste into*, *Added Apps* and *Paste Key*:
   it names the app the next capture goes to and lists every target — the
