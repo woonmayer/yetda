@@ -373,12 +373,12 @@
     <img class="logo" src="../icon.png" alt="Yetdaのアイコン">
     <p class="hook">今日、エージェントに何枚スクショを渡しましたか？</p>
     <h1>画面は見せて、<br><span class="hl">鍵は隠す。</span></h1>
-    <p class="sub"><kbd>⌘</kbd>を2回押して、ドラッグするだけ。スクショがターミナルでもデスクトップアプリでも、コーディングエージェントにそのまま入ります。APIキーやパスワードはMacの中で先に黒塗り。保存もドラッグも、ウィンドウの切り替えも要りません。</p>
+    <p class="sub"><kbd>⌘</kbd>を2回、ドラッグ。エージェントのプロンプトにそのまま入ります。パスワードはMacの中で先に黒塗り。</p>
     <div class="cta">
       <a class="btn primary" href="#install">macOSにインストール</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ GitHubで見る</a>
     </div>
-    <div class="meta">無料・オープンソース · MIT · macOS 13以降 · 端末内OCR・AI · ネットワーク通信なし · キャプチャは7日後に自動削除</div>
+    <div class="meta">無料・オープンソース · macOS 13以降 · オンデバイスAI · 通信なし</div>
     <div class="origin"><span lang="ko">옜다</span>（イェッタ）· 韓国語で「ほら、どうぞ」</div>
     <div class="agents">
       <span>対応</span>
@@ -387,89 +387,62 @@
 
     <div class="demo">
       <video src="../demo.mp4" poster="../demo-poster.jpg" autoplay muted loop playsinline aria-label="デモ：⌘を2回押し、APIキーが写ったエラーをドラッグすると、キーが黒塗りされたスクショがターミナルのエージェントとエージェントのデスクトップアプリに入る様子"></video>
-      <p class="caption">⌘⌘ → ドラッグ → キーは黒塗り → もうプロンプトの中。</p>
     </div>
   </header>
 
   <section id="how">
-    <h2>最初から最後まで3秒</h2>
-    <p class="lead">画面で何かを見て、エージェントに「これ見て」と言いたい瞬間のために。</p>
+    <h2>3秒で完了</h2>
     <div class="steps">
       <div class="step">
         <div class="n">01</div>
-        <h3><kbd>⌘</kbd> <kbd>⌘</kbd> を2回</h3>
-        <p>どのアプリからでも。いつものショートカットがよければ<kbd>⌘⇧2</kbd>でも。</p>
+        <h3><kbd>⌘</kbd> <kbd>⌘</kbd></h3>
+        <p>どのアプリからでも。<kbd>⌘⇧2</kbd>でも。</p>
       </div>
       <div class="step">
         <div class="n">02</div>
         <h3>範囲をドラッグ</h3>
-        <p>macOS標準の選択ツールそのまま。スペースキーでウィンドウ全体を撮れます。</p>
+        <p>スペースでウィンドウ全体。</p>
       </div>
       <div class="step">
         <div class="n">03</div>
         <h3>隠して、貼り付け</h3>
-        <p>スクショ内のキーやパスワードを黒塗りしてから、最後に使っていたターミナルかエージェントアプリを前面に出して貼り付けます。あとは質問を打つだけ。</p>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>思ったより、ずっと少ない手順</h2>
-    <p class="lead">標準の方法でもできますが、1日に何十回もする作業です。</p>
-    <div class="compare">
-      <div class="col before">
-        <h3>Yetdaなし</h3>
-        <ol>
-          <li><kbd>⌘⇧4</kbd>を押してドラッグ</li>
-          <li>デスクトップでファイルを探す</li>
-          <li>ターミナルに切り替える</li>
-          <li>ファイルをドラッグするか、パスをコピー</li>
-          <li>あとでデスクトップを片付ける</li>
-        </ol>
-      </div>
-      <div class="col after">
-        <h3>Yetdaあり</h3>
-        <ol>
-          <li><kbd>⌘</kbd>を2回押してドラッグ</li>
-        </ol>
-        <p class="note">画像はもうプロンプトの中。ファイルは自動で消えます。</p>
+        <p>最後に使ったターミナルかアプリへ。</p>
       </div>
     </div>
   </section>
 
   <section id="features">
-    <h2>小さなアプリに、必要な気配り</h2>
-    <p class="lead">メニューバーのアイコンと、いくつかのショートカットだけ。新しく覚えることはありません。</p>
+    <h2>細かいところ</h2>
     <div class="features">
       <div class="feat">
         <div class="ic">🔒</div>
         <h3>Macの中で隠す</h3>
-        <p>端末内OCRでAPIキー、トークン、パスワードを見つけ、Apple Intelligenceが有効なMacではAppleのオンデバイスLLMが未知の形式の文字列ももう一度確認します。隠してからエージェントに渡します。クラウドには送らず、ネットワークも使いません。</p>
+        <p>OCRに加え、対応MacではAppleのオンデバイスLLMも。クラウドなし。</p>
       </div>
       <div class="feat">
         <div class="ic">⌘⌘</div>
-        <h3>2回押しでキャプチャ</h3>
-        <p>3キーのショートカットより速い。他のアプリが使っていればオフにできます。</p>
+        <h3>⌘2回でキャプチャ</h3>
+        <p>3キーのショートカットより速い。</p>
       </div>
       <div class="feat">
         <div class="ic">↩︎</div>
         <h3>ターミナルでもアプリでも</h3>
-        <p>最後に使ったターミナルかエージェントアプリ（Claude Code、Codex、Claude・Codexのデスクトップアプリ）に、それぞれ合ったキーで貼り付けます。ほかのアプリもメニューから追加できます。</p>
+        <p>Claude Code、Codex、そのデスクトップアプリ、追加したアプリにも。</p>
       </div>
       <div class="feat">
         <div class="ic">🖼</div>
         <h3>前のスクショを貼る</h3>
-        <p><kbd>⌘⇧1</kbd>で直近10枚のサムネイルメニュー。1〜9キーですぐ貼り付けられます。</p>
+        <p><kbd>⌘⇧1</kbd>で直近10枚。</p>
       </div>
       <div class="feat">
         <div class="ic">/</div>
         <h3><code>/shots</code>スキル</h3>
-        <p>何枚も撮ったら、Claude CodeやCodexで<code>/shots</code>を実行。待機中のキャプチャをまとめて読み込みます。インストールはYetdaが提案します。</p>
+        <p>複数枚をClaude Code・Codexに一度に。</p>
       </div>
       <div class="feat">
         <div class="ic">Aa</div>
-        <h3>テキストも一緒に</h3>
-        <p>必要なら、スクショから読み取ったテキストも一緒に貼り付け。エラーメッセージを正確な文字列で渡せます。OCRも端末内で動きます。</p>
+        <h3>テキストも</h3>
+        <p>必要ならOCRテキストも一緒に貼ります。</p>
       </div>
     </div>
     <div class="terms">
@@ -480,11 +453,11 @@
 
   <section id="install">
     <h2>インストール</h2>
-    <p class="lead">Homebrewでインストールするか、アプリをダウンロードしてください。macOS 13以降、Appleの署名・公証済みです。</p>
+    <p class="lead">Apple署名・公証済み。macOS 13以降。</p>
     <div class="install">
 <pre><span class="c"># Homebrew</span>
 brew install --cask woonmayer/tap/yetda</pre>
-      <p class="note"><a class="btn primary" href="https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg">Yetda.dmgをダウンロード</a> dmgを開いて、Yetdaをアプリケーションフォルダへドラッグしてください。</p>
+      <p class="note"><a class="btn primary" href="https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg">Yetda.dmgをダウンロード</a> dmgを開いて、アプリケーションフォルダへドラッグ。</p>
       <details class="from-source">
         <summary>ソースからビルドする</summary>
 <pre><span class="c"># ビルド</span>
@@ -496,7 +469,7 @@ cd yetda
 rm -rf /Applications/Yetda.app &amp;&amp; mv Yetda.app /Applications/
 open /Applications/Yetda.app</pre>
       </details>
-      <p class="note">初回利用時に、macOSが<strong>画面収録</strong>（キャプチャ用）と<strong>アクセシビリティ</strong>（⌘⌘と自動貼り付け用）の許可を求めます。足りない許可があると、メニューの一番上に⚠︎項目が出て、該当する設定画面をすぐ開けます。初回起動時には、Claude CodeとCodexに<code>/shots</code>スキルを入れるかどうかも一度だけ聞きます。聞かずに入れることはありません。</p>
+      <p class="note">初回に画面収録とアクセシビリティの許可を求めます。</p>
     </div>
   </section>
 

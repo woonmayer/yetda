@@ -373,12 +373,12 @@
     <img class="logo" src="icon.png" alt="Yetda icon">
     <p class="hook">How many screenshots did you hand your agent today?</p>
     <h1>Show your agent the screen.<br><span class="hl">Not your keys.</span></h1>
-    <p class="sub">Tap <kbd>⌘</kbd> twice and drag. The screenshot lands in your coding agent, in the terminal or its desktop app, with API keys and passwords already blacked out on your Mac. No saving, no dragging, no switching windows.</p>
+    <p class="sub">Tap <kbd>⌘</kbd> twice and drag. It lands in your agent's prompt, passwords blacked out on your Mac.</p>
     <div class="cta">
       <a class="btn primary" href="#install">Install for macOS</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ View on GitHub</a>
     </div>
-    <div class="meta">Free &amp; open source · MIT · macOS 13+ · On-device OCR &amp; AI · No network access · Captures expire after 7 days</div>
+    <div class="meta">Free &amp; open source · macOS 13+ · On-device AI · No network</div>
     <div class="origin"><span lang="ko">옜다</span> · <i>yetda</i> · Korean for “here, take it.”</div>
     <div class="agents">
       <span>Works with</span>
@@ -387,89 +387,62 @@
 
     <div class="demo">
       <video src="demo.mp4" poster="demo-poster.jpg" autoplay muted loop playsinline aria-label="Demo: tapping Command twice, dragging over an error with an API key in it, the key being blacked out, and the screenshot landing in a terminal agent and then in an agent's desktop app"></video>
-      <p class="caption">⌘⌘ → drag → keys blacked out → it's in the prompt.</p>
     </div>
   </header>
 
   <section id="how">
-    <h2>Three seconds, start to finish</h2>
-    <p class="lead">Built for the moment you see something on screen and want your agent to look at it.</p>
+    <h2>Three seconds</h2>
     <div class="steps">
       <div class="step">
         <div class="n">01</div>
         <h3>Tap <kbd>⌘</kbd> <kbd>⌘</kbd></h3>
-        <p>From any app. Or press <kbd>⌘⇧2</kbd> if you prefer a classic hotkey.</p>
+        <p>From any app. Or <kbd>⌘⇧2</kbd>.</p>
       </div>
       <div class="step">
         <div class="n">02</div>
         <h3>Drag a region</h3>
-        <p>The native macOS selector. Press Space to grab a whole window instead.</p>
+        <p>Space grabs a whole window.</p>
       </div>
       <div class="step">
         <div class="n">03</div>
         <h3>Masked, then pasted</h3>
-        <p>Keys and passwords in the shot are blacked out, then Yetda brings back the terminal or agent app you used last and pastes. Keep typing your question.</p>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>Fewer steps than you think</h2>
-    <p class="lead">The built-in way works, but you do it dozens of times a day.</p>
-    <div class="compare">
-      <div class="col before">
-        <h3>Without Yetda</h3>
-        <ol>
-          <li>Press <kbd>⌘⇧4</kbd> and drag</li>
-          <li>Find the file on your Desktop</li>
-          <li>Switch to the terminal</li>
-          <li>Drag the file in, or copy its path</li>
-          <li>Clean up the Desktop later</li>
-        </ol>
-      </div>
-      <div class="col after">
-        <h3>With Yetda</h3>
-        <ol>
-          <li>Tap <kbd>⌘</kbd> twice and drag</li>
-        </ol>
-        <p class="note">The image is already in the prompt, and the file expires on its own.</p>
+        <p>Into the terminal or app you used last.</p>
       </div>
     </div>
   </section>
 
   <section id="features">
-    <h2>Small app, the right details</h2>
-    <p class="lead">A menu bar icon and a few shortcuts. Nothing else to learn.</p>
+    <h2>The details</h2>
     <div class="features">
       <div class="feat">
         <div class="ic">🔒</div>
-        <h3>Hides your secrets, on your Mac</h3>
-        <p>On-device OCR finds API keys, tokens and passwords; on Macs with Apple Intelligence, Apple's on-device LLM double-checks strings no pattern knows. They're blacked out before the image reaches your agent. No cloud, no network.</p>
+        <h3>Masked on your Mac</h3>
+        <p>OCR, plus Apple's on-device LLM where available. No cloud.</p>
       </div>
       <div class="feat">
         <div class="ic">⌘⌘</div>
         <h3>Double-tap capture</h3>
-        <p>Faster than any three-key hotkey. Toggle it off if another app already uses it.</p>
+        <p>Faster than a three-key shortcut.</p>
       </div>
       <div class="feat">
         <div class="ic">↩︎</div>
         <h3>Terminal or desktop app</h3>
-        <p>Goes to the terminal or agent app you used last (Claude Code, Codex, the Claude and Codex desktop apps) with the right key for each. Add any other app from the menu.</p>
+        <p>Claude Code, Codex, their desktop apps, or any app you add.</p>
       </div>
       <div class="feat">
         <div class="ic">🖼</div>
         <h3>Paste an earlier shot</h3>
-        <p><kbd>⌘⇧1</kbd> opens a thumbnail menu of your last 10 captures. Press 1–9 to paste one.</p>
+        <p><kbd>⌘⇧1</kbd> opens your last 10.</p>
       </div>
       <div class="feat">
         <div class="ic">/</div>
         <h3><code>/shots</code> skill</h3>
-        <p>Took several shots? Run <code>/shots</code> in Claude Code or Codex and it reads every pending one at once. Yetda offers to install it for you.</p>
+        <p>Several shots, one command in Claude Code or Codex.</p>
       </div>
       <div class="feat">
         <div class="ic">Aa</div>
-        <h3>Pastes the text, too</h3>
-        <p>Optionally adds the text read from the shot, so your agent gets the exact error message. OCR runs locally.</p>
+        <h3>Text, too</h3>
+        <p>Optionally pastes the OCR text with the image.</p>
       </div>
     </div>
     <div class="terms">
@@ -480,11 +453,11 @@
 
   <section id="install">
     <h2>Install</h2>
-    <p class="lead">Install with Homebrew, or download the app. macOS 13 or later; signed and notarized by Apple.</p>
+    <p class="lead">Signed and notarized by Apple. macOS 13+.</p>
     <div class="install">
 <pre><span class="c"># Homebrew</span>
 brew install --cask woonmayer/tap/yetda</pre>
-      <p class="note"><a class="btn primary" href="https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg">Download Yetda.dmg</a> Open the dmg and drag Yetda to Applications.</p>
+      <p class="note"><a class="btn primary" href="https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg">Download Yetda.dmg</a> Open it and drag Yetda to Applications.</p>
       <details class="from-source">
         <summary>Build from source instead</summary>
 <pre><span class="c"># build</span>
@@ -496,7 +469,7 @@ cd yetda
 rm -rf /Applications/Yetda.app &amp;&amp; mv Yetda.app /Applications/
 open /Applications/Yetda.app</pre>
       </details>
-      <p class="note">On first use macOS asks for <strong>Screen Recording</strong> (to capture) and <strong>Accessibility</strong> (for ⌘⌘ and auto-paste). If one is missing, the menu shows a ⚠︎ item that opens the right settings pane. On first launch Yetda also asks whether to add the <code>/shots</code> skill to Claude Code and Codex; it never installs it without asking.</p>
+      <p class="note">Asks for Screen Recording and Accessibility on first use.</p>
     </div>
   </section>
 

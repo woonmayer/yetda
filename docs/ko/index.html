@@ -373,12 +373,12 @@
     <img class="logo" src="../icon.png" alt="Yetda 아이콘">
     <p class="hook">오늘 에이전트한테 스크린샷 몇 장 넘기셨어요?</p>
     <h1>옜다, 화면.<br><span class="hl">비번은 빼고.</span></h1>
-    <p class="sub"><kbd>⌘</kbd>를 두 번 누르고 드래그하면 끝. 스크린샷이 터미널이든 데스크톱 앱이든 코딩 에이전트에 바로 들어가요. API 키·토큰·비밀번호는 맥 안에서 먼저 가려져요. 저장도, 드래그도, 창 전환도 필요 없어요.</p>
+    <p class="sub"><kbd>⌘</kbd> 두 번, 드래그. 에이전트 프롬프트에 바로 들어가요. 비번은 맥 안에서 먼저 가리고요.</p>
     <div class="cta">
       <a class="btn primary" href="#install">macOS에 설치</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ GitHub에서 보기</a>
     </div>
-    <div class="meta">무료 오픈소스 · MIT · macOS 13+ · 기기 안 OCR·AI · 네트워크 사용 안 함 · 캡처는 7일 뒤 자동 삭제</div>
+    <div class="meta">무료 오픈소스 · macOS 13+ · 온디바이스 AI · 네트워크 안 씀</div>
     <div class="origin"><span>옜다</span> · 뭔가를 툭 건네며 하는 말, “자, 받아.”</div>
     <div class="agents">
       <span>지원</span>
@@ -387,89 +387,62 @@
 
     <div class="demo">
       <video src="../demo.mp4" poster="../demo-poster.jpg" autoplay muted loop playsinline aria-label="데모: ⌘를 두 번 누르고 API 키가 보이는 에러를 드래그하면, 키가 가려진 채 터미널 에이전트와 에이전트 데스크톱 앱에 스크린샷이 들어가는 모습"></video>
-      <p class="caption">⌘⌘ → 드래그 → 키는 가리고 → 이미 프롬프트에.</p>
     </div>
   </header>
 
   <section id="how">
-    <h2>처음부터 끝까지 3초</h2>
-    <p class="lead">화면에서 뭔가를 보고, 에이전트한테 “이거 봐” 하고 싶은 순간을 위해 만들었어요.</p>
+    <h2>3초면 끝</h2>
     <div class="steps">
       <div class="step">
         <div class="n">01</div>
-        <h3><kbd>⌘</kbd> <kbd>⌘</kbd> 두 번</h3>
-        <p>어느 앱에서든요. 익숙한 단축키가 좋다면 <kbd>⌘⇧2</kbd>도 돼요.</p>
+        <h3><kbd>⌘</kbd> <kbd>⌘</kbd></h3>
+        <p>어느 앱에서든. <kbd>⌘⇧2</kbd>도 돼요.</p>
       </div>
       <div class="step">
         <div class="n">02</div>
         <h3>영역 드래그</h3>
-        <p>macOS 기본 선택 도구 그대로예요. 스페이스를 누르면 창 하나를 통째로 찍어요.</p>
+        <p>스페이스로 창 하나 통째로.</p>
       </div>
       <div class="step">
         <div class="n">03</div>
         <h3>가리고, 붙여넣기</h3>
-        <p>캡처 속 키와 비밀번호를 가린 다음, 마지막으로 쓰던 터미널이나 에이전트 앱을 앞으로 가져와 붙여넣어요. 이어서 질문만 쓰면 돼요.</p>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>생각보다 훨씬 짧아요</h2>
-    <p class="lead">기본 방법으로도 되지만, 하루에도 수십 번 하는 일이잖아요.</p>
-    <div class="compare">
-      <div class="col before">
-        <h3>Yetda 없이</h3>
-        <ol>
-          <li><kbd>⌘⇧4</kbd> 누르고 드래그</li>
-          <li>데스크톱에서 파일 찾기</li>
-          <li>터미널로 전환</li>
-          <li>파일을 끌어다 놓거나 경로 복사</li>
-          <li>나중에 데스크톱 정리</li>
-        </ol>
-      </div>
-      <div class="col after">
-        <h3>Yetda와 함께</h3>
-        <ol>
-          <li><kbd>⌘</kbd> 두 번 누르고 드래그</li>
-        </ol>
-        <p class="note">이미지는 이미 프롬프트에 있고, 파일은 알아서 사라져요.</p>
+        <p>마지막에 쓰던 터미널이나 앱으로.</p>
       </div>
     </div>
   </section>
 
   <section id="features">
-    <h2>작은 앱, 필요한 디테일</h2>
-    <p class="lead">메뉴바 아이콘 하나와 단축키 몇 개. 새로 배울 건 없어요.</p>
+    <h2>디테일</h2>
     <div class="features">
       <div class="feat">
         <div class="ic">🔒</div>
         <h3>맥 안에서 가리기</h3>
-        <p>기기 안 OCR로 API 키·토큰·비밀번호를 찾고, Apple Intelligence가 켜진 맥에서는 Apple의 온디바이스 LLM이 형식을 모르는 문자열까지 한 번 더 봐요. 가린 다음에 에이전트에게 보내요. 클라우드로 보내지 않고, 네트워크도 쓰지 않아요.</p>
+        <p>OCR에, 되는 맥에선 Apple 온디바이스 LLM까지. 클라우드 안 씀.</p>
       </div>
       <div class="feat">
         <div class="ic">⌘⌘</div>
-        <h3>두 번 눌러 캡처</h3>
-        <p>세 키 단축키보다 빨라요. 다른 앱이 이미 쓰고 있으면 끌 수 있어요.</p>
+        <h3>⌘ 두 번 캡처</h3>
+        <p>세 키 단축키보다 빨라요.</p>
       </div>
       <div class="feat">
         <div class="ic">↩︎</div>
-        <h3>터미널이든 데스크톱 앱이든</h3>
-        <p>마지막으로 쓴 터미널이나 에이전트 앱(Claude Code, Codex, Claude·Codex 데스크톱 앱)에 각자 맞는 키로 붙여넣어요. 다른 앱도 메뉴에서 추가할 수 있어요.</p>
+        <h3>터미널이든 앱이든</h3>
+        <p>Claude Code, Codex, 그 데스크톱 앱, 직접 추가한 앱까지.</p>
       </div>
       <div class="feat">
         <div class="ic">🖼</div>
         <h3>지난 캡처 붙이기</h3>
-        <p><kbd>⌘⇧1</kbd>을 누르면 최근 캡처 10장이 썸네일로 떠요. 1–9를 눌러 바로 붙여요.</p>
+        <p><kbd>⌘⇧1</kbd>로 최근 10장.</p>
       </div>
       <div class="feat">
         <div class="ic">/</div>
         <h3><code>/shots</code> 스킬</h3>
-        <p>여러 장 찍었다면? Claude Code나 Codex에서 <code>/shots</code>를 실행하면 대기 중인 캡처를 한 번에 읽어요. 설치는 Yetda가 제안해요.</p>
+        <p>여러 장을 Claude Code·Codex에 한 번에.</p>
       </div>
       <div class="feat">
         <div class="ic">Aa</div>
         <h3>글자도 같이</h3>
-        <p>원하면 캡처에서 읽은 글자도 함께 붙여요. 에러 메시지를 정확한 문자열로 넘길 수 있어요. OCR도 기기 안에서 돌아요.</p>
+        <p>원하면 OCR 텍스트도 같이 붙여요.</p>
       </div>
     </div>
     <div class="terms">
@@ -480,11 +453,11 @@
 
   <section id="install">
     <h2>설치</h2>
-    <p class="lead">Homebrew로 설치하거나 앱을 내려받으세요. macOS 13 이상, Apple 서명·공증을 마친 앱이에요.</p>
+    <p class="lead">Apple 서명·공증. macOS 13 이상.</p>
     <div class="install">
 <pre><span class="c"># Homebrew</span>
 brew install --cask woonmayer/tap/yetda</pre>
-      <p class="note"><a class="btn primary" href="https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg">Yetda.dmg 내려받기</a> dmg를 열고 Yetda를 응용 프로그램 폴더로 끌어다 놓으세요.</p>
+      <p class="note"><a class="btn primary" href="https://github.com/woonmayer/homebrew-tap/releases/latest/download/Yetda.dmg">Yetda.dmg 내려받기</a> dmg를 열고 응용 프로그램 폴더로 끌어다 놓으세요.</p>
       <details class="from-source">
         <summary>소스에서 직접 빌드하기</summary>
 <pre><span class="c"># 빌드</span>
@@ -496,7 +469,7 @@ cd yetda
 rm -rf /Applications/Yetda.app &amp;&amp; mv Yetda.app /Applications/
 open /Applications/Yetda.app</pre>
       </details>
-      <p class="note">처음 쓸 때 macOS가 <strong>화면 기록</strong>(캡처용)과 <strong>손쉬운 사용</strong>(⌘⌘와 자동 붙여넣기용) 권한을 물어봐요. 빠진 권한이 있으면 메뉴 맨 위에 ⚠︎ 항목이 떠서 해당 설정 화면을 바로 열어줘요. 처음 실행할 때는 Claude Code와 Codex에 <code>/shots</code> 스킬을 설치할지도 한 번 물어봐요. 묻지 않고 설치하는 일은 없어요.</p>
+      <p class="note">처음 쓸 때 화면 기록·손쉬운 사용 권한을 물어봐요.</p>
     </div>
   </section>
 
