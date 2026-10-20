@@ -3,7 +3,7 @@ import YetdaCore
 
 /// User preferences, stored in UserDefaults under the app's bundle ID.
 /// `extraTerminalBundleIDs` and `pasteKeyByApp` are edited from the menu
-/// ("Also Paste into …", "Paste Apps") or with `defaults write`.
+/// ("Paste Into") or with `defaults write`.
 enum Settings {
     private static var defaults: UserDefaults { .standard }
 
@@ -29,10 +29,19 @@ enum Settings {
         set { defaults.set(newValue, forKey: "pasteText") }
     }
 
-    /// nil means automatic: the terminal's own paste key.
-    static var pasteKeyOverride: PasteTarget.PasteKey? {
-        get { defaults.string(forKey: "pasteKey").flatMap(PasteTarget.PasteKey.init(rawValue:)) }
-        set { defaults.set(newValue?.rawValue, forKey: "pasteKey") }
+    /// Before 0.3.2 one paste key could be forced for every app. It now
+    /// becomes the key of each terminal and added app that has none of its
+    /// own, so nothing pastes differently after the update.
+    static func migrateGlobalPasteKey() {
+        guard let raw = defaults.string(forKey: "pasteKey") else { return }
+        if let key = PasteTarget.PasteKey(rawValue: raw) {
+            var keys = pasteKeyByApp
+            for id in PasteTarget.terminalBundleIDs.union(extraTerminalBundleIDs) where keys[id] == nil {
+                keys[id] = key
+            }
+            pasteKeyByApp = keys
+        }
+        defaults.removeObject(forKey: "pasteKey")
     }
 
     /// The paste key the user picked per app (bundle ID → key), for added

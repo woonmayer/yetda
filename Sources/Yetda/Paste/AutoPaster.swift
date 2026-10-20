@@ -32,16 +32,16 @@ final class AutoPaster {
     /// a newer capture has taken over.
     private var pasteTask: Task<Void, Never>?
     private let extraTerminals: () -> Set<String>
-    private let pasteKeyOverride: () -> PasteTarget.PasteKey?
     private let pasteKeyByApp: () -> [String: PasteTarget.PasteKey]
 
-    init(
-        extraTerminals: @escaping () -> Set<String>,
-        pasteKeyOverride: @escaping () -> PasteTarget.PasteKey?,
-        pasteKeyByApp: @escaping () -> [String: PasteTarget.PasteKey]
-    ) {
+    /// The app the next capture is pasted into.
+    var nextTargetBundleID: String? {
+        guard let app = lastTerminal, !app.isTerminated else { return nil }
+        return app.bundleIdentifier
+    }
+
+    init(extraTerminals: @escaping () -> Set<String>, pasteKeyByApp: @escaping () -> [String: PasteTarget.PasteKey]) {
         self.extraTerminals = extraTerminals
-        self.pasteKeyOverride = pasteKeyOverride
         self.pasteKeyByApp = pasteKeyByApp
         let workspace = NSWorkspace.shared
         lastTerminal = isTerminal(workspace.frontmostApplication)
@@ -90,9 +90,7 @@ final class AutoPaster {
             onStatus?("📋 copied")
             return
         }
-        let key = PasteTarget.pasteKey(
-            bundleID: terminal.bundleIdentifier, override: pasteKeyOverride(), perApp: pasteKeyByApp()
-        )
+        let key = PasteTarget.pasteKey(bundleID: terminal.bundleIdentifier, perApp: pasteKeyByApp())
         terminal.activate()
         pasteTask?.cancel()
         pasteTask = Task {

@@ -1,4 +1,5 @@
 import AppKit
+import UniformTypeIdentifiers
 import YetdaCore
 
 /// The menu bar item: its badge (pending captures), its menu, and the
@@ -10,16 +11,13 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         var deliver: @MainActor (URL) -> Void
         var pasteUnmasked: @MainActor () -> Void
         var hasUnmasked: @MainActor () -> Bool
+        /// Bundle ID of the app the next capture is pasted into.
+        var nextPasteTarget: @MainActor () -> String?
         var doubleCommandChanged: @MainActor (Bool) -> Void
         var terminalsChanged: @MainActor () -> Void
     }
 
     private static let flashDuration: Duration = .seconds(3)
-    private static let pasteKeyChoices: [(title: String, key: PasteTarget.PasteKey?)] = [
-        ("Automatic (⌃V in terminals, ⌘V in iTerm2 and apps)", nil),
-        ("⌃V", .controlV),
-        ("⌘V (e.g. Cursor CLI)", .commandV),
-    ]
 
     private let store: CaptureStore
     private let handlers: Handlers
@@ -33,10 +31,8 @@ final class StatusMenu: NSObject, NSMenuDelegate {
     private let unmaskItem = NSMenuItem()
     private let clearItem = NSMenuItem()
     private let autoPasteItem = NSMenuItem()
-    private let frontAppItem = NSMenuItem()
-    private let pasteAppsItem = NSMenuItem()
+    private let pasteIntoItem = NSMenuItem()
     private var frontAppBundleID: String?
-    private var pasteKeyItems: [NSMenuItem] = []
     private let doubleCommandItem = NSMenuItem()
     private let redactItem = NSMenuItem()
     private let pasteTextItem = NSMenuItem()
@@ -100,11 +96,8 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         configure(clearItem, "Clear", #selector(clearAll), in: menu)
 
         menu.addItem(.separator())
-        configure(autoPasteItem, "Auto-paste into Terminal or Agent App", #selector(toggleAutoPaste), in: menu)
-        configure(frontAppItem, "", #selector(toggleFrontAppAsTerminal), in: menu).indentationLevel = 1
-        configure(pasteAppsItem, "Added Apps", nil, in: menu).submenu = NSMenu()
-        pasteAppsItem.indentationLevel = 1
-        configure(NSMenuItem(), "Paste Key", nil, in: menu).submenu = buildPasteKeyMenu()
+        configure(autoPasteItem, "Auto-paste", #selector(toggleAutoPaste), in: menu)
+        configure(pasteIntoItem, "Paste Into", nil, in: menu).submenu = NSMenu()
         configure(doubleCommandItem, "Capture with ⌘⌘", #selector(toggleDoubleCommand), in: menu)
         configure(redactItem, "Hide Secrets in Captures", #selector(toggleRedact), in: menu)
         configure(pasteTextItem, "Also Paste Text from Capture", #selector(togglePasteText), in: menu)
@@ -113,17 +106,6 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         menu.addItem(.separator())
         configure(NSMenuItem(), "Support Yetda…", #selector(openSponsors), in: menu)
         menu.addItem(withTitle: "Quit Yetda", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
-        return menu
-    }
-
-    private func buildPasteKeyMenu() -> NSMenu {
-        let menu = NSMenu()
-        menu.autoenablesItems = false
-        pasteKeyItems = Self.pasteKeyChoices.enumerated().map { index, choice in
-            let item = configure(NSMenuItem(), choice.title, #selector(choosePasteKey(_:)), in: menu)
-            item.tag = index
-            return item
-        }
         return menu
     }
 
@@ -145,11 +127,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         unmaskItem.isHidden = !handlers.hasUnmasked()
 
         autoPasteItem.state = .init(Settings.autoPaste)
-        refreshFrontAppItem()
-        refreshPasteAppsMenu()
-        for item in pasteKeyItems {
-            item.state = .init(Self.pasteKeyChoices[item.tag].key == Settings.pasteKeyOverride)
-        }
+        refreshPasteIntoMenu()
         doubleCommandItem.state = .init(Settings.doubleCommandCapture)
         redactItem.state = .init(Settings.redactSecrets)
         pasteTextItem.state = .init(Settings.pasteText)
@@ -162,42 +140,70 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         accessibilityWarning.isHidden = !needsAccessibility || Permissions.hasAccessibility()
     }
 
-    /// "Also Paste into <app>": offers the app the user was just in (opening
-    /// a menu bar menu doesn't change the frontmost app) as an auto-paste
-    /// target, unless it's already a known target or Yetda itself.
-    private func refreshFrontAppItem() {
-        let app = NSWorkspace.shared.frontmostApplication
-        let bundleID = app?.bundleIdentifier
-        frontAppBundleID = bundleID
-        frontAppItem.isHidden = bundleID == nil || bundleID == Bundle.main.bundleIdentifier
-            || PasteTarget.isPasteTarget(bundleID: bundleID)
-        frontAppItem.title = "Also Paste into “\(app?.localizedName ?? "this app")”"
-        frontAppItem.state = .init(bundleID.map(Settings.extraTerminalBundleIDs.contains) ?? false)
-    }
-
-    /// The apps the user added, each with its paste key (⌘V by default, as in
-    /// any Mac text field; ⌃V for a terminal) and a way to remove it.
-    private func refreshPasteAppsMenu() {
-        let extra = Settings.extraTerminalBundleIDs.sorted()
-        pasteAppsItem.isHidden = extra.isEmpty
-        guard let submenu = pasteAppsItem.submenu else { return }
+    /// "Paste Into ▸": the apps a capture can be pasted into — the built-in
+    /// terminals and agent apps found on this Mac, then the ones the user
+    /// added — each with its paste key, which can be changed. The capture
+    /// goes to whichever of them was used last, named in the item's title.
+    private func refreshPasteIntoMenu() {
+        let next = handlers.nextPasteTarget()
+        pasteIntoItem.title = "Paste Into: \(next.map(Self.appName) ?? "—")"
+        pasteIntoItem.isEnabled = Settings.autoPaste
+        guard let submenu = pasteIntoItem.submenu else { return }
         submenu.removeAllItems()
         submenu.autoenablesItems = false
-        let keys = Settings.pasteKeyByApp
-        for bundleID in extra {
-            let key = PasteTarget.pasteKey(bundleID: bundleID, perApp: keys)
-            let appItem = configure(NSMenuItem(), "\(Self.appName(bundleID)) — \(key == .commandV ? "⌘V" : "⌃V")", nil, in: submenu)
-            let choices = NSMenu()
-            choices.autoenablesItems = false
-            for (title, choice) in [("Paste with ⌘V", PasteTarget.PasteKey.commandV), ("Paste with ⌃V", .controlV)] {
-                let item = configure(NSMenuItem(), title, #selector(choosePasteKeyForApp(_:)), in: choices)
-                item.representedObject = [bundleID, choice.rawValue]
-                item.state = .init(key == choice)
-            }
-            choices.addItem(.separator())
-            configure(NSMenuItem(), "Remove", #selector(removePasteApp(_:)), in: choices).representedObject = bundleID
-            appItem.submenu = choices
+
+        let extra = Settings.extraTerminalBundleIDs
+        let rows = PasteTarget.menuRows(extra: extra, perApp: Settings.pasteKeyByApp) {
+            NSWorkspace.shared.urlForApplication(withBundleIdentifier: $0) != nil
         }
+        addNote("Pastes into the one you used last.", to: submenu)
+        for (title, section, removable) in [
+            ("Terminals", rows.terminals, false), ("Agent Apps", rows.agentApps, false), ("Added", rows.added, true),
+        ] where !section.isEmpty {
+            submenu.addItem(.separator())
+            addNote(title, to: submenu)
+            for row in section {
+                addAppRow(row, removable: removable, isNext: row.bundleID == next, to: submenu)
+            }
+        }
+
+        submenu.addItem(.separator())
+        let front = NSWorkspace.shared.frontmostApplication
+        frontAppBundleID = front?.bundleIdentifier
+        if let id = frontAppBundleID, id != Bundle.main.bundleIdentifier,
+           !PasteTarget.isPasteTarget(bundleID: id, extra: extra) {
+            configure(NSMenuItem(), "Add “\(front?.localizedName ?? id)”", #selector(addFrontApp), in: submenu)
+        }
+        configure(NSMenuItem(), "Add App…", #selector(addAppFromFolder), in: submenu)
+    }
+
+    private func addNote(_ title: String, to menu: NSMenu) {
+        let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+        item.isEnabled = false
+        menu.addItem(item)
+    }
+
+    /// "Claude   ⌘V ▸" with the key choices (and Remove, for an added app).
+    /// The app the next capture goes to is ticked.
+    private func addAppRow(_ row: PasteTarget.Row, removable: Bool, isNext: Bool, to menu: NSMenu) {
+        let item = configure(NSMenuItem(), "\(Self.appName(row.bundleID))  \(Self.symbol(row.key))", nil, in: menu)
+        item.state = .init(isNext)
+        let choices = NSMenu()
+        choices.autoenablesItems = false
+        for choice in [PasteTarget.PasteKey.commandV, .controlV] {
+            let option = configure(NSMenuItem(), "Paste with \(Self.symbol(choice))", #selector(choosePasteKeyForApp(_:)), in: choices)
+            option.representedObject = [row.bundleID, choice.rawValue]
+            option.state = .init(row.key == choice)
+        }
+        if removable {
+            choices.addItem(.separator())
+            configure(NSMenuItem(), "Remove", #selector(removePasteApp(_:)), in: choices).representedObject = row.bundleID
+        }
+        item.submenu = choices
+    }
+
+    private static func symbol(_ key: PasteTarget.PasteKey) -> String {
+        key == .commandV ? "⌘V" : "⌃V"
     }
 
     /// The app's name as Finder shows it, or its bundle ID if it isn't installed.
@@ -258,15 +264,29 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         if Settings.doubleCommandCapture && !Permissions.hasAccessibility() { Permissions.openAccessibilitySettings() }
     }
 
-    @objc private func toggleFrontAppAsTerminal() {
+    @objc private func addFrontApp() {
         guard let bundleID = frontAppBundleID else { return }
-        var extra = Settings.extraTerminalBundleIDs
-        if extra.remove(bundleID) == nil {
-            extra.insert(bundleID)
-        } else {
-            Settings.pasteKeyByApp[bundleID] = nil
-        }
-        Settings.extraTerminalBundleIDs = extra
+        addPasteApps([bundleID])
+    }
+
+    /// Picks apps in a Finder dialog, starting in /Applications.
+    @objc private func addAppFromFolder() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.application]
+        panel.allowsMultipleSelection = true
+        panel.directoryURL = URL(fileURLWithPath: "/Applications")
+        panel.message = "Choose apps for Yetda to paste captures into."
+        panel.prompt = "Add"
+        NSApp.activate(ignoringOtherApps: true)
+        let chosen = panel.runModal() == .OK ? panel.urls.compactMap { Bundle(url: $0)?.bundleIdentifier } : []
+        NSApp.hide(nil) // hand focus back to the app the user was in
+        addPasteApps(chosen.filter { $0 != Bundle.main.bundleIdentifier })
+    }
+
+    private func addPasteApps(_ bundleIDs: [String]) {
+        let new = bundleIDs.filter { !PasteTarget.builtInBundleIDs.contains($0) }
+        guard !new.isEmpty else { return }
+        Settings.extraTerminalBundleIDs.formUnion(new)
         handlers.terminalsChanged()
     }
 
@@ -297,10 +317,6 @@ final class StatusMenu: NSObject, NSMenuDelegate {
             NSLog("Yetda: /shots skill for \(agent.name): \(error.localizedDescription)")
             flash("⚠︎ skill")
         }
-    }
-
-    @objc private func choosePasteKey(_ sender: NSMenuItem) {
-        Settings.pasteKeyOverride = Self.pasteKeyChoices[sender.tag].key
     }
 }
 

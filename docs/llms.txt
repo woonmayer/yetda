@@ -9,7 +9,7 @@ Key facts:
 - Price: free. License: MIT. Source: https://github.com/woonmayer/yetda
 - Privacy: no network access and no analytics; OCR and secret detection run on the Mac. Captures are kept in `~/Yetda/` and deleted after 7 days.
 - Permissions: Screen Recording (to capture) and Accessibility (to paste into the terminal and detect the ⌘⌘ tap). Yetda does not record what you type.
-- Desktop apps: also pastes into the Claude, Codex and ChatGPT desktop apps, and any app added from the menu (⌃V or ⌘V per app).
+- Desktop apps: also pastes into the Claude, Codex and ChatGPT desktop apps, and any app added from the menu (Paste Into → Add App…; ⌃V or ⌘V per app).
 - Terminals: Terminal, iTerm2, Ghostty, Warp, WezTerm, kitty, Alacritty, Hyper and more; any other app can be added from the menu.
 - Several screenshots at once: the bundled `/shots` skill for Claude Code and Codex feeds all pending captures into the session.
 - Paste an earlier capture: ⌘⇧1 opens a thumbnail menu of the 10 newest captures.

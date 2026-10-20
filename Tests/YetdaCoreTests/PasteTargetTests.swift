@@ -66,4 +66,24 @@ final class PasteTargetTests: XCTestCase {
     func test_override_also_applies_to_agent_apps() {
         XCTAssertEqual(PasteTarget.pasteKey(bundleID: "com.anthropic.claudefordesktop", override: .controlV), .controlV)
     }
+
+    func test_menu_rows_list_installed_built_ins_then_added_apps() {
+        let installed: Set<String> = ["com.apple.Terminal", "com.mitchellh.ghostty", "com.anthropic.claudefordesktop"]
+        let rows = PasteTarget.menuRows(
+            extra: ["com.tinyspeck.slackmacgap", "com.apple.Terminal", "com.example.a"],
+            perApp: ["com.mitchellh.ghostty": .commandV, "com.example.a": .controlV],
+            isInstalled: installed.contains
+        )
+        XCTAssertEqual(rows.terminals, [
+            .init(bundleID: "com.apple.Terminal", key: .controlV),
+            .init(bundleID: "com.mitchellh.ghostty", key: .commandV),
+        ])
+        XCTAssertEqual(rows.agentApps, [.init(bundleID: "com.anthropic.claudefordesktop", key: .commandV)])
+        // Added apps are listed even when not installed (so they can be removed);
+        // a built-in one added again isn't listed twice.
+        XCTAssertEqual(rows.added, [
+            .init(bundleID: "com.example.a", key: .controlV),
+            .init(bundleID: "com.tinyspeck.slackmacgap", key: .commandV),
+        ])
+    }
 }

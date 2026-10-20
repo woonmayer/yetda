@@ -25,7 +25,7 @@ accepts a pasted image:
 | Codex CLI | `Ctrl+V` | should work |
 | Gemini CLI | `Ctrl+V` | should work |
 | opencode | `Ctrl+V` | should work |
-| Cursor CLI | `⌘V` | set **Paste Key → ⌘V** in the menu |
+| Cursor CLI | `⌘V` | set your terminal to `⌘V` under **Paste Into** |
 | Claude desktop app | `⌘V` | should work |
 | Codex / ChatGPT desktop app | `⌘V` | should work |
 
@@ -116,15 +116,13 @@ app. If captures come out blank, the permission isn't granted yet.
   - **Open Folder** — reveal `~/Yetda/` in Finder
   - **Paste Recent** — same thumbnail list as ⌘⇧1
   - **Clear (N)** — empty the capture queue
-  - **Auto-paste into Terminal or Agent App** — toggle auto-paste (on by default)
-  - **Also Paste into “<app>”** — shown when the app you were just in isn't
-    built in (terminals and agent desktop apps); tick it to make that app an
-    auto-paste target
-  - **Added Apps** — the apps you added: pick `⌘V` (default) or `Ctrl+V`
-    for each, or remove it
-  - **Paste Key** — Automatic (`Ctrl+V` in terminals; `⌘V` in iTerm2 and
-    other apps), or force `Ctrl+V` / `⌘V` for all apps; a key picked under
-    **Added Apps** still wins for that app
+  - **Auto-paste** — toggle auto-paste (on by default)
+  - **Paste Into: <app>** — names the app the next capture goes to (the one
+    you used last) and lists every target: the terminals and agent apps on
+    your Mac, then the apps you added, each with its paste key (`Ctrl+V` in
+    terminals, `⌘V` in iTerm2 and apps). Pick a different key per app;
+    **Add “<app>”** adds the app you were just in, **Add App…** any app from
+    a Finder dialog, and an added app can be removed again
   - **Capture with ⌘⌘** — toggle the double-tap trigger (on by default; turn it
     off if another app, e.g. Codex, also uses ⌘⌘)
   - **Paste Last Capture Without Hiding** — shown after a capture had secrets masked

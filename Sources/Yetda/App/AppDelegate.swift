@@ -9,7 +9,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let store = CaptureStore()
     private let autoPaster = AutoPaster(
         extraTerminals: { Settings.extraTerminalBundleIDs },
-        pasteKeyOverride: { Settings.pasteKeyOverride },
         pasteKeyByApp: { Settings.pasteKeyByApp }
     )
     private lazy var captures = CaptureController(store: store, autoPaster: autoPaster)
@@ -21,6 +20,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         LegacyMigration.run(newFolder: store.folderURL)
+        Settings.migrateGlobalPasteKey()
         store.clearPending()
         do {
             try store.createFolder()
@@ -58,6 +58,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             deliver: { [weak self] url in self?.captures.deliver(url) },
             pasteUnmasked: { [weak self] in self?.captures.pasteUnmasked() },
             hasUnmasked: { [weak self] in self?.captures.hasUnmasked ?? false },
+            nextPasteTarget: { [weak self] in self?.autoPaster.nextTargetBundleID },
             doubleCommandChanged: { [weak self] enabled in
                 if enabled { self?.doubleCommand.start() } else { self?.doubleCommand.stop() }
             },

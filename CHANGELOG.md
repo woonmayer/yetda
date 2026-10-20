@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- **Paste Into** menu replaces *Also Paste into*, *Added Apps* and *Paste Key*:
+  it names the app the next capture goes to and lists every target — the
+  terminals and agent apps on this Mac, then the apps you added — with each
+  one's paste key, which you can change per app. Add the app you were just in,
+  or any app with **Add App…**. A paste key forced for all apps carries over
+  to each terminal and added app.
+
 ## 0.3.1
 
 - **Agent desktop apps:** auto-paste also goes to the Claude, Codex and ChatGPT

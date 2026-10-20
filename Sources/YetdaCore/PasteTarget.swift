@@ -9,11 +9,12 @@ public enum PasteTarget {
 
     /// Desktop apps of coding agents. Their composer takes an image on ⌘V,
     /// like any Mac text field.
-    public static let agentAppBundleIDs: Set<String> = [
+    public static let agentApps: [String] = [
         "com.anthropic.claudefordesktop", // Claude
         "com.openai.codex",               // Codex
         "com.openai.chat",                // ChatGPT
     ]
+    public static let agentAppBundleIDs = Set(agentApps)
 
     // Terminals that keep Ctrl+V for themselves; agents there take an image paste on ⌘V.
     private static let commandVTerminalBundleIDs: Set<String> = [
@@ -39,7 +40,8 @@ public enum PasteTarget {
         return terminalBundleIDs.contains(bundleID) ? .controlV : .commandV
     }
 
-    public static let terminalBundleIDs: Set<String> = [
+    /// Terminal emulators, in the order the menu lists them.
+    public static let terminals: [String] = [
         "com.apple.Terminal",
         "com.googlecode.iterm2",
         "com.mitchellh.ghostty",
@@ -52,9 +54,36 @@ public enum PasteTarget {
         "com.stablyai.orca",
         "fun.tw93.kaku",
     ]
+    public static let terminalBundleIDs = Set(terminals)
 
     public static func isAgentApp(bundleID: String?) -> Bool {
         bundleID.map(agentAppBundleIDs.contains) ?? false
+    }
+
+    /// One app in the paste-target menu.
+    public struct Row: Equatable, Sendable {
+        public var bundleID: String
+        public var key: PasteKey
+        public init(bundleID: String, key: PasteKey) {
+            self.bundleID = bundleID
+            self.key = key
+        }
+    }
+
+    /// What the menu lists: the built-in terminals and agent apps that are
+    /// installed, then the apps the user added (sorted), each with the key
+    /// it will paste with.
+    public static func menuRows(
+        extra: Set<String>, perApp: [String: PasteKey], isInstalled: (String) -> Bool
+    ) -> (terminals: [Row], agentApps: [Row], added: [Row]) {
+        func rows(_ ids: [String]) -> [Row] {
+            ids.map { Row(bundleID: $0, key: pasteKey(bundleID: $0, perApp: perApp)) }
+        }
+        return (
+            rows(terminals.filter(isInstalled)),
+            rows(agentApps.filter(isInstalled)),
+            rows(extra.subtracting(builtInBundleIDs).sorted())
+        )
     }
 
     /// A terminal, an agent's desktop app, or an app the user added.
