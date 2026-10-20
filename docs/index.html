@@ -220,6 +220,7 @@
 
   /* Demo */
   .demo { margin: 48px auto 0; max-width: 900px; text-align: left; }
+  @media (max-width: 600px) { .demo video { aspect-ratio: 1080 / 900 !important; } .hero .origin { display: none; } .demo { margin-top: 28px; } }
   .demo video { display: block; width: 100%; height: auto; aspect-ratio: 1600 / 1016; border-radius: 16px; background: #0d0e12; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
   .screen {
     position: relative; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden;
@@ -373,7 +374,7 @@
     <img class="logo" src="icon.png" alt="Yetda icon">
     <p class="hook">How many screenshots did you hand your AI today?</p>
     <h1>Show your agent the screen.<br><span class="hl">Not your keys.</span></h1>
-    <p class="sub">Paste screenshots into Claude Code, Codex and more. Passwords get hidden on the way.</p>
+    <p class="sub">Screenshots straight into Claude Code, Codex, whatever you use. Passwords get hidden on the way.</p>
     <div class="cta">
       <a class="btn primary" href="#install">Install for macOS</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ View on GitHub</a>
@@ -386,7 +387,7 @@
     </div>
 
     <div class="demo">
-      <video src="demo.mp4" poster="demo-poster.jpg" autoplay muted loop playsinline aria-label="Demo: tapping Command twice, dragging over an error with an API key in it, the key being blacked out, and the screenshot landing in a terminal agent and then in an agent's desktop app"></video>
+      <video id="demo" src="demo.mp4" poster="demo-poster.jpg" data-base="" autoplay muted loop playsinline aria-label="Demo: tapping Command twice, dragging over an error with an API key in it, the key being blacked out, and the screenshot landing in a terminal agent and then in an agent's desktop app"></video>
     </div>
   </header>
 
@@ -512,5 +513,19 @@ open /Applications/Yetda.app</pre>
   </div>
 </footer>
 
+<script>
+// Phones get a taller crop of the demo; if autoplay is blocked (e.g. Low Power Mode), show controls so a tap plays it.
+(() => {
+  const v = document.getElementById('demo');
+  if (!v) return;
+  const b = v.dataset.base || '';
+  if (matchMedia('(max-width: 600px)').matches) {
+    v.poster = b + 'demo-mobile-poster.jpg';
+    v.src = b + 'demo-mobile.mp4';
+  }
+  const p = v.play();
+  if (p) p.catch(() => { v.controls = true; });
+})();
+</script>
 </body>
 </html>

@@ -220,6 +220,7 @@
 
   /* Demo */
   .demo { margin: 48px auto 0; max-width: 900px; text-align: left; }
+  @media (max-width: 600px) { .demo video { aspect-ratio: 1080 / 900 !important; } .hero .origin { display: none; } .demo { margin-top: 28px; } }
   .demo video { display: block; width: 100%; height: auto; aspect-ratio: 1600 / 1016; border-radius: 16px; background: #0d0e12; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
   .screen {
     position: relative; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden;
@@ -373,7 +374,7 @@
     <img class="logo" src="../icon.png" alt="Yetda 아이콘">
     <p class="hook">오늘 AI한테 스크린샷 몇 장 넘기셨어요?</p>
     <h1>옜다, 화면.<br><span class="hl">비번은 빼고.</span></h1>
-    <p class="sub">Claude Code·Codex 등에 스크린샷 붙이는 맥 앱. 비번은 알아서 가려요.</p>
+    <p class="sub">Claude Code든 Codex든, 스크린샷을 바로 붙여 주는 맥 앱. 비번은 알아서 가려요.</p>
     <div class="cta">
       <a class="btn primary" href="#install">macOS에 설치</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ GitHub에서 보기</a>
@@ -386,7 +387,7 @@
     </div>
 
     <div class="demo">
-      <video src="../demo.mp4" poster="../demo-poster.jpg" autoplay muted loop playsinline aria-label="데모: ⌘를 두 번 누르고 API 키가 보이는 에러를 드래그하면, 키가 가려진 채 터미널 에이전트와 에이전트 데스크톱 앱에 스크린샷이 들어가는 모습"></video>
+      <video id="demo" src="../demo.mp4" poster="../demo-poster.jpg" data-base="../" autoplay muted loop playsinline aria-label="데모: ⌘를 두 번 누르고 API 키가 보이는 에러를 드래그하면, 키가 가려진 채 터미널 에이전트와 에이전트 데스크톱 앱에 스크린샷이 들어가는 모습"></video>
     </div>
   </header>
 
@@ -512,5 +513,19 @@ open /Applications/Yetda.app</pre>
   </div>
 </footer>
 
+<script>
+// Phones get a taller crop of the demo; if autoplay is blocked (e.g. Low Power Mode), show controls so a tap plays it.
+(() => {
+  const v = document.getElementById('demo');
+  if (!v) return;
+  const b = v.dataset.base || '';
+  if (matchMedia('(max-width: 600px)').matches) {
+    v.poster = b + 'demo-mobile-poster.jpg';
+    v.src = b + 'demo-mobile.mp4';
+  }
+  const p = v.play();
+  if (p) p.catch(() => { v.controls = true; });
+})();
+</script>
 </body>
 </html>

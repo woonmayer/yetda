@@ -220,6 +220,7 @@
 
   /* Demo */
   .demo { margin: 48px auto 0; max-width: 900px; text-align: left; }
+  @media (max-width: 600px) { .demo video { aspect-ratio: 1080 / 900 !important; } .hero .origin { display: none; } .demo { margin-top: 28px; } }
   .demo video { display: block; width: 100%; height: auto; aspect-ratio: 1600 / 1016; border-radius: 16px; background: #0d0e12; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
   .screen {
     position: relative; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden;
@@ -373,7 +374,7 @@
     <img class="logo" src="../icon.png" alt="Yetdaのアイコン">
     <p class="hook">今日、AIに何枚スクショを渡しましたか？</p>
     <h1>画面は見せて、<br><span class="hl">鍵は隠す。</span></h1>
-    <p class="sub">Claude CodeやCodexなどにスクショを貼るMacアプリ。パスワードは自動で隠します。</p>
+    <p class="sub">Claude CodeでもCodexでも、スクショをそのまま貼れるMacアプリ。パスワードは自動で隠します。</p>
     <div class="cta">
       <a class="btn primary" href="#install">macOSにインストール</a>
       <a class="btn" href="https://github.com/woonmayer/yetda">★ GitHubで見る</a>
@@ -386,7 +387,7 @@
     </div>
 
     <div class="demo">
-      <video src="../demo.mp4" poster="../demo-poster.jpg" autoplay muted loop playsinline aria-label="デモ：⌘を2回押し、APIキーが写ったエラーをドラッグすると、キーが黒塗りされたスクショがターミナルのエージェントとエージェントのデスクトップアプリに入る様子"></video>
+      <video id="demo" src="../demo.mp4" poster="../demo-poster.jpg" data-base="../" autoplay muted loop playsinline aria-label="デモ：⌘を2回押し、APIキーが写ったエラーをドラッグすると、キーが黒塗りされたスクショがターミナルのエージェントとエージェントのデスクトップアプリに入る様子"></video>
     </div>
   </header>
 
@@ -512,5 +513,19 @@ open /Applications/Yetda.app</pre>
   </div>
 </footer>
 
+<script>
+// Phones get a taller crop of the demo; if autoplay is blocked (e.g. Low Power Mode), show controls so a tap plays it.
+(() => {
+  const v = document.getElementById('demo');
+  if (!v) return;
+  const b = v.dataset.base || '';
+  if (matchMedia('(max-width: 600px)').matches) {
+    v.poster = b + 'demo-mobile-poster.jpg';
+    v.src = b + 'demo-mobile.mp4';
+  }
+  const p = v.play();
+  if (p) p.catch(() => { v.controls = true; });
+})();
+</script>
 </body>
 </html>
