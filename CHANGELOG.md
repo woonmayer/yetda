@@ -1,10 +1,11 @@
 # Changelog
 
-## Unreleased
+## 0.3.3
 
 - **Feedback** menu: *Report a Bug…* opens the GitHub issue form with your
   Yetda and macOS versions and paste target filled in; *Suggest an Idea…*
   opens the idea form. Nothing is sent until you submit it in the browser.
+- Website moved to [yetda.app](https://yetda.app).
 
 ## 0.3.2
 
