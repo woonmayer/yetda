@@ -103,7 +103,7 @@ final class CaptureController {
         guard redact || wantText else { return "" }
         let scan = await ScreenshotScanner.scan(url, redact: redact)
         if scan.maskingFailed {
-            onStatus?("⚠︎ not pasted")
+            onStatus?("⚠︎ not pasted" + (scan.failure.map { " (\($0))" } ?? ""))
             return nil
         }
         if keepOriginal { keepUnmasked(scan.original) }

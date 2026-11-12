@@ -18,6 +18,8 @@ enum ScreenshotScanner {
         /// Secrets were found but the masked image couldn't be saved, so the
         /// file still shows them and must not be shared.
         var maskingFailed = false
+        /// Why, for the status line: "OCR", "locate" or "save".
+        var failure: String?
     }
 
     /// Runs off the main actor; OCR takes a few hundred milliseconds.
@@ -28,9 +30,9 @@ enum ScreenshotScanner {
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               let image = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
             NSLog("Yetda: could not read \(url.lastPathComponent) to scan it.")
-            return Result(maskingFailed: redact)
+            return Result(maskingFailed: redact, failure: "read")
         }
-        guard let lines = TextRecognizer.lines(in: image) else { return Result(maskingFailed: redact) }
+        guard let lines = TextRecognizer.lines(in: image) else { return Result(maskingFailed: redact, failure: "OCR") }
         guard redact else { return Result(text: lines.map(\.best.text).joined(separator: "\n")) }
 
         // Every line's candidates go to the on-device model in one request,
@@ -47,7 +49,7 @@ enum ScreenshotScanner {
             let reading = plan.reading == 0 ? line.best : line.alternatives[plan.reading - 1]
             guard let located = locate(plan.ranges, in: reading) else {
                 NSLog("Yetda: found a secret but couldn't locate it in the image; not sharing the capture.")
-                return Result(maskingFailed: true)
+                return Result(maskingFailed: true, failure: "locate")
             }
             rects += located
         }
@@ -63,7 +65,7 @@ enum ScreenshotScanner {
         }
         guard let masked = SecretMasker.mask(rects, in: image), writePNG(masked, to: url) else {
             NSLog("Yetda: secrets found but the masked capture couldn't be saved; not sharing it.")
-            return Result(maskingFailed: true)
+            return Result(maskingFailed: true, failure: "save")
         }
         return Result(hiddenCount: rects.count, text: text, original: original)
     }
