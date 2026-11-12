@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.4
+
+- **Fix for macOS 27:** text recognition failed on the Neural Engine, and
+  since secret masking fails closed, every capture stopped at
+  *⚠︎ not pasted*. Yetda now retries on the CPU, then with the previous
+  recognition model, and keeps the setup that works.
+- When a capture is held back, the status names why: *(OCR)*, *(locate)*,
+  *(save)* or *(read)*.
+
 ## 0.3.3
 
 - **Feedback** menu: *Report a Bug…* opens the GitHub issue form with your
