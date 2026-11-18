@@ -1,8 +1,8 @@
 #!/bin/bash
 # Diagnoses Yetda's OCR failures (E5RT error 13 on macOS 27).
-# Run: curl -sL https://raw.githubusercontent.com/woonmayer/yetda/diag/ocr/scripts/diag/diagnose-ocr.sh | bash
+# Run: curl -sL https://raw.githubusercontent.com/woonmayer/yetda/diag-ocr/scripts/diag/diagnose-ocr.sh | bash
 # Writes ~/Desktop/yetda-diag.txt. Reads only; deletes nothing.
-BASE=https://raw.githubusercontent.com/woonmayer/yetda/diag/ocr/scripts/diag
+BASE=https://raw.githubusercontent.com/woonmayer/yetda/diag-ocr/scripts/diag
 TMP="$(mktemp -d)"
 OUT="$HOME/Desktop/yetda-diag.txt"
 curl -sfL "$BASE/ocr.js" -o "$TMP/ocr.js"
