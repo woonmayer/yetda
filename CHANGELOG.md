@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.5
+
+- **macOS 27 OCR, for real this time:** macOS 27 has a Vision bug where the
+  accurate text recognizer fails (E5RT error 13) and stays broken until the
+  app restarts. Yetda now falls back to the fast recognizer instead of
+  holding the capture back with *⚠︎ not pasted (OCR)*.
+- Text recognition runs one capture at a time. On macOS 27 its first run
+  takes about 20 s; captures taken meanwhile now wait instead of failing,
+  and the menu bar shows *⏳ OCR* until it is ready.
+- Captures that queue up are all saved, but only the newest one is pasted.
+
 ## 0.3.4
 
 - **Fix for macOS 27:** text recognition failed on the Neural Engine, and
