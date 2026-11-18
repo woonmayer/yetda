@@ -19,6 +19,9 @@ final class CaptureController {
     private let service = CaptureService(run: runScreencapture)
     private let autoPaster: AutoPaster
     private var isCapturing = false
+    /// Counts captures, so one that finishes after a newer one was taken
+    /// (they queue behind a slow OCR) is saved but not pasted.
+    private var captureCount = 0
 
     /// The newest capture as taken, before secrets were masked. Memory only;
     /// dropped after `unmaskLifetime` or when the next capture is taken.
@@ -41,6 +44,8 @@ final class CaptureController {
         }
         guard prepareFolder() else { return }
         isCapturing = true
+        captureCount += 1
+        let number = captureCount
         let date = Date()
         let pending = store.pendingFileURL(for: date)
         let final = store.fileURL(for: date)
@@ -53,7 +58,7 @@ final class CaptureController {
             switch outcome {
             case .cancelled: return
             case .failed: onStatus?("⚠︎ capture failed")
-            case .captured: await finish(pending: pending, final: final)
+            case .captured: await finish(pending: pending, final: final, number: number)
             }
         }
     }
@@ -75,7 +80,7 @@ final class CaptureController {
 
     // MARK: - Steps
 
-    private func finish(pending: URL, final: URL) async {
+    private func finish(pending: URL, final: URL, number: Int) async {
         keepUnmasked(nil) // whatever happens, the previous original is stale now
         guard let text = await scan(pending, keepOriginal: true) else {
             discard(pending)
@@ -89,7 +94,11 @@ final class CaptureController {
             discard(pending)
             return
         }
-        copyAndPaste(final, text: text)
+        if number == captureCount {
+            copyAndPaste(final, text: text)
+        } else {
+            NSLog("Yetda: a newer capture was taken meanwhile; saved this one without pasting.")
+        }
         store.prune()
         onCapturesChanged?()
     }
@@ -101,6 +110,7 @@ final class CaptureController {
         let redact = Settings.redactSecrets
         let wantText = Settings.autoPaste && Settings.pasteText
         guard redact || wantText else { return "" }
+        if TextRecognizer.isBusy { onStatus?("⏳ OCR") }
         let scan = await ScreenshotScanner.scan(url, redact: redact)
         if scan.maskingFailed {
             onStatus?("⚠︎ not pasted" + (scan.failure.map { " (\($0))" } ?? ""))

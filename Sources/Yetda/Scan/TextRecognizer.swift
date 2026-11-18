@@ -43,7 +43,7 @@ struct RecognizedLine: Sendable {
 /// On-device text recognition (Vision).
 enum TextRecognizer {
     /// Loads the OCR model in the background; the first recognition otherwise
-    /// takes a few seconds.
+    /// takes a few seconds (around 20 s on macOS 27, which compiles it).
     static func warmUp() {
         DispatchQueue.global(qos: .utility).async {
             guard let context = CGContext(
@@ -57,34 +57,48 @@ enum TextRecognizer {
     /// The image's text lines, top to bottom, then left to right; nil if
     /// recognition failed (as opposed to finding no text).
     ///
-    /// Tries the default setup first, then fallbacks: on macOS 27 the
-    /// recognizer can fail on the Neural Engine (E5RT error 13), and without
-    /// text every capture is blocked, since masking fails closed. The first
-    /// setup that works is remembered for the rest of the launch.
+    /// One recognition at a time: on macOS 27 the first one compiles the
+    /// model into the app's cache (around 20 s), and a second one started
+    /// meanwhile fails with E5RT error 13. So later captures wait for it
+    /// instead. A failed round is retried once, then with fallbacks.
     static func lines(in image: CGImage) -> [RecognizedLine]? {
-        let start = preferred.withLock { $0 }
-        for attempt in Attempt.allCases where attempt.rawValue >= start.rawValue {
-            let request = makeRequest(attempt)
-            do {
-                try VNImageRequestHandler(cgImage: image).perform([request])
-            } catch {
-                log.error("text recognition failed (\(attempt.name, privacy: .public)): \(String(describing: error), privacy: .public)")
-                continue
-            }
-            if attempt != start {
-                log.notice("text recognition works with \(attempt.name, privacy: .public); using it from now on")
-                preferred.withLock { $0 = attempt }
-            }
-            return (request.results ?? [])
-                .sorted(by: readingOrder)
-                .compactMap { observation in
-                    let readings = observation.topCandidates(3).map { LineReading(text: $0.string, recognized: $0) }
-                    guard let best = readings.first else { return nil }
-                    return RecognizedLine(best: best, alternatives: Array(readings.dropFirst()))
+        gate.lock()
+        busy.withLock { $0 = true }
+        defer {
+            busy.withLock { $0 = false }
+            gate.unlock()
+        }
+        for round in 1...2 {
+            for attempt in Attempt.allCases {
+                let request = makeRequest(attempt)
+                do {
+                    try VNImageRequestHandler(cgImage: image).perform([request])
+                } catch {
+                    log.error("text recognition failed (\(attempt.name, privacy: .public), round \(round)): \(String(describing: error), privacy: .public)")
+                    continue
                 }
+                if attempt != .standard || round > 1 {
+                    log.notice("text recognition worked with \(attempt.name, privacy: .public) in round \(round)")
+                }
+                return (request.results ?? [])
+                    .sorted(by: readingOrder)
+                    .compactMap { observation in
+                        let readings = observation.topCandidates(3).map { LineReading(text: $0.string, recognized: $0) }
+                        guard let best = readings.first else { return nil }
+                        return RecognizedLine(best: best, alternatives: Array(readings.dropFirst()))
+                    }
+            }
+            if round == 1 { Thread.sleep(forTimeInterval: 0.5) }
         }
         return nil
     }
+
+    /// Whether a recognition (or the warm-up) is running, so a new capture
+    /// will wait for it.
+    static var isBusy: Bool { busy.withLock { $0 } }
+
+    private static let gate = NSLock()
+    private static let busy = OSAllocatedUnfairLock(initialState: false)
 
     /// Recognition setups, most capable first.
     private enum Attempt: Int, CaseIterable {
@@ -105,7 +119,6 @@ enum TextRecognizer {
         }
     }
 
-    private static let preferred = OSAllocatedUnfairLock(initialState: Attempt.standard)
     private static let log = Logger(subsystem: "io.github.woonmayer.yetda", category: "ocr")
 
     private static func makeRequest(_ attempt: Attempt) -> VNRecognizeTextRequest {
