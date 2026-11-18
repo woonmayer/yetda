@@ -45,7 +45,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.statusMenu.showRecentPicker()
         }
         if Settings.doubleCommandCapture { doubleCommand.start() }
-        if Settings.redactSecrets || Settings.pasteText { TextRecognizer.warmUp() }
+        if Settings.redactSecrets || Settings.pasteText {
+            // On macOS 27 this compiles the OCR model, around 20 s on first
+            // launch; captures taken meanwhile wait for it.
+            statusMenu.ongoing = "⏳ OCR"
+            TextRecognizer.warmUp { [weak self] in
+                Task { @MainActor in self?.statusMenu.ongoing = nil }
+            }
+        }
 
         SkillInstaller.updateInstalledCopies()
         // After launch finishes, so the question doesn't hold up the menu bar item.

@@ -52,9 +52,19 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         refreshBadge()
     }
 
+    /// A status that stays next to the icon until cleared, such as "⏳ OCR"
+    /// while text recognition gets ready. Flashes still show over it.
+    var ongoing: String? {
+        didSet { refreshBadge() }
+    }
+
     /// Shows how many captures are pending next to the icon.
     func refreshBadge() {
         guard flashReset == nil else { return } // a flash is showing; it refreshes when done
+        if let ongoing {
+            statusItem?.button?.title = " \(ongoing)"
+            return
+        }
         let count = store.captureFiles().count
         statusItem?.button?.title = count > 0 ? " \(count)" : ""
     }

@@ -44,8 +44,9 @@ struct RecognizedLine: Sendable {
 enum TextRecognizer {
     /// Loads the OCR model in the background; the first recognition otherwise
     /// takes a few seconds (around 20 s on macOS 27, which compiles it).
-    static func warmUp() {
+    static func warmUp(done: @escaping @Sendable () -> Void = {}) {
         DispatchQueue.global(qos: .utility).async {
+            defer { done() }
             guard let context = CGContext(
                 data: nil, width: 64, height: 32, bitsPerComponent: 8, bytesPerRow: 0,
                 space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
