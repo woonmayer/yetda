@@ -107,15 +107,17 @@ enum TextRecognizer {
         case standard
         /// Latest model, kept off the Neural Engine.
         case cpuOnly
-        /// The previous model generation on the CPU: no automatic language
-        /// detection, so it reads Latin text only, which is what keys are.
-        case legacy
+        /// The fast recognizer. macOS 27 has a Vision bug where the accurate
+        /// model fails with E5RT error 13 (its cache can be purged or left
+        /// empty) and keeps failing for the rest of the process; the fast
+        /// one still works. Reads less exactly, but masks rather than blocks.
+        case fast
 
         var name: String {
             switch self {
             case .standard: "standard"
             case .cpuOnly: "CPU only"
-            case .legacy: "legacy model"
+            case .fast: "fast recognizer"
             }
         }
     }
@@ -132,9 +134,8 @@ enum TextRecognizer {
         case .cpuOnly:
             request.automaticallyDetectsLanguage = true
             runOnCPU(request)
-        case .legacy:
-            request.revision = VNRecognizeTextRequestRevision2
-            runOnCPU(request)
+        case .fast:
+            request.recognitionLevel = .fast
         }
         return request
     }
